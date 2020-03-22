@@ -173,7 +173,7 @@ body{
 					width: 20%;
 					height: 50px;
 					&.smaller{
-						width: 15%;
+						width: 12.5%;
 					}
 				}
 				input[type="text"]{
@@ -678,6 +678,24 @@ body{
 	    &.show{
 			opacity: 1;
 		}
+		&.vertblackout{
+			animation: vertblackout 0.75s linear 0s infinite normal;
+		}
+		&.vertblink{
+			animation: vertblink 0.75s linear 0s infinite normal;
+		}
+		&.horblackout{
+			animation: horblackout 0.75s linear 0s infinite normal;
+		}
+		&.horblink{
+			animation: horblink 0.75s linear 0s infinite normal;
+		}
+		&.diagonalblink{
+			animation: diagonalblink 0.75s linear 0s infinite normal;
+		}
+		&.diagonalblinkreverse{
+			animation: diagonalblink 0.75s linear 0s infinite reverse;
+		}
 	}
 	#bluebg{
 		position: absolute;
@@ -694,6 +712,9 @@ body{
 	    opacity: 0;
 	    &.show{
 			opacity: 1;
+		}
+		&.blueblink{
+			animation: blueblink 0.6s linear 0s infinite normal;
 		}
 	}
 	#redbg{
@@ -2137,4 +2158,50 @@ header{
   0%   {background-image: url(../img/onlyscore_empty.png);}
   50%  {background-image: url(../img/onlyscore_empty_standby.png);}
   100% {background-image: url(../img/onlyscore_empty.png);}
+}
+//BOARD ANIMATIONS
+@keyframes vertblackout {
+  0%   {background-image: url(../img/board_gold_vertical_blackout_1.jpg);}
+  25%  {background-image: url(../img/board_gold_vertical_blackout_2.jpg);}
+  50%  {background-image: url(../img/board_gold_vertical_blackout_3.jpg);}
+  75%  {background-image: url(../img/board_gold_vertical_blackout_4.jpg);}
+  100% {background-image: url(../img/board_gold_vertical_blackout_1.jpg);}
+}
+@keyframes vertblink {
+  0%   {background-image: url(../img/board_gold_vertical_blink_1.jpg);}
+  25%  {background-image: url(../img/board_gold_vertical_blink_2.jpg);}
+  50%  {background-image: url(../img/board_gold_vertical_blink_3.jpg);}
+  75%  {background-image: url(../img/board_gold_vertical_blink_4.jpg);}
+  100% {background-image: url(../img/board_gold_vertical_blink_1.jpg);}
+}
+@keyframes horblackout {
+  0%   {background-image: url(../img/board_gold_blackout_1.jpg);}
+  25%  {background-image: url(../img/board_gold_blackout_2.jpg);}
+  50%  {background-image: url(../img/board_gold_blackout_3.jpg);}
+  75%  {background-image: url(../img/board_gold_blackout_4.jpg);}
+  100% {background-image: url(../img/board_gold_blackout_1.jpg);}
+}
+@keyframes horblink {
+  0%   {background-image: url(../img/board_gold_blink_1.jpg);}
+  25%  {background-image: url(../img/board_gold_blink_2.jpg);}
+  50%  {background-image: url(../img/board_gold_blink_3.jpg);}
+  75%  {background-image: url(../img/board_gold_blink_4.jpg);}
+  100% {background-image: url(../img/board_gold_blink_1.jpg);}
+}
+@keyframes diagonalblink {
+  0%   {background-image: url(../img/board_gold_diagonal_blink_1.jpg);}
+  15%   {background-image: url(../img/board_gold_diagonal_blink_2.jpg);}
+  30%   {background-image: url(../img/board_gold_diagonal_blink_3.jpg);}
+  45%   {background-image: url(../img/board_gold_diagonal_blink_4.jpg);}
+  60%   {background-image: url(../img/board_gold_diagonal_blink_5.jpg);}
+  75%   {background-image: url(../img/board_gold_diagonal_blink_6.jpg);}
+  90%   {background-image: url(../img/board_gold_diagonal_blink_7.jpg);}
+  100%   {background-image: url(../img/board_gold_diagonal_blink_1.jpg);}
+}
+@keyframes blueblink {
+  0%   {background-image: url(../img/board_blue_blink_1.jpg);}
+  25%  {background-image: url(../img/board_blue_blink_2.jpg);}
+  50%  {background-image: url(../img/board_blue_blink_3.jpg);}
+  75%  {background-image: url(../img/board_blue_blink_4.jpg);}
+  100% {background-image: url(../img/board_blue_blink_1.jpg);}
 }

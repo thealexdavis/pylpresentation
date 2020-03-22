@@ -243,6 +243,7 @@ function loadGame(){
 		document.getElementById("center").className = '';
 		document.getElementById("bg").className = '';
 		document.getElementById("board_bg").className = '';
+		runBoardAnim(2);
 	}, 3500);
 	setTimeout(function(){ 
 		blinkOn = false;
@@ -776,9 +777,27 @@ function stopBoard(){
 	clearInterval(cycleVar);
 	sI = selectedSquare - 1;
 	posStop = activeIndexes[sI];
+	if(sI == 3){
+		if(bonusRound){
+			runBoardAnim(7);
+		} else {
+			runBoardAnim(4);
+		}
+	} else if(sI == 5 && activeBoard[selectedSquare]['extras'][0][posStop] == "backtwo"){
+		if(bonusRound){
+			runBoardAnim(7);
+		} else {
+			runBoardAnim(4);
+		}
+	}
 	if (activeBoard[selectedSquare]['type'][0][posStop] == "bigbucks"){
 		extraMsg = "Big Bucks! ";
 		selectedSquare = 4;
+		if(bonusRound){
+			runBoardAnim(7);
+		} else {
+			runBoardAnim(4);
+		}
 		sI = selectedSquare - 1;
 		posStop = activeIndexes[sI];
 // 		infoGui.value = "Big Bucks! "+toDollar(activeBoard[selectedSquare]['values'][0][posStop])+"! You're up to "+toDollar(playerScore)+". "+totalSpins+" spins left this round. Good luck!";
@@ -786,6 +805,9 @@ function stopBoard(){
 			clearAllSquares();
 			setSquare(4);
 		}, 750);
+	}
+	if (activeBoard[selectedSquare]['type'][0][posStop] == "addaone" || activeBoard[selectedSquare]['type'][0][posStop] == "double"){
+		runBoardAnim(6);
 	}
 	if (activeBoard[selectedSquare]['extras'][0][posStop] == "backtwo"){
 		extraMsg = "Move two spaces to ";
@@ -2022,7 +2044,7 @@ function preloadImages(srcs) {
 }
 
 // then to call it, you would use this
-var imageSrcs = ["assets/img/basebg.png","assets/img/blankscore.png","assets/img/board_blue.jpg","assets/img/board_red.jpg","assets/img/board_standby.jpg","assets/img/border.png","assets/img/brightgreenspiral.png","assets/img/buzzer.jpg","assets/img/centerburst.png","assets/img/cfx.png","assets/img/earnedpassed.png","assets/img/greenspiral.png","assets/img/leftarrow.png","assets/img/logo.png","assets/img/monitorpodium.jpg","assets/img/movehorizontal.png","assets/img/onlypassedspins_display.png","assets/img/movehorizontal.png","assets/img/movevertical.png","assets/img/onlyscore_empty_standby.png","assets/img/onlyscore_empty.png","assets/img/onlyspins_display.png","assets/img/red_border.png","assets/img/rightarrow.png","assets/img/scorebg.jpg","assets/img/spins_buzz.png","assets/img/spins_notbuzz.png","assets/img/thewhammy.png","assets/img/whammy_popup.jpg","assets/img/whammy1.png","assets/img/whammy2.png","assets/img/whammy3.png","assets/img/whammy4.png","assets/img/whammy5.png","assets/img/whammy6.png","assets/img/white_border.png"];
+var imageSrcs = ["assets/img/basebg.png","assets/img/blankscore.png","assets/img/board_blue.jpg","assets/img/board_red.jpg","assets/img/board_standby.jpg","assets/img/border.png","assets/img/brightgreenspiral.png","assets/img/buzzer.jpg","assets/img/centerburst.png","assets/img/cfx.png","assets/img/earnedpassed.png","assets/img/greenspiral.png","assets/img/leftarrow.png","assets/img/logo.png","assets/img/monitorpodium.jpg","assets/img/movehorizontal.png","assets/img/onlypassedspins_display.png","assets/img/movehorizontal.png","assets/img/movevertical.png","assets/img/onlyscore_empty_standby.png","assets/img/onlyscore_empty.png","assets/img/onlyspins_display.png","assets/img/red_border.png","assets/img/rightarrow.png","assets/img/scorebg.jpg","assets/img/spins_buzz.png","assets/img/spins_notbuzz.png","assets/img/thewhammy.png","assets/img/whammy_popup.jpg","assets/img/whammy1.png","assets/img/whammy2.png","assets/img/whammy3.png","assets/img/whammy4.png","assets/img/whammy5.png","assets/img/whammy6.png","assets/img/white_border.png","assets/img/board_blue_blink_1.jpg","assets/img/board_blue_blink_2.jpg","assets/img/board_blue_blink_3.jpg","assets/img/board_blue_blink_4.jpg","assets/img/board_gold_blackout_1.jpg","assets/img/board_gold_blackout_2.jpg","assets/img/board_gold_blackout_3.jpg","assets/img/board_gold_blackout_4.jpg","assets/img/board_gold_blink_1.jpg","assets/img/board_gold_blink_2.jpg","assets/img/board_gold_blink_3.jpg","assets/img/board_gold_blink_4.jpg","assets/img/board_gold_diagonal_blink_1.jpg","assets/img/board_gold_diagonal_blink_2.jpg","assets/img/board_gold_diagonal_blink_3.jpg","assets/img/board_gold_diagonal_blink_4.jpg","assets/img/board_gold_diagonal_blink_5.jpg","assets/img/board_gold_diagonal_blink_6.jpg","assets/img/board_gold_diagonal_blink_7.jpg","assets/img/board_gold_vertical_blackout_1.jpg","assets/img/board_gold_vertical_blackout_2.jpg","assets/img/board_gold_vertical_blackout_3.jpg","assets/img/board_gold_vertical_blackout_4.jpg","assets/img/board_gold_vertical_blink_1.jpg","assets/img/board_gold_vertical_blink_2.jpg","assets/img/board_gold_vertical_blink_3.jpg","assets/img/board_gold_vertical_blink_4.jpg"];
 
 preloadImages(imageSrcs);
 
@@ -2367,9 +2389,15 @@ socket.on('showTheAnswer',function(data) {
 });
 //START ROUND
 socket.on('startRound',function(data) {
+	if(data == 0){
+		runBoardAnim(3);
+	}
 	if(data == 1){
 		bonusRound = false;
 		activeBoard = roundOneBoard;
+		runBoardAnim(5);
+		tobigboardSfx.play();
+		sfxPlayer = tobigboardSfx;
 		loadSingle(activeBoard,currentStop,1,1);
 /*
 		setTimeout(function(){ 
@@ -2379,11 +2407,15 @@ socket.on('startRound',function(data) {
 */
 	}
 	if(data == 2){
+		runBoardAnim(5);
 		bonusRound = false;
 		activeBoard = roundTwoBoard;
+		tobigboardSfx.play();
+		sfxPlayer = tobigboardSfx;
 		loadSingle(activeBoard,currentStop,1,1);
 	}
 	if(data == 3){
+		runBoardAnim(3);
 		bonusRound = true;
 	}
 });
@@ -2420,6 +2452,7 @@ socket.on("getSquareInfo",function(data){
 });
 //DISPLAY BG
 socket.on("displayBg",function(data){
+	goldBoard.className = 'show';
 	if(data == 1){
 		blueBoard.className = '';
 		redBoard.className = '';
@@ -2443,8 +2476,10 @@ socket.on("turnStandby",function(data){
 	resetBoard();
 	clearInterval(boardBlinkTimer);
 	unlightAllSquares();
+	runBoardAnim(0);
 	blueBoard.className = '';
 	redBoard.className = '';
+	boardCenter.className = "";
 	document.getElementById("bg").className = '';
 	document.getElementById("board_bg").className = '';
 	document.getElementById("squares").className = '';
@@ -2492,7 +2527,7 @@ function boardLinkAction(){
 //BLACKOUT
 socket.on("triggerBlackout",function(data){
 	unlightAllSquares();
-	document.getElementById("bg").className = 'preload';
+	runBoardAnim(1);
 	document.getElementById("board_bg").className = 'preload';
 	document.getElementById("squares").className = 'preload';
 	document.getElementById("center").className = 'preload';
@@ -2624,4 +2659,41 @@ function aud_fade(sfxPlayer,currentPlaying){
         soundSf.volume -= 0.005;
         timer = setTimeout(aud_fade,5);
     }
+}
+//TRIGGER BOARD ANIMATION
+socket.on("triggerBgAnim",function(data){
+	runBoardAnim(data);
+});
+function runBoardAnim(data){
+	redBoard.className = "";
+	blueBoard.className = "";
+	goldBoard.className = "";
+	if(data==1){
+		goldBoard.classList.add("show");
+		goldBoard.classList.add("vertblackout");
+	}
+	if(data==2){
+		goldBoard.classList.add("show");
+		goldBoard.classList.add("vertblink");
+	}
+	if(data==3){
+		goldBoard.classList.add("show");
+		goldBoard.classList.add("horblackout");
+	}
+	if(data==4){
+		goldBoard.classList.add("show");
+		goldBoard.classList.add("horblink");
+	}
+	if(data==5){
+		goldBoard.classList.add("show");
+		goldBoard.classList.add("diagonalblinkreverse");
+	}
+	if(data==6){
+		goldBoard.classList.add("show");
+		goldBoard.classList.add("diagonalblink");
+	}
+	if(data==7){
+		blueBoard.classList.add("show");
+		blueBoard.classList.add("blueblink");
+	}
 }

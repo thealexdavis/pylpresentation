@@ -401,6 +401,12 @@ socket.on('sendSquareInfo',function(squareInfo) {
 	if(squareType == "whammy"){
 		playerScoreNew = 0;
 		toggleWhammy([playerNum,1]);
+		if (playerNum !== 4 && parseInt(document.getElementsByName(playerNumberFull+"passed")[0].value) > 0){
+			playerPassedSpinsNow = parseInt(document.getElementsByName(playerNumberFull+"passed")[0].value) - 1;
+			playerEarnedSpinsNow = parseInt(document.getElementsByName(playerNumberFull+"earned")[0].value);
+			document.getElementsByName(playerNumberFull+"earned")[0].value = playerPassedSpinsNow + playerEarnedSpinsNow;
+			document.getElementsByName(playerNumberFull+"passed")[0].value = 0;
+		}
 	} else if(squareType == "addaone"){
 		currentScore = "1"+document.getElementsByName(playerNumberFull+"score")[0].value;
 		playerScoreNew = parseInt(currentScore);
@@ -412,11 +418,22 @@ socket.on('sendSquareInfo',function(squareInfo) {
 	document.getElementsByName(playerNumberFull+"score")[0].value = playerScoreNew;
 	if (squareExtras !== "plus"){
 		if (playerNum !== 4 && parseInt(document.getElementsByName(playerNumberFull+"passed")[0].value) > 0){
-			playerSpinsNew = parseInt(document.getElementsByName(playerNumberFull+"passed")[0].value) - 1;
-			document.getElementsByName(playerNumberFull+"passed")[0].value = playerSpinsNew;
+			if(squareType !== "whammy"){
+				playerSpinsNew = parseInt(document.getElementsByName(playerNumberFull+"passed")[0].value) - 1;
+				document.getElementsByName(playerNumberFull+"passed")[0].value = playerSpinsNew;
+			}
 		} else {
-			playerSpinsNew = parseInt(document.getElementsByName(playerNumberFull+"earned")[0].value) - 1;
-			document.getElementsByName(playerNumberFull+"earned")[0].value = playerSpinsNew;
+			if(squareType !== "whammy"){
+				playerSpinsNew = parseInt(document.getElementsByName(playerNumberFull+"earned")[0].value) - 1;
+				document.getElementsByName(playerNumberFull+"earned")[0].value = playerSpinsNew;
+			}
+		}
+	} else {
+		if (playerNum !== 4 && parseInt(document.getElementsByName(playerNumberFull+"passed")[0].value) > 0){
+			playerSpinsNewPassed = parseInt(document.getElementsByName(playerNumberFull+"passed")[0].value) - 1;
+			document.getElementsByName(playerNumberFull+"passed")[0].value = playerSpinsNewPassed;
+			playerSpinsNewEarned = parseInt(document.getElementsByName(playerNumberFull+"earned")[0].value) + 1;
+			document.getElementsByName(playerNumberFull+"earned")[0].value = playerSpinsNewEarned;
 		}
 	}
 	if(playerNum == 4){
@@ -534,4 +551,8 @@ function sendQuestion(){
 //PLAY SFX
 function sfx(sfxType){
 	socket.emit('trigger sfx', sfxType);
+}
+//RENDER BOARD ANIMATION
+function boardAnim(animType){
+	socket.emit('trigger board animation', animType);
 }

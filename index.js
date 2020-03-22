@@ -253,6 +253,10 @@ io.on('connection', function(socket){
 	  socket.on('trigger sfx', function(sfxId){
 	    io.emit('triggerTheSFX', sfxId);
 	  });
+	  //TRIGGER BOARD ANIMATION
+	  socket.on('trigger board animation', function(animId){
+	    io.emit('triggerBgAnim', animId);
+	  });
 });
 
 http.listen(3000, function(){
