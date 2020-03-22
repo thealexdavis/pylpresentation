@@ -406,6 +406,9 @@ socket.on('sendSquareInfo',function(squareInfo) {
 			playerEarnedSpinsNow = parseInt(document.getElementsByName(playerNumberFull+"earned")[0].value);
 			document.getElementsByName(playerNumberFull+"earned")[0].value = playerPassedSpinsNow + playerEarnedSpinsNow;
 			document.getElementsByName(playerNumberFull+"passed")[0].value = 0;
+		} else {
+			playerSpinsNew = parseInt(document.getElementsByName(playerNumberFull+"earned")[0].value) - 1;
+			document.getElementsByName(playerNumberFull+"earned")[0].value = playerSpinsNew;
 		}
 	} else if(squareType == "addaone"){
 		currentScore = "1"+document.getElementsByName(playerNumberFull+"score")[0].value;
