@@ -2406,6 +2406,7 @@ socket.on('startRound',function(data) {
 		runBoardAnim(5);
 		tobigboardSfx.play();
 		sfxPlayer = tobigboardSfx;
+		currentPlaying = 4;
 		loadSingle(activeBoard,currentStop,1,1);
 /*
 		setTimeout(function(){ 
@@ -2419,6 +2420,7 @@ socket.on('startRound',function(data) {
 		bonusRound = false;
 		activeBoard = roundTwoBoard;
 		tobigboardSfx.play();
+		currentPlaying = 4;
 		sfxPlayer = tobigboardSfx;
 		loadSingle(activeBoard,currentStop,1,1);
 	}
@@ -2545,6 +2547,7 @@ socket.on("triggerBlackout",function(data){
 socket.on("triggerShowOpen",function(data){
 	loadGame();
 	themeSfx.play();
+	currentPlaying = 1;
 	sfxPlayer = themeSfx;
 });
 //TOGGLE CENTER MONITOR
