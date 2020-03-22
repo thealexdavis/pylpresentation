@@ -892,6 +892,7 @@ function stopBoard(){
 		}
 		if (activeBoard[selectedSquare]['type'][0][posStop] == "whammy"){
 			whammySfx.play();
+			sfxPlayer = whammySfx;
 			redBoard.className = 'show';
  			blinkSquare(sI);
 			playerScore = 0;
@@ -1964,6 +1965,7 @@ function addVal(sC,ty){
 	}
 	selectedSquare = sC;
 	boardSpinSfx.play();
+	sfxPlayer = boardSpinSfx;
 	stopBoard();
 }
 
@@ -2248,6 +2250,7 @@ socket.on('togglePodium',function(podiumStatus) {
 //LOCKOUT TRIGGERED
 socket.on('lockoutBuzzer',function(data) {
 	buzzinSfx.play();
+	sfxPlayer = buzzinSfx;
 	if(data[1] == 1){
 		document.getElementById("player1score").className = "";
 		document.getElementById("player1score").classList.add("scorezone");
@@ -2306,6 +2309,7 @@ socket.on('podsBlink',function(data) {
 //ADD SPINS
 socket.on('addSpins',function(data) {
 	dingSfx.play();
+	sfxPlayer = dingSfx;
 	if(data[0] == 1){
 		player1center.innerHTML = data[1];
 		player1passed.innerHTML = data[1];
@@ -2324,6 +2328,7 @@ socket.on('transmitWhammy',function(data) {
 	if(data[0] == 4){
 		if(data[2] == 1){
 			boingSfx.play();
+			sfxPlayer = boingSfx;
 			document.getElementById('whammy'+data[1]).className = '';
 			document.getElementById('whammy'+data[1]).classList.add("whammypopup");
 			document.getElementById('whammy'+data[1]).classList.add("active");
@@ -2336,6 +2341,7 @@ socket.on('transmitWhammy',function(data) {
 	} else {
 		if(data[2] == 1){
 			boingSfx.play();
+			sfxPlayer = boingSfx;
 			document.getElementById('p'+data[0]+'w'+data[1]).className = "active";
 		}
 		if(data[2] == -1){
@@ -2347,6 +2353,7 @@ socket.on('transmitWhammy',function(data) {
 //PASS SPINS
 socket.on('passSpins',function(data) {
 	passSfx.play();
+	sfxPlayer = passSfx;
 	document.getElementById('center'+data[0][0]).innerHTML = 0;
 	document.getElementById('passed'+data[0][0]).innerHTML = 0;
 	document.getElementById('spins'+data[1][0]).innerHTML = data[1][1];
@@ -2354,6 +2361,7 @@ socket.on('passSpins',function(data) {
 //TIMES UP
 socket.on('timesup',function(data) {
 	timeupSfx.play();
+	sfxPlayer = timesupSfx;
 });
 //DISPLAY ANSWERS
 socket.on('sendTheAnswers',function(data) {
@@ -2422,6 +2430,7 @@ socket.on('startRound',function(data) {
 //START THE BOARD
 socket.on("startBoard",function(data){
 	boardSpinSfx.play();
+	sfxPlayer = boardSpinSfx;
 	clearAllSquares();
 	spinTimer();
 	cycleTimer(activeBoard);
@@ -2536,6 +2545,7 @@ socket.on("triggerBlackout",function(data){
 socket.on("triggerShowOpen",function(data){
 	loadGame();
 	themeSfx.play();
+	sfxPlayer = themeSfx;
 });
 //TOGGLE CENTER MONITOR
 socket.on("toggleCenterMonitor",function(data){
@@ -2572,6 +2582,7 @@ socket.on("showBonusSpins",function(data){
 	setTimeout(function(){ 
 		document.getElementById("spinstotal").innerHTML = data[0];
 		dingSfx.play();
+		sfxPlayer = dingSfx;
 	}, 3000);
 });
 //LIGHT MAIN PODIUM
