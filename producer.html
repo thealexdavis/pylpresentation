@@ -1,0 +1,219 @@
+<html lang="en">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, maximum-scale=1.0, minimum-scale=1.0, initial-scale=1.0" />
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+<title>Press Your Luck Producer</title>
+
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="assets/fonts/fonts.css">
+<link rel="stylesheet" type="text/css" href="assets/css/styles.css">
+	</head>
+
+<body class="producer">
+	<div class="holder_all">
+		<div class="player_info">
+			<div class="the_champion off">
+				<p id="buzzertogglechamp" onclick="activateBuzzer(4)">CHAMPION</p>
+				<input type="text" name="champPlayerNumber" value="" placeholder="PLAYER NUMBER">
+				<div class="details">
+					<div class="holder"><label for="champ1name">NAME</label><input type="text" name="champ1name" value="" placeholder="PLAYER 1"></div>
+					<div class="holder"><label for="champ1earned">SPINS</label><input type="text" name="champ1earned" value="0" placeholder="0"></div>
+					<div class="holder"><label for="champ1score">SCORE</label><input type="text" name="champ1score" value="0" placeholder="0"></div>
+					<div class="holder"><label for="champ1safe">SAFE</label><input type="text" name="champ1safe" value="0" placeholder="0"></div>
+					<div class="holder"><label for="champ1total">TOTAL</label><input type="text" name="champ1total" value="0" placeholder="0"></div>
+					<div class="holder"><label for="champ1whammy">WHAMMY</label><input type="text" name="champ1whammy" value="0" placeholder="0"></div>
+				</div>
+				<div class="controls">
+					<button id="champsync" onclick="champsync()">SYNC</button>
+					<button id="champaddsquare" onclick="addSquare(4)">ADD SQUARE</button>
+					<button id="champaddwhammy" onclick="toggleWhammy([4,1])">ADD WHAMMY</button>
+					<button id="champlosewhammy" onclick="toggleWhammy([4,-1])">LOSE WHAMMY</button>
+				</div>
+			</div>
+			<div class="the_player">
+				<p id="buzzertoggle1" onclick="activateBuzzer(1)">PLAYER 1</p>
+				<input type="text" name="player1key" value="" placeholder="KEY">
+				<div class="details">
+					<div class="holder"><label for="player1name">NAME</label><input type="text" name="player1name" value="PLAYER 1" placeholder="PLAYER 1"></div>
+					<div class="holder"><label for="player1score">SCORE</label><input type="text" name="player1score" value="0" placeholder="0"></div>
+					<div class="holder"><label for="player1earned">EARNED</label><input type="text" name="player1earned" value="0" placeholder="0"></div>
+					<div class="holder"><label for="player1passed">PASSED</label><input type="text" name="player1passed" value="0" placeholder="0"></div>
+					<div class="holder"><label for="player1whammy">WHAMMY</label><input type="text" name="player1whammy" value="0" placeholder="0"></div>
+				</div>
+				<div class="controls">
+					<button id="p1sync">SYNC</button>
+					<button id="p1add1" onclick="addSpins([1,1])">ADD 1 SPIN</button>
+					<button id="p1add3" onclick="addSpins([1,3])">ADD 3 SPIN</button>
+					<button id="p1addsquare" onclick="addSquare(1)">ADD SQUARE</button>
+					<button id="p1addwhammy" onclick="toggleWhammy([1,1])">ADD WHAMMY</button>
+					<button id="p1losewhammy" onclick="toggleWhammy([1,-1])">LOSE WHAMMY</button>
+					<button id="p1pass2" onclick="passSpins([1,2])">PASS TO 2</button>
+					<button id="p1pass3" onclick="passSpins([1,3])">PASS TO 3</button>
+				</div>
+			</div>
+			<div class="the_player">
+				<p id="buzzertoggle2" onclick="activateBuzzer(2)">PLAYER 2</p>
+				<input type="text" name="player2key" value="" placeholder="KEY">
+				<div class="details">
+					<div class="holder"><label for="player2name">NAME</label><input type="text" name="player2name" value="PLAYER 2" placeholder="PLAYER 2"></div>
+					<div class="holder"><label for="player2score">SCORE</label><input type="text" name="player2score" value="0" placeholder="0"></div>
+					<div class="holder"><label for="player2earned">EARNED</label><input type="text" name="player2earned" value="0" placeholder="0"></div>
+					<div class="holder"><label for="player2passed">PASSED</label><input type="text" name="player2passed" value="0" placeholder="0"></div>
+					<div class="holder"><label for="player2whammy">WHAMMY</label><input type="text" name="player2whammy" value="0" placeholder="0"></div>
+				</div>
+				<div class="controls">
+					<button id="p2sync">SYNC</button>
+					<button id="p2add1" onclick="addSpins([2,1])">ADD 1 SPIN</button>
+					<button id="p2add3" onclick="addSpins([2,3])">ADD 3 SPIN</button>
+					<button id="p2addsquare" onclick="addSquare(2)">ADD SQUARE</button>
+					<button id="p2addwhammy" onclick="toggleWhammy([2,1])">ADD WHAMMY</button>
+					<button id="p2losewhammy" onclick="toggleWhammy([2,-1])">LOSE WHAMMY</button>
+					<button id="p2pass1" onclick="passSpins([2,1])">PASS TO 1</button>
+					<button id="p2pass3" onclick="passSpins([2,3])">PASS TO 3</button>
+				</div>
+			</div>
+			<div class="the_player">
+				<p id="buzzertoggle3" onclick="activateBuzzer(3)">PLAYER 3</p>
+				<input type="text" name="player3key" value="" placeholder="KEY">
+				<div class="details">
+					<div class="holder"><label for="player3name">NAME</label><input type="text" name="player3name" value="PLAYER 3" placeholder="PLAYER 3"></div>
+					<div class="holder"><label for="player3score">SCORE</label><input type="text" name="player3score" value="0" placeholder="0"></div>
+					<div class="holder"><label for="player3earned">EARNED</label><input type="text" name="player3earned" value="0" placeholder="0"></div>
+					<div class="holder"><label for="player3passed">PASSED</label><input type="text" name="player3passed" value="0" placeholder="0"></div>
+					<div class="holder"><label for="player3whammy">WHAMMY</label><input type="text" name="player3whammy" value="0" placeholder="0"></div>
+				</div>
+				<div class="controls">
+					<button id="p3sync">SYNC</button>
+					<button id="p3add1" onclick="addSpins([3,1])">ADD 1 SPIN</button>
+					<button id="p3add3" onclick="addSpins([3,3])">ADD 3 SPIN</button>
+					<button id="p3addsquare" onclick="addSquare(3)">ADD SQUARE</button>
+					<button id="p3addwhammy" onclick="toggleWhammy([3,1])">ADD WHAMMY</button>
+					<button id="p3losewhammy" onclick="toggleWhammy([3,-1])">LOSE WHAMMY</button>
+					<button id="p3pass1" onclick="passSpins([3,1])">PASS TO 1</button>
+					<button id="p3pass2" onclick="passSpins([3,2])">PASS TO 2</button>
+				</div>
+			</div>
+		</div>
+		<div class="board_info">
+			<div class="round_control">
+				<button onclick="startRound(0)" id="startqround">START QUESTION ROUND</button>
+				<button id="showqpodium">SHOW Q PODIUM</button>
+				<button id="showmoneypodium">SHOW $ PODIUM</button>
+				<button id="hidepodium">HIDE</button>
+				<button onclick="startRound(1)" id="startr1">START ROUND ONE</button>
+				<button onclick="startRound(2)" id="startr2">START ROUND TWO</button>
+				<button id="startbonus" onclick="startRound(3)">START BONUS ROUND</button>
+			</div>
+			<div class="question_control">
+				<p>QUESTION CONTROL</p>
+				<button id="loadq1" onclick="loadQ(1)" class="questionload">LOAD Q1</button>
+				<button id="loadq2" onclick="loadQ(2)" class="questionload">LOAD Q2</button>
+				<button id="loadq3" onclick="loadQ(3)" class="questionload">LOAD Q3</button>
+				<button id="loadq4" onclick="loadQ(4)" class="questionload">LOAD Q4</button>
+				<button id="loadq5" onclick="loadQ(5)" class="questionload">LOAD Q5</button>
+				<button id="loadq6" onclick="loadQ(6)" class="questionload">LOAD Q6</button>
+				<button id="loadq7" onclick="loadQ(7)" class="questionload">LOAD Q7</button>
+				<button id="loadq8" onclick="loadQ(8)" class="questionload">LOAD Q8</button>
+				<button id="loadq9" onclick="loadQ(9)" class="questionload">LOAD Q9</button>
+				<button id="loadq10" onclick="loadQ(10)" class="questionload">LOAD Q10</button>
+				<textarea name="thequestion" id="thequestion"></textarea>
+				<input type="text" name="theanswer1" id="theanswer1" placeholder="">
+				<input type="text" name="theanswer2" id="theanswer2" placeholder="">
+				<input type="text" name="theanswer3" id="theanswer3" placeholder="">
+				<button id="buzzerson" class="questioncontrol">BUZZERS ON</button>
+				<button id="buzzersoff" class="questioncontrol">BUZZERS OFF</button>
+				<button id="sendhostq" onclick="sendQuestion()" class="questioncontrol">SEND QUESTION</button>
+				<button id="sendanswers" onclick="sendAnswers()" class="questioncontrol">SEND ANSWERS</button>
+				<button id="reveala" onclick="revealAnswer()" class="questioncontrol">REVEAL ANS</button>
+				<button id="clearall" onclick="clearAll(1)" class="questioncontrol">CLEAR ALL</button>
+				<button id="timeup" onclick="timeup()" class="questioncontrol">TIMES UP</button>
+				<button id="wronganswerslayout" onclick="answerLayout(1)" class="questioncontrol">WRONG ANSWERS LAYOUT</button>
+				<button id="randomizeanswerslayout" onclick="answerLayout(2)" class="questioncontrol">RANDOMIZE ANSWERS</button>
+				<button id="blink1" onclick="blinkPod([[1],1])" class="questioncontrol">BLINK P1</button>
+				<button id="blink2" onclick="blinkPod([[2],1])" class="questioncontrol">BLINK P2</button>
+				<button id="blink3" onclick="blinkPod([[3],1])" class="questioncontrol">BLINK P3</button>
+				<button id="blink12" onclick="blinkPod([[1,2],1])" class="questioncontrol">BLINK P1/2</button>
+				<button id="blink23" onclick="blinkPod([[2,3],1])" class="questioncontrol">BLINK P2/3</button>
+				<button id="blink13" onclick="blinkPod([[1,3],1])" class="questioncontrol">BLINK P1/3</button>
+				<button id="blink123" onclick="blinkPod([[1,2,3],1])" class="questioncontrol">BLINK ALL</button>
+			</div>
+			<div class="spin_control">
+				<p>SPIN CONTROL</p>
+				<button id="startspin" class="questioncontrol" onclick="startSpin()">START SPIN</button>
+				<button id="endspin" class="questioncontrol" onclick="endSpin()">END SPIN</button>
+				<button id="clearall" onclick="clearAll(2)" class="questioncontrol" onclick="lightPod(0)">CLEAR PODS</button>
+				<button id="clearlights" class="questioncontrol" onclick="clearLights()">CLEAR BOARD LIGHTS</button>
+				<button id="blink1" onclick="blinkPod([[1],2])" class="questioncontrol">BLINK P1</button>
+				<button id="blink2" onclick="blinkPod([[2],2])" class="questioncontrol">BLINK P2</button>
+				<button id="blink3" onclick="blinkPod([[3],2])" class="questioncontrol">BLINK P3</button>
+				<button id="blinkend" class="questioncontrol" onclick="blinkPod([[0],2])">BLINK END</button>
+				<button id="blink1" onclick="lightPod(1)" class="questioncontrol">LIGHT P1</button>
+				<button id="blink2" onclick="lightPod(2)" class="questioncontrol">LIGHT P2</button>
+				<button id="blink3" onclick="lightPod(3)" class="questioncontrol">LIGHT3 P3</button>
+				<button id="chooseleft" class="questioncontrol" onclick="directionMove(2)">CHOOSE LEFT</button>
+				<button id="chooseright" class="questioncontrol" onclick="directionMove(4)">CHOOSE RIGHT</button>
+				<button id="chooseup" class="questioncontrol" onclick="directionMove(3)">CHOOSE UP</button>
+				<button id="choosedown" class="questioncontrol" onclick="directionMove(1)">CHOOSE DOWN</button>
+			</div>
+			<div class="bonus_control">
+				<p>BONUS CONTROL</p>
+				<button id="startspin" onclick="startSpin()">START SPIN</button>
+				<button id="endspin" onclick="endSpin()">END SPIN</button>
+				<button id="loadbonusb1" onclick="loadBonusBoard(1)">LOAD R1</button>
+				<button id="loadbonusb2" onclick="loadBonusBoard(2)">LOAD R2</button>
+				<button id="loadbonusb3" onclick="loadBonusBoard(3)">LOAD R3</button>
+				<button id="loadbonusb4" onclick="loadBonusBoard(4)">LOAD R4</button>
+				<button id="loadbonusb5" onclick="loadBonusBoard(5)">LOAD R5</button>
+				<button id="showpodium" onclick="bonusPodium(1)">SHOW PODIUM</button>
+				<button id="hidepodium" onclick="bonusPodium(0)">HIDE PODIUM</button>
+				<button id="hidepodium" onclick="bonusPod(1)">SHOW SAFE $</button>
+				<button id="hidepodium" onclick="bonusPod(2)">SHOW SCORE $</button>
+				<button id="hidepodium" onclick="bonusPod(3)">SHOW COMBO $</button>
+				<button id="hidepodium" onclick="displayBonusSpins()">DISPLAY SPINS</button>
+				<button id="clearlights" onclick="clearLights()">CLEAR LIGHTS</button>
+				<button id="chooseleft" class="questioncontrol" onclick="directionMove(2)">CHOOSE LEFT</button>
+				<button id="chooseright" class="questioncontrol" onclick="directionMove(4)">CHOOSE RIGHT</button>
+				<button id="chooseup" class="questioncontrol" onclick="directionMove(3)">CHOOSE UP</button>
+				<button id="choosedown" class="questioncontrol" onclick="directionMove(1)">CHOOSE DOWN</button>
+			</div>
+			<div class="board_control">
+				<p>BOARD CONTROL</p>
+				<button id="goldbg" onclick="showBg(1)">GOLD BG</button>
+				<button id="redbg" onclick="showBg(2)">RED BG</button>
+				<button id="bluebg" onclick="showBg(3)">BLUE BG</button>
+				<button id="clearlights" onclick="clearLights()">CLEAR LIGHTS</button>
+				<button id="standbyboard" onclick="standby()">STANDBY</button>
+				<input type="text" name="moneyshow" id="moneyshow" placeholder="1,000,000">
+				<button id="showcentercash" onclick="centerMonitor(1)">SHOW CENTER $</button>
+				<button id="hidecentercash" onclick="centerMonitor(0)">HIDE CENTER $</button>
+				<button id="lightall" onclick="lightall()">LIGHT ALL</button>
+				<button id="blinkstart" onclick="toggleBoardBlink(1)">BLINK START</button>
+				<button id="blinkend" onclick="toggleBoardBlink(0)">BLINK END</button>
+				<button id="blackout" onclick="blackout()">BLACKOUT</button>
+				<button id="showopen" onclick="showOpen()">OPEN</button>
+				<button id="showopen" class="smaller" onclick="sfx(1)">PLAY THEME</button>
+				<button id="showopen" class="smaller" onclick="sfx(2)">PLAY LOOP</button>
+				<button id="showopen" class="smaller" onclick="sfx(3)">PLAY STING</button>
+				<button id="showopen" class="smaller" onclick="sfx(4)">PLAY TO BB</button>
+				<button id="showopen" class="smaller" onclick="sfx(5)">FADE SFX</button>
+				<button id="showopen" class="smaller" onclick="sfx(6)">STOP SFX</button>
+			</div>
+			<div class="host_screen_control">
+				<p>HOST SCREEN</p>
+				<textarea name="message"></textarea>
+				<button id="sendmessage" onclick="messageTransmit(1)">SEND MSG</button>
+				<button id="clearmessage" onclick="messageTransmit(0)">CLEAR MSG</button>
+			</div>
+		</div>
+	</div>
+	<script src="/socket.io/socket.io.js"></script>
+	<script>
+	  var socket = io();
+	</script>
+</body>
+
+<script src="assets/js/questions.js"></script>
+<script src="assets/js/producer.js"></script>
+
+</html>

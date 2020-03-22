@@ -1,0 +1,188 @@
+<html lang="en">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, maximum-scale=1.0, minimum-scale=1.0, initial-scale=1.0" />
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+<title>Press Your Luck</title>
+
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="assets/fonts/fonts.css">
+<link rel="stylesheet" type="text/css" href="assets/css/styles.css">
+	</head>
+
+<body id="host_screen">
+	<div class="player_area">
+		<div class="col" id="player1col">
+			<div class="name colinside">
+				<label for="player1name">NAME</label>
+				<input type="text" name="player1name" value="">	
+			</div>
+			<div class="score colinside">
+				<label for="player1score">SCORE</label>
+				<input type="text" name="player1score" readonly="readonly" value="$0">	
+			</div>
+			<div class="earned colinside">
+				<label for="player1earned">EARNED</label>
+				<input type="text" name="player1earned" readonly="readonly" value="0">	
+			</div>
+			<div class="passed colinside">
+				<label for="player1passed">PASSED</label>
+				<input type="text" name="player1passed" readonly="readonly" value="0">	
+			</div>
+			<div class="whammies colinside">
+				<label for="player1passed">WHAMMIES</label>
+				<input type="text" name="player1whammies" readonly="readonly" value="0">	
+			</div>
+		</div>
+		<div class="col" id="player2col">
+			<div class="name colinside">
+				<label for="player2name">NAME</label>
+				<input type="text" name="player2name" readonly="readonly" value="">	
+			</div>
+			<div class="score colinside">
+				<label for="player2score">SCORE</label>
+				<input type="text" name="player2score" readonly="readonly" value="$0">	
+			</div>
+			<div class="earned colinside">
+				<label for="player2earned">EARNED</label>
+				<input type="text" name="player2earned" readonly="readonly" value="0">	
+			</div>
+			<div class="passed colinside">
+				<label for="player2passed">PASSED</label>
+				<input type="text" name="player2passed" readonly="readonly" value="0">	
+			</div>
+			<div class="whammies colinside">
+				<label for="player2passed">WHAMMIES</label>
+				<input type="text" name="player2whammies" readonly="readonly" value="0">	
+			</div>
+		</div>
+		<div class="col" id="player3col">
+			<div class="name colinside">
+				<label for="player3name">NAME</label>
+				<input type="text" name="player3name" readonly="readonly" value="">	
+			</div>
+			<div class="score colinside">
+				<label for="player3score">SCORE</label>
+				<input type="text" name="player3score" readonly="readonly" value="$0">	
+			</div>
+			<div class="earned colinside">
+				<label for="player3earned">EARNED</label>
+				<input type="text" name="player3earned" readonly="readonly" value="0">	
+			</div>
+			<div class="passed colinside">
+				<label for="player3passed">PASSED</label>
+				<input type="text" name="player3passed" readonly="readonly" value="0">	
+			</div>
+			<div class="whammies colinside">
+				<label for="player3passed">WHAMMIES</label>
+				<input type="text" name="player3whammies" readonly="readonly" value="0">	
+			</div>
+		</div>
+	</div>
+	<div class="question_area">
+		<h2>QUESTION ROUND</h2>
+		<textarea name="question"></textarea>
+		<input type="text" value="" name="answer1">
+		<input type="text" value="" name="answer2">
+		<input type="text" value="" name="answer3">
+	</div>
+	<div class="board_area">
+		<h2>BOARD ROUND</h2>
+		<div class="left_col">
+			<div class="col">
+				<label for="roundnumber">ROUND NUMBER</label>
+				<input type="text" name="roundnumber" readonly="readonly" value="0">
+			</div>	
+			<div class="col">
+				<label for="spinstaken">SPINS TAKEN</label>
+				<input type="text" name="spinstaken" readonly="readonly" value="0">	
+			</div>
+			<div class="col">
+				<label for="totalmoney">TOTAL GAME $$</label>
+				<input type="text" name="totalmoney" readonly="readonly" value="$0">	
+			</div>
+			<div class="col">
+				<label for="totalwhammies">TOTAL WHAMMIES</label>
+				<input type="text" name="totalwhammies" readonly="readonly" value="0">	
+			</div>
+			<div class="col">
+				<label for="totallost">$$ LOST</label>
+				<input type="text" name="totallost" readonly="readonly" value="$0">	
+			</div>
+		</div>
+		<div class="right_col">
+			<div class="col">
+				<label for="distancefirst">DISTANCE FROM FIRST</label>
+				<input type="text" name="distancefirst" readonly="readonly" value="0">
+			</div>
+			<div class="col">
+				<label for="distancesecond">DISTANCE FROM SECOND</label>
+				<input type="text" name="distancesecond" readonly="readonly" value="0">
+			</div>
+			<div class="col">
+				<label for="distancethird">DISTANCE FROM THIRD</label>
+				<input type="text" name="distancethird" readonly="readonly" value="0">
+			</div>
+			<div class="col">
+				<label for="whopasto">PASSED SPINS GO TO</label>
+				<input type="text" name="whopasto" readonly="readonly" value="">
+			</div>
+		</div>
+	</div>
+	<div class="bonus_area">
+		<h2>BONUS ROUND</h2>
+		<div class="left_col">
+			<div class="col">
+				<label for="bonusroundnumber">ROUND NUMBER</label>
+				<input type="text" name="bonusroundnumber" readonly="readonly" value="0">
+			</div>	
+			<div class="col">
+				<label for="bonusspinstotake">SPINS TO TAKE</label>
+				<input type="text" name="bonusspinstotake" readonly="readonly" value="0">	
+			</div>
+			<div class="col">
+				<label for="totalspinstaken">SPINS TAKEN</label>
+				<input type="text" name="totalspinstaken" readonly="readonly" value="0">	
+			</div>
+			<div class="col">
+				<label for="bonuswhammies">WHAMMIES</label>
+				<input type="text" name="bonuswhammies" readonly="readonly" value="0">	
+			</div>
+		</div>
+		<div class="right_col">
+			<div class="col">
+				<label for="champname">CHAMPION NAME</label>
+				<input type="text" name="champname" readonly="readonly" value="0">
+			</div>
+			<div class="col">
+				<label for="bonustotal">BONUS TOTAL</label>
+				<input type="text" name="bonustotal" readonly="readonly" value="0">
+			</div>
+			<div class="col">
+				<label for="targetdistance">$$ UNTIL MILLION</label>
+				<input type="text" name="targetdistance" readonly="readonly" value="$500,000">
+			</div>
+			<div class="col">
+				<label for="safetotal">SAFE TOTAL</label>
+				<input type="text" name="safetotal" readonly="readonly" value="0">
+			</div>
+			<div class="col">
+				<label for="totalwinnings">TOTAL WINNINGS</label>
+				<input type="text" name="totalwinnings" readonly="readonly" value="0">
+			</div>
+		</div>
+	</div>
+	<div class="message_area">
+		<h2>MESSAGES</h2>
+		<textarea name="message"></textarea>
+	</div>
+	<!-- <button id="stopBtn">STOP!</button> -->
+	<script src="/socket.io/socket.io.js"></script>
+	<script>
+	  var socket = io();
+	</script>
+</body>
+
+<script src="assets/js/host.js"></script>
+
+</html>

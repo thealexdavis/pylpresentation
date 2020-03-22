@@ -1,0 +1,39 @@
+<html lang="en">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, maximum-scale=1.0, minimum-scale=1.0, initial-scale=1.0" />
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+<title>Press Your Luck</title>
+
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="assets/fonts/fonts.css">
+<link rel="stylesheet" type="text/css" href="assets/css/styles.css">
+	</head>
+
+<body>
+	<div id="stage">
+		<header>
+			<p id="playername">Press Your Luck</p>		
+		</header>
+		<div id="main_stage">
+			<div id="login_area">
+				<form id="login_form" method="post">
+					<input type="text" name="username" id="username" placeholder="Name" maxlength="10">
+					<span class="error" id="username_error"></span>
+					<input type="number" name="gamecode" id="gamecode" placeholder="Game Code" maxlength="5">
+					<span class="error" id="gamecode_error"></span>
+					<input type="submit" id="login_player" value="PLAY">
+				</form>
+			</div>
+		</div>
+	</div>
+	<!-- <button id="stopBtn">STOP!</button> -->
+	<script src="/socket.io/socket.io.js"></script>
+	<script>
+	  var socket = io();
+	</script>
+</body>
+
+<script src="assets/js/player.js"></script>
+
+</html>
