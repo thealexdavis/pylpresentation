@@ -253,37 +253,37 @@ function loadGame(){
 
 function startRulesScene(){
 	setTimeout(function(){ 
-		textRibbonContent.innerHTML = "<p>You're going to face off against the Whammy over five rounds. At the end of each round you can take whatever money you've made or you can Press Your Luck and play on.</p>";
+// 		textRibbonContent.innerHTML = "<p>You're going to face off against the Whammy over five rounds. At the end of each round you can take whatever money you've made or you can Press Your Luck and play on.</p>";
 		textDisplay.className = '';
 		textDisplay.className = 'show';
 	}, 0);
 	setTimeout(function(){ 
-		textRibbonContent.className = '';
-		textRibbonContent.className = 'show';
+// 		textRibbonContent.className = '';
+// 		textRibbonContent.className = 'show';
 	}, 250);
 	setTimeout(function(){ 
-		textRibbonContent.className = '';
+// 		textRibbonContent.className = '';
 	}, 7000);
 	setTimeout(function(){
-		textRibbonContent.innerHTML = "";
-		textRibbonContent.innerHTML = "<p>The longer you stay in the game, the bigger the money gets...and if you make it to our final round, our Big Bucks Bonanza, one spin can be worth $100,000.</p>";
-		textRibbonContent.className = 'show';
+// 		textRibbonContent.innerHTML = "";
+// 		textRibbonContent.innerHTML = "<p>The longer you stay in the game, the bigger the money gets...and if you make it to our final round, our Big Bucks Bonanza, one spin can be worth $100,000.</p>";
+// 		textRibbonContent.className = 'show';
 	}, 7250);
 	setTimeout(function(){ 
-		textRibbonContent.className = '';
+// 		textRibbonContent.className = '';
 	}, 15000);
 	setTimeout(function(){
-		textRibbonContent.innerHTML = "";
-		textRibbonContent.innerHTML = "<p>As always there are Whammies out there. If you hit one he takes your bank down to $0. Four Whammies puts you out of the game entirely.</p>";
-		textRibbonContent.className = 'show';
+// 		textRibbonContent.innerHTML = "";
+// 		textRibbonContent.innerHTML = "<p>As always there are Whammies out there. If you hit one he takes your bank down to $0. Four Whammies puts you out of the game entirely.</p>";
+// 		textRibbonContent.className = 'show';
 	}, 15250);
 	setTimeout(function(){ 
-		textRibbonContent.className = '';
+// 		textRibbonContent.className = '';
 	}, 22000);
 	setTimeout(function(){
-		textRibbonContent.innerHTML = "";
-		textRibbonContent.innerHTML = "<p>However, if your bank ever reaches $500,000, the game is over...because we are going to bump your winnings up to $1,000,000!</p>";
-		textRibbonContent.className = 'show';
+// 		textRibbonContent.innerHTML = "";
+// 		textRibbonContent.innerHTML = "<p>However, if your bank ever reaches $500,000, the game is over...because we are going to bump your winnings up to $1,000,000!</p>";
+// 		textRibbonContent.className = 'show';
 	}, 22250);
 	setTimeout(function(){
 		centerLogo.classList.add("fliptrans");
@@ -313,12 +313,12 @@ function startRulesScene(){
 		centerLogo.classList.add("fliptrans");
 		frameContent.className = '';
 		frameContent.innerHTML = '';
-		textRibbonContent.className = '';
+// 		textRibbonContent.className = '';
 		textDisplay.className = '';
 	}, 28400);
 	setTimeout(function(){ 
 		startOpenScreen();
-		textRibbonContent.innerHTML = "";
+// 		textRibbonContent.innerHTML = "";
 	}, 29000);
 }
 
@@ -360,44 +360,6 @@ function startGame(){
 		startQround(1);
 	}
 };
-
-function startQround(r){
-	if (r == 1){
-		totalQuestions = 3;
-	}
-	if (r == 2){
-		totalQuestions = 4;
-	}
-	setTimeout(function(){ 
-		textRibbonContent.innerHTML = "<p>Before we go to the Big Board, you have to earn spins by answering questions correctly. Buzz in with the right answer on your device.</p>";
-		textDisplay.className = '';
-		textDisplay.className = 'show';
-	}, 1);
-	setTimeout(function(){ 
-		textRibbonContent.className = '';
-		textRibbonContent.className = 'show';
-	}, 250);
-	setTimeout(function(){ 
-		textRibbonContent.className = '';
-	}, 5000);
-	setTimeout(function(){
-		textRibbonContent.innerHTML = "";
-		textRibbonContent.innerHTML = "<p>A right answer gives you 1 spin. If you answer first, though, you'll get 3 spins!</p>";
-		textRibbonContent.className = 'show';
-	}, 5250);
-	setTimeout(function(){ 
-		textRibbonContent.className = '';
-	}, 10000);
-	setTimeout(function(){
-		textRibbonContent.innerHTML = "";
-		textRibbonContent.innerHTML = "<p>Once the choices appear, you'll have five seconds to answer. Here's the first question.</p>";
-		textRibbonContent.className = 'show';
-	}, 10250);
-	setTimeout(function(){ 
-		textRibbonContent.className = '';
-		loadQuestion(r);
-	}, 15000);
-}
 
 function loadQuestion(r){
 	if (r == 1){
@@ -766,6 +728,11 @@ function buzzerPress(){
 	}
 }
 
+function setSelectiveSquare(ss){
+	selectedSquare = ss;
+// 	console.log(selectedSquare);
+}
+
 function stopBoard(){
 	canStop = false;
 	document.getElementById("buzzer").className = 'press';
@@ -791,7 +758,7 @@ function stopBoard(){
 		}
 	}
 	if (activeBoard[selectedSquare]['type'][0][posStop] == "bigbucks"){
-		extraMsg = "Big Bucks! ";
+// 		extraMsg = "Big Bucks! ";
 		selectedSquare = 4;
 		if(bonusRound){
 			runBoardAnim(7);
@@ -810,7 +777,7 @@ function stopBoard(){
 		runBoardAnim(6);
 	}
 	if (activeBoard[selectedSquare]['extras'][0][posStop] == "backtwo"){
-		extraMsg = "Move two spaces to ";
+// 		extraMsg = "Move two spaces to ";
 		var startSquare = selectedSquare;
 		selectedSquare = selectedSquare - 2;
 		sI = selectedSquare - 1;
@@ -829,7 +796,7 @@ function stopBoard(){
 	}
 	if (activeBoard[selectedSquare]['extras'][0][posStop] == "losewhammy"){
 		if (totalWhammies > 0){
-			guiMsg = "Stop at $"+toDollar(activeBoard[selectedSquare]['values'][0][posStop])+" or Lose a Whammy! Which do you want?<p class='btns'><button id='takemoney'>$"+toDollar(activeBoard[selectedSquare]['values'][0][posStop])+"</button><button id='losewhammy'>Lose a Whammy</button></p>";
+// 			guiMsg = "Stop at $"+toDollar(activeBoard[selectedSquare]['values'][0][posStop])+" or Lose a Whammy! Which do you want?<p class='btns'><button id='takemoney'>$"+toDollar(activeBoard[selectedSquare]['values'][0][posStop])+"</button><button id='losewhammy'>Lose a Whammy</button></p>";
 /*
 			setTimeout(function(){ 
 				textRibbonContent.innerHTML = "<p>"+guiMsg+"</p>";
@@ -850,7 +817,7 @@ function stopBoard(){
 		}
 	}
 	if (activeBoard[selectedSquare]['extras'][0][posStop] == "forwardtwo"){
-		extraMsg = "Move two spaces to ";
+// 		extraMsg = "Move two spaces to ";
 		var startSquare = selectedSquare;
 		selectedSquare = selectedSquare + 2;
 		sI = selectedSquare - 1;
@@ -868,7 +835,7 @@ function stopBoard(){
 */
 	}
 	if (activeBoard[selectedSquare]['extras'][0][posStop] == "across"){
-		extraMsg = "Across the board to ";
+// 		extraMsg = "Across the board to ";
 		selectedSquare = 8;
 		sI = selectedSquare - 1;
 		posStop = activeIndexes[sI];
@@ -904,18 +871,18 @@ function stopBoard(){
 			if (totalWhammies == 3){
 				extras = "  Be careful: one more Whammy and you're out of the game.";
 			}
-			spinsMsg = "";
+// 			spinsMsg = "";
  			if (totalSpins >= 1){
 	 			plural = "";
 	 			if (totalSpins > 1){
 		 			plural = "s";
 	 			}
-		 		spinsMsg = " "+totalSpins+" spin"+plural+" left to take this round. Good luck!";
+// 		 		spinsMsg = " "+totalSpins+" spin"+plural+" left to take this round. Good luck!";
 		 	}
 			if (totalWhammies < 4){
-				whammyMsg = "Stop...at a Whammy!"+extras+" Back down to $0."+spinsMsg;
+// 				whammyMsg = "Stop...at a Whammy!"+extras+" Back down to $0."+spinsMsg;
 			} else {
-				whammyMsg = "Stop...at a Whammy!"+extras+" Unfortunately that's your fourth Whammy and your game is over. Thanks for playing Press Your Luck.<p class='btns'><button id='menuBtn' onclick='menuBtn(1)'>MENU</button><button id='restartBtn' onclick='menuBtn(2)'>RESTART</button></p>";
+// 				whammyMsg = "Stop...at a Whammy!"+extras+" Unfortunately that's your fourth Whammy and your game is over. Thanks for playing Press Your Luck.<p class='btns'><button id='menuBtn' onclick='menuBtn(1)'>MENU</button><button id='restartBtn' onclick='menuBtn(2)'>RESTART</button></p>";
 			}
 /*
 			setTimeout(function(){ 
@@ -945,31 +912,31 @@ function stopBoard(){
 */
 		} else {
  			playerScore += activeBoard[selectedSquare]['values'][0][posStop];
- 			spinsMsg = "";
+//  			spinsMsg = "";
  			if (totalSpins >= 1){
 	 			plural = "";
 	 			if (totalSpins > 1){
 		 			plural = "s";
 	 			}
-		 		spinsMsg = totalSpins+" spin"+plural+" left to take this round. Good luck!";
+// 		 		spinsMsg = totalSpins+" spin"+plural+" left to take this round. Good luck!";
 		 	}
  			if (activeBoard[selectedSquare]['type'][0][posStop] == "move"){
 	 			if (activeBoard[selectedSquare]['extras'][0][posStop] == "forwardtwo"){
-		 			guiMsg = "Move two spaces to "+toDollar(activeBoard[selectedSquare]['values'][0][posStop])+"! You're up to $"+toDollar(playerScore)+". "+spinsMsg;
+// 		 			guiMsg = "Move two spaces to "+toDollar(activeBoard[selectedSquare]['values'][0][posStop])+"! You're up to $"+toDollar(playerScore)+". "+spinsMsg;
 		 		}
 	 			if (activeBoard[selectedSquare]['extras'][0][posStop] == "backtwo"){
-		 			guiMsg = "Move two spaces to "+toDollar(activeBoard[selectedSquare]['values'][0][posStop])+"! You're up to $"+toDollar(playerScore)+". "+spinsMsg;
+// 		 			guiMsg = "Move two spaces to "+toDollar(activeBoard[selectedSquare]['values'][0][posStop])+"! You're up to $"+toDollar(playerScore)+". "+spinsMsg;
 		 		}
 		 		if (activeBoard[selectedSquare]['extras'][0][posStop] == "across"){
-			 		guiMsg = "Across the board to "+toDollar(activeBoard[selectedSquare]['values'][0][posStop])+"! You're up to $"+toDollar(playerScore)+". "+spinsMsg;
+// 			 		guiMsg = "Across the board to "+toDollar(activeBoard[selectedSquare]['values'][0][posStop])+"! You're up to $"+toDollar(playerScore)+". "+spinsMsg;
 			 	}
 			 	if (activeBoard[selectedSquare]['extras'][0][posStop] == "losewhammy"){
-					guiMsg = "Stop at "+toDollar(activeBoard[selectedSquare]['values'][0][posStop])+" or Lose a Whammy! Click which option you choose."; 	
+// 					guiMsg = "Stop at "+toDollar(activeBoard[selectedSquare]['values'][0][posStop])+" or Lose a Whammy! Click which option you choose."; 	
 				}
 	 		} else if (activeBoard[selectedSquare]['type'][0][posStop] == "bigbucks"){
-		 		guiMsg = "Big Bucks! $"+toDollar(activeBoard[selectedSquare]['values'][0][posStop])+""+extras+"! You're up to $"+toDollar(playerScore)+". "+spinsMsg;
+// 		 		guiMsg = "Big Bucks! $"+toDollar(activeBoard[selectedSquare]['values'][0][posStop])+""+extras+"! You're up to $"+toDollar(playerScore)+". "+spinsMsg;
 		 	} else {
-	 			guiMsg = extraMsg + "" +prizeInfo+" $"+toDollar(activeBoard[selectedSquare]['values'][0][posStop])+""+extras+"! You're up to $"+toDollar(playerScore)+". "+spinsMsg;
+// 	 			guiMsg = extraMsg + "" +prizeInfo+" $"+toDollar(activeBoard[selectedSquare]['values'][0][posStop])+""+extras+"! You're up to $"+toDollar(playerScore)+". "+spinsMsg;
  	 			blinkSquare(sI);
  			}
 /*
@@ -1033,7 +1000,7 @@ function stopBoard(){
 			squareClickA.addEventListener("click", chooseSquareA);
 			squareClickB.addEventListener("click", chooseSquareB);
 */
-			guiMsg = "Move one space! Click either square or use an arrow key to make your selection!";
+// 			guiMsg = "Move one space! Click either square or use an arrow key to make your selection!";
 /*
 			setTimeout(function(){ 
 				textRibbonContent.innerHTML = "<p>"+guiMsg+"</p>";
@@ -1083,7 +1050,7 @@ function stopBoard(){
 			squareClickC.addEventListener("click", chooseSquarePACC);
 			squareClickB.addEventListener("click", chooseSquarePACB);
 */
-			guiMsg = "Stop at Pick a Corner! Click whichever corner you'd like to bank!";
+// 			guiMsg = "Stop at Pick a Corner! Click whichever corner you'd like to bank!";
 			setTimeout(function(){ 
 				allowClick = false;
 				toggleVarCorner = setInterval(toggleSquares, 1500);
@@ -1198,16 +1165,16 @@ function startnewRound(rn){
 		if (rn == 4){bigBucksNum = "increase to an unbelievable $75,000";spinsTake = 3;};
 		if (playerScore > 0){
 			if (rn !== 5){
-				roundMsg = "It's decision time. You can walk away with $"+toDollar(playerScore)+" or Press Your Luck. If you play, Big Bucks will "+bigBucksNum+"! You'll have to take "+spinsTake+" spins.";
+// 				roundMsg = "It's decision time. You can walk away with $"+toDollar(playerScore)+" or Press Your Luck. If you play, Big Bucks will "+bigBucksNum+"! You'll have to take "+spinsTake+" spins.";
 		// 		infoGui.value = "You've ended the round with $"+toDollar(playerScore)+" and it's decision time. You can walk away with your winnings or Press Your Luck. If you play on, we'll add another bigger prize to the board, and Big Bucks will "+bigBucksNum+"! You must take "+spinsTake+" spins. Do you want to walk away, or Press Your Luck?";
 			} else {
-				roundMsg = "You've made it to the Big Bucks Bonanza. Everything on the board is now Big Bucks, from $10,000 to our biggest bucks: $100,000. You will have to survive 3 spins.";
+// 				roundMsg = "You've made it to the Big Bucks Bonanza. Everything on the board is now Big Bucks, from $10,000 to our biggest bucks: $100,000. You will have to survive 3 spins.";
 			}
 		} else {
-			roundMsg = "You've ended the round with $0. The good news is that you've got nothing to lose, so we're moving on to the next round!";
+// 			roundMsg = "You've ended the round with $0. The good news is that you've got nothing to lose, so we're moving on to the next round!";
 		}
 		setTimeout(function(){ 
-			textRibbonContent.className = '';
+// 			textRibbonContent.className = '';
 			clearAllSquares();
 		}, 0);
 /*
@@ -1232,7 +1199,7 @@ function startnewRound(rn){
 */
 		} else {
 			setTimeout(function(){ 
-				textRibbonContent.className = '';
+// 				textRibbonContent.className = '';
 			}, 4500);
 			setTimeout(function(){
 // 				continueGame();
@@ -1322,9 +1289,9 @@ function menuBtn(fn){
 		frameContent.className = '';
 		frameContent.classList.add("fliptrans");
 		frameContent.classList.add("greenspiralcenter");
-		textRibbonContent.className = '';
+// 		textRibbonContent.className = '';
 		textDisplay.className = '';
-		textRibbonContent.innerHTML = "";
+// 		textRibbonContent.innerHTML = "";
 	}, 0);
 	setTimeout(function(){ 
 		document.getElementById("whammy1").className = 'whammypopup';
@@ -1371,16 +1338,16 @@ function loseWhammy(el){
 	totalSpins--;
 	totalGui.innerHTML = toDollar(playerScore);
  	spinsGui.innerHTML = totalSpins;
- 	spinsMsg = "";
+//  	spinsMsg = "";
  	if (totalSpins >= 1){
-		spinsMsg = " "+totalSpins+" spins left to take this round. Good luck!";
+// 		spinsMsg = " "+totalSpins+" spins left to take this round. Good luck!";
 	}
 	if (el == 0){
-		guiMsg = "You've chosen $"+toDollar(activeBoard[selectedSquare]['values'][0][posStop])+"! You're up to $"+toDollar(playerScore)+"."+spinsMsg;
+// 		guiMsg = "You've chosen $"+toDollar(activeBoard[selectedSquare]['values'][0][posStop])+"! You're up to $"+toDollar(playerScore)+"."+spinsMsg;
 	} else if (el == 2){
-		guiMsg = "$"+toDollar(activeBoard[selectedSquare]['values'][0][posStop])+" or Lose a Whammy! You have no Whammies so you get the cash! You're up to $"+toDollar(playerScore)+"."+spinsMsg;
+// 		guiMsg = "$"+toDollar(activeBoard[selectedSquare]['values'][0][posStop])+" or Lose a Whammy! You have no Whammies so you get the cash! You're up to $"+toDollar(playerScore)+"."+spinsMsg;
 	} else {
-		guiMsg = "You've chosen to lose a Whammy! You're still at $"+toDollar(playerScore)+" ."+spinsMsg;
+// 		guiMsg = "You've chosen to lose a Whammy! You're still at $"+toDollar(playerScore)+" ."+spinsMsg;
 		setTimeout(function(){ 
 			whammyRemove = totalWhammies + 1;
 			document.getElementById("whammy"+whammyRemove).className = '';
@@ -1436,43 +1403,43 @@ function continueGame(){
 	if (roundNum == 5){activeBoard = royaleBoardSix;totalSpins = 3;topDollar="100,000";}
 	redBoard.className = '';
 	blueBoard.className = '';
-	roundMsg = "";
+// 	roundMsg = "";
 	scoreCenter.style.display = "none";
 	displayCenterMoney(roundNum);
 	setTimeout(function(){ 
-		textRibbonContent.className = '';
+// 		textRibbonContent.className = '';
 	}, 0);
 	setTimeout(function(){ 
 		if (playerScore > 0){
-			textRibbonContent.innerHTML = "<p>You're Pressing Your Luck! Big Bucks in round "+roundNum+" is worth $"+topDollar+"!</p>";
+// 			textRibbonContent.innerHTML = "<p>You're Pressing Your Luck! Big Bucks in round "+roundNum+" is worth $"+topDollar+"!</p>";
 		} else {
-			textRibbonContent.innerHTML = "<p>Big Bucks in round "+roundNum+" is worth $"+topDollar+"!</p>";
+// 			textRibbonContent.innerHTML = "<p>Big Bucks in round "+roundNum+" is worth $"+topDollar+"!</p>";
 		}
 		textDisplay.className = '';
 		textDisplay.className = 'show';
 	}, 1500);
 	setTimeout(function(){ 
-		textRibbonContent.className = '';
-		textRibbonContent.className = 'show';
+// 		textRibbonContent.className = '';
+// 		textRibbonContent.className = 'show';
 	}, 1750);
 	setTimeout(function(){ 
-		textRibbonContent.className = '';
+// 		textRibbonContent.className = '';
 	}, 7000);
 	setTimeout(function(){
-		finalRnMsg = " Good luck!";
+// 		finalRnMsg = " Good luck!";
 		if (roundNum == 5){
-			finalRnMsg = "This is the final round...good luck!"
+// 			finalRnMsg = "This is the final round...good luck!"
 		}
-		textRibbonContent.innerHTML = "";
-		textRibbonContent.innerHTML = "<p>You have to survive "+totalSpins+" spins."+finalRnMsg+"</p>";
+// 		textRibbonContent.innerHTML = "";
+// 		textRibbonContent.innerHTML = "<p>You have to survive "+totalSpins+" spins."+finalRnMsg+"</p>";
 		scoreCenter.style.display = "block";
-		textRibbonContent.className = 'show';
+// 		textRibbonContent.className = 'show';
 	}, 7250);
 	setTimeout(function(){ 
 		spinsGui.innerHTML = totalSpins;
 	}, 9000);
 	setTimeout(function(){ 
-		textRibbonContent.className = '';
+// 		textRibbonContent.className = '';
 		textDisplay.className = '';
 	}, 12000);
 	setTimeout(function(){ 
@@ -1481,7 +1448,7 @@ function continueGame(){
 	 	centerFrame.className = '';
 	 	frameContent.className = '';
 	 	centerLogo.className = '';
-		textRibbonContent.innerHTML = "";
+// 		textRibbonContent.innerHTML = "";
 	}, 12500);
 /*
 	if (roundNum !== 5){
@@ -1731,6 +1698,38 @@ function loadPrizes(i,e,r,a,n,t){
 	}
 }
 
+socket.on('cycleBoardStops',function(allStops,type) {
+	stops = allStops;
+	currentStop = stops;
+	currentBoard = activeBoard;
+	boardConfig = activeBoard;
+// 	currentBoard = boardConfig;
+	for(x=0;x<stops.length;x++){
+		singleStop = stops[x];
+	}
+	activeIndexes = [];
+	if (type == 2){
+		for(var i in boardConfig) {
+			currentSquareReadout = boardConfig[i];
+			currentSquareStop = stops[i-1];
+			fillSquare(i-1, boardConfig[i]['color'][0][currentSquareStop], boardConfig[i]['type'][0][currentSquareStop], boardConfig[i]['values'][0][currentSquareStop], boardConfig[i]['text'][0][currentSquareStop], boardConfig[i]['prizeValues'][0][currentSquareStop], boardConfig[i]['extras'][0][currentSquareStop]);
+			activeIndexes.push(currentSquareStop);
+		}
+	} else if (type == 1){
+		for(var i in boardConfig) {
+			timerCounter = i * 100;
+			squareStop = parseInt(i) + 3;
+			if (squareStop > 18){
+				squareStop = squareStop - 18;
+			}
+			currentSquareReadout = boardConfig[squareStop];
+			currentSquareStop = stops[squareStop-1];
+			doTimerLoad(i,squareStop,currentSquareReadout,currentSquareStop,boardConfig);
+		}
+	}
+});
+
+/*
 function loadSingle(boardConfig, stops, num, type){
 	if (stops.length < 18){
 		stops = [];
@@ -1772,21 +1771,9 @@ function loadSingle(boardConfig, stops, num, type){
 			currentSquareStop = stops[squareStop-1];
 			doTimerLoad(i,squareStop,currentSquareReadout,currentSquareStop,boardConfig);
 		}
-/*
-		setTimeout(function(){ 
-			boardItemsFade[square].className = '';
-				boardItemsFade[square].classList.add("item");
-				boardItemsFade[square].classList.add("itemsinglefade");
-				boardItemsFade[square].classList.add("animate");
-				boardItemsFade[square].classList.add("show");
-				boardItemsFade[square].classList.add(color);
-				if (color == "move"){
-					boardItemsFade[square].classList.add(extra);
-				}
-		}, 300);
-*/
 	}
 }
+*/
 
 function doTimerLoad(j,i,currentSquareReadout,currentSquareStop,boardConfig) {
 	timerVal = j*75;
@@ -1838,14 +1825,14 @@ function fillSquare(square,color,type,value,text,prizeValue,extra){
 function cycleTimer(theBoard) {
 	document.getElementById("buzzer").className = '';
 // 	document.getElementById("buzzer").addEventListener("click", buzzerPress);
-	extraMsg = "Stop at ";
+// 	extraMsg = "Stop at ";
 // 	boardSpinSfx.play();
 // 	blueBoard.className = 'show';
 	activeBoard = theBoard;
- 	boardCycle(currentStop);
  	setTimeout(function(){ 
  		canStop = true;
  	}, 1250);
+ 	boardCycle(currentStop);
     cycleVar = setInterval(boardCycle, 800);
 }
 
@@ -1869,13 +1856,25 @@ function setSquare(ab){
 	squareElem.classList.add("active");
 }
 
-function spinBoard(){
+//BOUNCE BOARD LIGHT
+socket.on('boardLtBn',function(selectedSquare,usedSquares) {
+	if (usedSquares.length > 1){
+		var activeSquare = document.body.querySelector('.square.active');
+		activeSquare.className = '';
+		activeSquare.classList.add("square");
+	}
+	setSelectiveSquare(selectedSquare);
+	var squareElem = document.body.querySelector('.square[data-square="'+selectedSquare+'"]');
+	squareElem.classList.add("active");
+});
+
+/*
+function spinBoard(randomSquare){
 	if (usedSquares.length > 2){
 		addSquare = usedSquares[0];
 		usedSquares.shift();
 		spinSquares.push(addSquare);
 	}
-	randomLand = Math.floor(Math.random()*spinSquares.length);
 	selectedSquare = spinSquares[Math.floor(Math.random()*spinSquares.length)];
 	var squareIndex = spinSquares.indexOf(selectedSquare);
 	if (squareIndex > -1) {
@@ -1890,6 +1889,7 @@ function spinBoard(){
 	var squareElem = document.body.querySelector('.square[data-square="'+selectedSquare+'"]');
 	squareElem.classList.add("active");
 }
+*/
 
 function chooseSquareA(){
 /*
@@ -2407,7 +2407,7 @@ socket.on('startRound',function(data) {
 		tobigboardSfx.play();
 		sfxPlayer = tobigboardSfx;
 		currentPlaying = 4;
-		loadSingle(activeBoard,currentStop,1,1);
+//  		loadSingle(activeBoard,currentStop,1,1);
 /*
 		setTimeout(function(){ 
 			spinTimer();
@@ -2422,7 +2422,7 @@ socket.on('startRound',function(data) {
 		tobigboardSfx.play();
 		currentPlaying = 4;
 		sfxPlayer = tobigboardSfx;
-		loadSingle(activeBoard,currentStop,1,1);
+//  		loadSingle(activeBoard,currentStop,1,1);
 	}
 	if(data == 3){
 		runBoardAnim(3);
@@ -2434,8 +2434,9 @@ socket.on("startBoard",function(data){
 	boardSpinSfx.play();
 	sfxPlayer = boardSpinSfx;
 	clearAllSquares();
-	spinTimer();
-	cycleTimer(activeBoard);
+	canStop = true;
+// 	spinTimer();
+// 	cycleTimer(activeBoard);
 	if (bonusRound){
 		blueBoard.className = 'show';
 		redBoard.className = '';

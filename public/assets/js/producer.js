@@ -10,6 +10,12 @@ player1Active = false;
 player2Active = false;
 player3Active = false;
 champActive = false;
+canSpin = true;
+var spinVar;
+clearInterval(spinVar);
+var cycleVar;
+clearInterval(cycleVar);
+currentStop = [];
 
 
 //SHUFFLE ARRAYS MASTER
@@ -305,6 +311,8 @@ function startRound(num){
  		document.getElementsByName("champPlayerNumber")[0].value = champNumber;
  		document.getElementsByName("champ1safe")[0].value = safeScore;
 	}
+	currentStop = [];
+	loadSingle(currentStop,1,1);
 }
 //ACTIVATE PLAYER BUZZER
 function activateBuzzer(playerNum){
@@ -375,13 +383,17 @@ function activateBuzzer(playerNum){
 function startSpin(){
 	socket.emit('start board', 'start');
 	podiumGo(3);
+	spinTimer();
+	cycleTimer();
 	if(roundNum == 3){
 		socket.emit('display bg', 3);
 	}
 }
-//START SPIN
+//END SPIN
 function endSpin(){
 	socket.emit('stop board', 'stop');
+	clearInterval(spinVar);
+	clearInterval(cycleVar);
 }
 //ADD SQUARE
 function addSquare(playerNum){
@@ -450,6 +462,8 @@ socket.on('sendSquareInfo',function(squareInfo) {
 });
 //BOARD HAS BEEN STOPPED
 socket.on('clientstop',function(data) {
+	clearInterval(spinVar);
+	clearInterval(cycleVar);
     document.getElementById("buzzertoggle1").className = "";
     document.getElementById("buzzertoggle2").className = "";
     document.getElementById("buzzertoggle3").className = "";
@@ -558,4 +572,57 @@ function sfx(sfxType){
 //RENDER BOARD ANIMATION
 function boardAnim(animType){
 	socket.emit('trigger board animation', animType);
+}
+//BOARD LIGHT CYCLE
+function spinTimer() {
+	spinSquares = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
+	usedSquares = [];
+	spinVar = setInterval(spinBoard, 250);
+	canSpin = true;
+}
+function spinBoard(){
+	if (usedSquares.length > 2){
+		addSquare = usedSquares[0];
+		usedSquares.shift();
+		spinSquares.push(addSquare);
+	}
+// 	randomLand = Math.floor(Math.random()*spinSquares.length);
+	selectedSquare = spinSquares[Math.floor(Math.random()*spinSquares.length)];
+	var squareIndex = spinSquares.indexOf(selectedSquare);
+	if (squareIndex > -1) {
+		spinSquares.splice(squareIndex, 1);
+	}
+	usedSquares.push(selectedSquare);
+	if(canSpin){
+		socket.emit('board light bounce', selectedSquare,usedSquares,canSpin);
+	}
+}
+//BOARD SLIDE CYCLE
+function cycleTimer(theBoard = false) {
+ 	boardCycle(currentStop);
+    cycleVar = setInterval(boardCycle, 800);
+}
+function boardCycle(){
+	loadSingle(currentStop,1,2);
+}
+function loadSingle(stops, num, type){
+	currentStop = stops;
+	if (stops.length < 18){
+		stops = [];
+		for(x=0;x<18;x++){
+			stopNum = Math.floor(Math.random() * 3) + 1;
+			stops.push(stopNum);
+		}
+	} else {
+		for(x=0;x<18;x++){
+			potentialStops = [1,2,3];
+			currentUsed = stops[x] - 1;
+			potentialStops.splice(currentUsed, 1);
+			stopCheck = Math.floor(Math.random() * 2);
+			stopNum = potentialStops[stopCheck];
+			stops[x] = stopNum;
+		}
+	}
+	console.log(stops);
+	socket.emit('send stops board', stops,type);
 }

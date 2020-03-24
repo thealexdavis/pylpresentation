@@ -257,6 +257,14 @@ io.on('connection', function(socket){
 	  socket.on('trigger board animation', function(animId){
 	    io.emit('triggerBgAnim', animId);
 	  });
+	  //BOARD LIGHT BOUNCE
+	  socket.on('board light bounce', function(selectedSquare,usedSquares,canSpin){
+	    io.emit('boardLtBn', selectedSquare,usedSquares,canSpin);
+	  });
+	  //BOARD LIGHT BOUNCE
+	  socket.on('send stops board', function(allStops,type){
+	    io.emit('cycleBoardStops', allStops,type);
+	  });
 });
 
 http.listen(3000, function(){
