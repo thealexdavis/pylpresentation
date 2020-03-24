@@ -387,6 +387,7 @@ function startSpin(){
 	podiumGo(3);
 	spinTimer();
 	cycleTimer();
+	receivedValue = false;
 	if(roundNum == 3){
 		socket.emit('display bg', 3);
 	}
@@ -398,69 +399,72 @@ function endSpin(){
 	clearInterval(cycleVar);
 }
 //ADD SQUARE
-function addSquare(playerNum){
+function addSquareValue(playerNum){
 // 	podiumGo(2);
 	socket.emit('add square', playerNum);
 }
 //GET SQUARE VALUE AND PARSE
 socket.on('sendSquareInfo',function(squareInfo) {
-	var playerNum = squareInfo[0];
-	var squareValue = parseInt(squareInfo[1]);
-	var squareType = squareInfo[2];
-	var squareExtras = squareInfo[3];
-	var playerNumberFull = "player"+playerNum;
-	if(playerNum == 4){
-		playerNumberFull = "champ1"
-	}
-	if(squareType == "whammy"){
-		playerScoreNew = 0;
-		toggleWhammy([playerNum,1]);
-		if (playerNum !== 4 && parseInt(document.getElementsByName(playerNumberFull+"passed")[0].value) > 0){
-			playerPassedSpinsNow = parseInt(document.getElementsByName(playerNumberFull+"passed")[0].value) - 1;
-			playerEarnedSpinsNow = parseInt(document.getElementsByName(playerNumberFull+"earned")[0].value);
-			document.getElementsByName(playerNumberFull+"earned")[0].value = playerPassedSpinsNow + playerEarnedSpinsNow;
-			document.getElementsByName(playerNumberFull+"passed")[0].value = 0;
-		} else {
-			playerSpinsNew = parseInt(document.getElementsByName(playerNumberFull+"earned")[0].value) - 1;
-			document.getElementsByName(playerNumberFull+"earned")[0].value = playerSpinsNew;
+	if(!receivedValue){
+		receivedValue = true;
+		var playerNum = squareInfo[0];
+		var squareValue = parseInt(squareInfo[1]);
+		var squareType = squareInfo[2];
+		var squareExtras = squareInfo[3];
+		var playerNumberFull = "player"+playerNum;
+		if(playerNum == 4){
+			playerNumberFull = "champ1"
 		}
-	} else if(squareType == "addaone"){
-		currentScore = "1"+document.getElementsByName(playerNumberFull+"score")[0].value;
-		playerScoreNew = parseInt(currentScore);
-	} else if(squareType == "double"){
-		playerScoreNew = parseInt(document.getElementsByName(playerNumberFull+"score")[0].value) * 2;
-	} else {
-		playerScoreNew = parseInt(document.getElementsByName(playerNumberFull+"score")[0].value) + squareValue;
-	}
-	document.getElementsByName(playerNumberFull+"score")[0].value = playerScoreNew;
-	if (squareExtras !== "plus"){
-		if (playerNum !== 4 && parseInt(document.getElementsByName(playerNumberFull+"passed")[0].value) > 0){
-			if(squareType !== "whammy"){
-				playerSpinsNew = parseInt(document.getElementsByName(playerNumberFull+"passed")[0].value) - 1;
-				document.getElementsByName(playerNumberFull+"passed")[0].value = playerSpinsNew;
-			}
-		} else {
-			if(squareType !== "whammy"){
+		if(squareType == "whammy"){
+			playerScoreNew = 0;
+			toggleWhammy([playerNum,1]);
+			if (playerNum !== 4 && parseInt(document.getElementsByName(playerNumberFull+"passed")[0].value) > 0){
+				playerPassedSpinsNow = parseInt(document.getElementsByName(playerNumberFull+"passed")[0].value) - 1;
+				playerEarnedSpinsNow = parseInt(document.getElementsByName(playerNumberFull+"earned")[0].value);
+				document.getElementsByName(playerNumberFull+"earned")[0].value = playerPassedSpinsNow + playerEarnedSpinsNow;
+				document.getElementsByName(playerNumberFull+"passed")[0].value = 0;
+			} else {
 				playerSpinsNew = parseInt(document.getElementsByName(playerNumberFull+"earned")[0].value) - 1;
 				document.getElementsByName(playerNumberFull+"earned")[0].value = playerSpinsNew;
 			}
+		} else if(squareType == "addaone"){
+			currentScore = "1"+document.getElementsByName(playerNumberFull+"score")[0].value;
+			playerScoreNew = parseInt(currentScore);
+		} else if(squareType == "double"){
+			playerScoreNew = parseInt(document.getElementsByName(playerNumberFull+"score")[0].value) * 2;
+		} else {
+			playerScoreNew = parseInt(document.getElementsByName(playerNumberFull+"score")[0].value) + squareValue;
 		}
-	} else {
-		if (playerNum !== 4 && parseInt(document.getElementsByName(playerNumberFull+"passed")[0].value) > 0){
-			playerSpinsNewPassed = parseInt(document.getElementsByName(playerNumberFull+"passed")[0].value) - 1;
-			document.getElementsByName(playerNumberFull+"passed")[0].value = playerSpinsNewPassed;
-			playerSpinsNewEarned = parseInt(document.getElementsByName(playerNumberFull+"earned")[0].value) + 1;
-			document.getElementsByName(playerNumberFull+"earned")[0].value = playerSpinsNewEarned;
+		document.getElementsByName(playerNumberFull+"score")[0].value = playerScoreNew;
+		if (squareExtras !== "plus"){
+			if (playerNum !== 4 && parseInt(document.getElementsByName(playerNumberFull+"passed")[0].value) > 0){
+				if(squareType !== "whammy"){
+					playerSpinsNew = parseInt(document.getElementsByName(playerNumberFull+"passed")[0].value) - 1;
+					document.getElementsByName(playerNumberFull+"passed")[0].value = playerSpinsNew;
+				}
+			} else {
+				if(squareType !== "whammy"){
+					playerSpinsNew = parseInt(document.getElementsByName(playerNumberFull+"earned")[0].value) - 1;
+					document.getElementsByName(playerNumberFull+"earned")[0].value = playerSpinsNew;
+				}
+			}
+		} else {
+			if (playerNum !== 4 && parseInt(document.getElementsByName(playerNumberFull+"passed")[0].value) > 0){
+				playerSpinsNewPassed = parseInt(document.getElementsByName(playerNumberFull+"passed")[0].value) - 1;
+				document.getElementsByName(playerNumberFull+"passed")[0].value = playerSpinsNewPassed;
+				playerSpinsNewEarned = parseInt(document.getElementsByName(playerNumberFull+"earned")[0].value) + 1;
+				document.getElementsByName(playerNumberFull+"earned")[0].value = playerSpinsNewEarned;
+			}
 		}
+		if(playerNum == 4){
+			newTotal = parseInt(document.getElementsByName(playerNumberFull+"score")[0].value) + parseInt(document.getElementsByName(playerNumberFull+"safe")[0].value);
+			document.getElementsByName(playerNumberFull+"total")[0].value = newTotal;
+			pData = [playerNum,document.getElementsByName(playerNumberFull+"name")[0].value,document.getElementsByName(playerNumberFull+"score")[0].value,document.getElementsByName(playerNumberFull+"earned")[0].value,document.getElementsByName(playerNumberFull+"safe")[0].value,document.getElementsByName(playerNumberFull+"whammy")[0].value];
+		} else {
+			pData = [playerNum,document.getElementsByName(playerNumberFull+"name")[0].value,document.getElementsByName(playerNumberFull+"score")[0].value,document.getElementsByName(playerNumberFull+"earned")[0].value,document.getElementsByName(playerNumberFull+"passed")[0].value,document.getElementsByName(playerNumberFull+"whammy")[0].value];
+		}
+		sync(pData);
 	}
-	if(playerNum == 4){
-		newTotal = parseInt(document.getElementsByName(playerNumberFull+"score")[0].value) + parseInt(document.getElementsByName(playerNumberFull+"safe")[0].value);
-		document.getElementsByName(playerNumberFull+"total")[0].value = newTotal;
-		pData = [playerNum,document.getElementsByName(playerNumberFull+"name")[0].value,document.getElementsByName(playerNumberFull+"score")[0].value,document.getElementsByName(playerNumberFull+"earned")[0].value,document.getElementsByName(playerNumberFull+"safe")[0].value,document.getElementsByName(playerNumberFull+"whammy")[0].value];
-	} else {
-		pData = [playerNum,document.getElementsByName(playerNumberFull+"name")[0].value,document.getElementsByName(playerNumberFull+"score")[0].value,document.getElementsByName(playerNumberFull+"earned")[0].value,document.getElementsByName(playerNumberFull+"passed")[0].value,document.getElementsByName(playerNumberFull+"whammy")[0].value];
-	}
-	sync(pData);
 });
 //BOARD HAS BEEN STOPPED
 socket.on('clientstop',function(data) {
@@ -629,6 +633,5 @@ function loadSingle(stops, num, type){
 			stops[x] = stopNum;
 		}
 	}
-	console.log(stops);
 	socket.emit('send stops board', stops,type);
 }
