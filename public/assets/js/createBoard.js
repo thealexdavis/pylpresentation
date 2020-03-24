@@ -611,7 +611,6 @@ function displayCenterMoney(rn){
 				frameContent.classList.add("removeburst");
 			}, 3010);
 			setTimeout(function(){ 
-				loadSingle(activeBoard,currentStop,1,1);
 				centerFrame.className = '';
 				centerFrame.classList.add("fliptrans");
 				frameContent.className = '';

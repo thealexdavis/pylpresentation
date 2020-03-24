@@ -62,6 +62,12 @@ socket.on('activateBuzzers',function(data) {
 		}
 	}
 });
+document.body.onkeyup = function(e){
+    if(e.keyCode == 32 && buzzerStatus){
+    	buzzin();
+    	buzzerStatus = false;
+    }
+}
 function activateBuzzer(){
 	document.getElementById("thebuzzer").addEventListener("click", buzzin);
 	document.getElementById("thebuzzer").className = "active";

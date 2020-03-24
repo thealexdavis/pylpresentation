@@ -269,6 +269,8 @@ function startRound(num){
 		socket.emit('podium toggle', 3);
  		socket.emit('start round', 1);
  		roundNum = 1;
+ 		currentStop = [];
+		loadSingle(currentStop,1,1);
  		document.getElementsByClassName('question_control')[0].style.display = 'none';
  		document.getElementsByClassName('spin_control')[0].style.display = 'flex';
 	}
@@ -276,6 +278,8 @@ function startRound(num){
 		socket.emit('podium toggle', 3);
  		socket.emit('start round', 2);
  		roundNum = 2;
+ 		currentStop = [];
+		loadSingle(currentStop,1,1);
  		document.getElementsByClassName('question_control')[0].style.display = 'none';
  		document.getElementsByClassName('spin_control')[0].style.display = 'flex';
 	}
@@ -311,8 +315,6 @@ function startRound(num){
  		document.getElementsByName("champPlayerNumber")[0].value = champNumber;
  		document.getElementsByName("champ1safe")[0].value = safeScore;
 	}
-	currentStop = [];
-	loadSingle(currentStop,1,1);
 }
 //ACTIVATE PLAYER BUZZER
 function activateBuzzer(playerNum){
@@ -536,6 +538,10 @@ function loadBonusBoard(bonusNum){
 	} else {
 		loadedSpins = 3;
 	}
+	setTimeout(function(){ 
+		currentStop = [];
+		loadSingle(currentStop,1,1);
+	}, 4000);
 	document.getElementsByName("champ1earned")[0].value = loadedSpins;
 	socket.emit('load bonus board', bonusNum);
 }

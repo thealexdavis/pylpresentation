@@ -1,42 +1,42 @@
 questionList = {
 	1: {
-		"question": "Question 1 is A",
-		"answers":["Answer A","Answer B","Answer C"]
+		"question": "If you at a Coney Dog after watching a Lions NFL game in the Great Lakes state, what state are you visiting?",
+		"answers":["Michigan","Wisconsin","Ohio"]
 	},
 	2: {
-		"question":"Question 2 is B",
-		"answers":["Answer B","Answer A","Answer C"]
+		"question":"Assemble! What Walt Disney film was the highest grossing movie of twenty nineteen?",
+		"answers":["Avengers: Endgame","Captain Marvel","Aquaman"]
 	},
 	3: {
-		"question":"Question 3 is C",
-		"answers":["Answer C","Answer B","Answer A"]
+		"question":"Christopher Lee, Benedict Cumberbatch, and Robert Downey Junior have all portrayed what famous literary detective on the big screen?",
+		"answers":["Sherlock Holmes","Dick Tracy","Batman"]
 	},
 	4: {
-		"question":"Question 4 is A",
-		"answers":["Answer A","Answer B","Answer C"]
+		"question":"The Big Bran Hypothetis and The Stockholm Syndrome were the first and last named episodes of what long running sitcom which ended in twenty nineteen?",
+		"answers":["The Big Bang Theory","The Good Place","The Unbreakable Kimmy Schmidt"]
 	},
 	5: {
-		"question":"Question 5 is B",
-		"answers":["Answer B","Answer A","Answer C"]
+		"question":"First said by Clara Peller in a famous nineteen eighty four commerical, what fast food chain is known for the phrase 'Where's the Beef?'",
+		"answers":["Wendy's","Burger King","White Castle"]
 	},
 	6: {
-		"question":"Question 6 is C",
-		"answers":["Answer C","Answer B","Answer A"]
+		"question":"If you're wearing a Kangol, a Stetson, or a New Era cap, what part of your body is being covered?",
+		"answers":["Head","Feet","Chest"]
 	},
 	7: {
-		"question":"Question 7 is A",
-		"answers":["Answer A","Answer B","Answer C"]
+		"question":"Quick! How many days total are in July, August, and September combined?",
+		"answers":["92","91","93"]
 	},
 	8: {
-		"question":"Question 8 is B",
-		"answers":["Answer B","Answer A","Answer C"]
+		"question":"The FedEx logo is comprised of letters in purple and what other color?",
+		"answers":["Orange","Green","Blue"]
 	},
 	9: {
-		"question":"Question 9 is C",
-		"answers":["Answer C","Answer B","Answer A"]
+		"question":"A study from the U.S. Census Bureau says, rounded up to the nearest fifteen minute interval, how many minutes per day does the average person spend commuting to work?",
+		"answers":["30","45","15"]
 	},
 	10: {
-		"question":"Question 10 is A",
-		"answers":["Answer A","Answer B","Answer C"]
+		"question":"You'll get Eye-Eye-Eye spins if you buzz in and tell me what number equals the Roman Numeral Ex-Ex-Vee-Eye-Eye?",
+		"answers":["27","32","23"]
 	}
 }
