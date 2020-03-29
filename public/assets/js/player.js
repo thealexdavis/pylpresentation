@@ -12,10 +12,13 @@ var myUserId = socket.id;
 answerTemplate = '<div id="answer_area"><button id="answerA"></button><button id="answerB"></button><button id="answerC"></button></div>';
 loginTemplate = '<div id="login_area"><form id="login_form" method="post"><input type="text" name="username" id="username" placeholder="Name" maxlength="10"><span class="error" id="username_error"></span><input type="text" name="gamecode" id="gamecode" placeholder="Game Code" maxlength="5"><span class="error" id="gamecode_error"></span><input type="submit" id="login_player" value="PLAY"></form></div>';
 spinTemplate = '<div id="spincount"><span id="counter"></span></div>';
-standbyTemplate = '<div id="standby"><img src="assets/img/logo.png" id="standby_logo"></div>';
-standbyTemplateHostSingle = '<div id="standby"><img src="assets/img/logo.png" id="standby_logo"><button id="playfull">PLAY FULL GAME</button><button id="playbonus">PLAY BONUS ROUND</button></div>';
-standbyTemplateHostMulti = '<div id="standby"><img src="assets/img/logo.png" id="standby_logo"><button id="playfull">PLAY FULL GAME</button><button id="playbonus">PLAY MAIN GAME</button></div>';
+// standbyTemplate = '<div id="standby"><img src="assets/img/logo.png" id="standby_logo"></div>';
+// standbyTemplateHostSingle = '<div id="standby"><img src="assets/img/logo.png" id="standby_logo"><button id="playfull">PLAY FULL GAME</button><button id="playbonus">PLAY BONUS ROUND</button></div>';
+// standbyTemplateHostMulti = '<div id="standby"><img src="assets/img/logo.png" id="standby_logo"><button id="playfull">PLAY FULL GAME</button><button id="playbonus">PLAY MAIN GAME</button></div>';
 buzzerTemplate = '<div id="buzzer"><div id="thebuzzer"></div></div>';
+standbyTemplate = '<div id="buzzer"><div id="thebuzzer"></div></div>';
+standbyTemplateHostSingle = '<div id="buzzer"><div id="thebuzzer"></div></div>';
+standbyTemplateHostMulti = '<div id="buzzer"><div id="thebuzzer"></div></div>';
 buzzerStatus = false;
 roundType = 0;
 

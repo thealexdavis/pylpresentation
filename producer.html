@@ -15,7 +15,8 @@
 		<div class="player_info">
 			<div class="the_champion off">
 				<p id="buzzertogglechamp" onclick="activateBuzzer(4)">CHAMPION</p>
-				<input type="text" name="champPlayerNumber" value="" placeholder="PLAYER NUMBER">
+				<input type="text" name="champKey" value="" placeholder="KEY">
+				<input type="hidden" name="champPlayerNumber" value="" placeholder="PLAYER NUMBER">
 				<div class="details">
 					<div class="holder"><label for="champ1name">NAME</label><input type="text" name="champ1name" value="" placeholder="PLAYER 1"></div>
 					<div class="holder"><label for="champ1earned">SPINS</label><input type="text" name="champ1earned" value="0" placeholder="0"></div>
@@ -26,9 +27,10 @@
 				</div>
 				<div class="controls">
 					<button id="champsync" onclick="champsync()">SYNC</button>
-					<button id="champaddsquare" onclick="addSquareValue(4)">ADD SQUARE</button>
-					<button id="champaddwhammy" onclick="toggleWhammy([4,1])">ADD WHAMMY</button>
-					<button id="champlosewhammy" onclick="toggleWhammy([4,-1])">LOSE WHAMMY</button>
+					<button id="champaddsquare" onclick="addSquareValue(4)">+ SQUARE</button>
+					<button id="champaddwhammy" onclick="toggleWhammy([4,1])">+ WHAMMY</button>
+					<button id="champlosewhammy" onclick="toggleWhammy([4,-1])">- WHAMMY</button>
+					<button id="kick1" onclick="kickPlayer(4)">KICK</button>
 				</div>
 			</div>
 			<div class="the_player">
@@ -43,13 +45,14 @@
 				</div>
 				<div class="controls">
 					<button id="p1sync">SYNC</button>
-					<button id="p1add1" onclick="addSpins([1,1])">ADD 1 SPIN</button>
-					<button id="p1add3" onclick="addSpins([1,3])">ADD 3 SPIN</button>
-					<button id="p1addsquare" onclick="addSquareValue(1)">ADD SQUARE</button>
-					<button id="p1addwhammy" onclick="toggleWhammy([1,1])">ADD WHAMMY</button>
-					<button id="p1losewhammy" onclick="toggleWhammy([1,-1])">LOSE WHAMMY</button>
+					<button id="p1add1" onclick="addSpins([1,1])">+ 1 SPIN</button>
+					<button id="p1add3" onclick="addSpins([1,3])">+ 3 SPIN</button>
+					<button id="p1addsquare" onclick="addSquareValue(1)">+ SQUARE</button>
+					<button id="p1addwhammy" onclick="toggleWhammy([1,1])">+ WHAMMY</button>
+					<button id="p1losewhammy" onclick="toggleWhammy([1,-1])">- WHAMMY</button>
 					<button id="p1pass2" onclick="passSpins([1,2])">PASS TO 2</button>
 					<button id="p1pass3" onclick="passSpins([1,3])">PASS TO 3</button>
+					<button id="kick1" onclick="kickPlayer(1)">KICK</button>
 				</div>
 			</div>
 			<div class="the_player">
@@ -64,13 +67,14 @@
 				</div>
 				<div class="controls">
 					<button id="p2sync">SYNC</button>
-					<button id="p2add1" onclick="addSpins([2,1])">ADD 1 SPIN</button>
-					<button id="p2add3" onclick="addSpins([2,3])">ADD 3 SPIN</button>
-					<button id="p2addsquare" onclick="addSquareValue(2)">ADD SQUARE</button>
-					<button id="p2addwhammy" onclick="toggleWhammy([2,1])">ADD WHAMMY</button>
-					<button id="p2losewhammy" onclick="toggleWhammy([2,-1])">LOSE WHAMMY</button>
+					<button id="p2add1" onclick="addSpins([2,1])">+ 1 SPIN</button>
+					<button id="p2add3" onclick="addSpins([2,3])">+ 3 SPIN</button>
+					<button id="p2addsquare" onclick="addSquareValue(2)">+ SQUARE</button>
+					<button id="p2addwhammy" onclick="toggleWhammy([2,1])">+ WHAMMY</button>
+					<button id="p2losewhammy" onclick="toggleWhammy([2,-1])">- WHAMMY</button>
 					<button id="p2pass1" onclick="passSpins([2,1])">PASS TO 1</button>
 					<button id="p2pass3" onclick="passSpins([2,3])">PASS TO 3</button>
+					<button id="kick2" onclick="kickPlayer(2)">KICK</button>
 				</div>
 			</div>
 			<div class="the_player">
@@ -85,13 +89,14 @@
 				</div>
 				<div class="controls">
 					<button id="p3sync">SYNC</button>
-					<button id="p3add1" onclick="addSpins([3,1])">ADD 1 SPIN</button>
-					<button id="p3add3" onclick="addSpins([3,3])">ADD 3 SPIN</button>
-					<button id="p3addsquare" onclick="addSquareValue(3)">ADD SQUARE</button>
-					<button id="p3addwhammy" onclick="toggleWhammy([3,1])">ADD WHAMMY</button>
-					<button id="p3losewhammy" onclick="toggleWhammy([3,-1])">LOSE WHAMMY</button>
+					<button id="p3add1" onclick="addSpins([3,1])">+ 1 SPIN</button>
+					<button id="p3add3" onclick="addSpins([3,3])">+ 3 SPIN</button>
+					<button id="p3addsquare" onclick="addSquareValue(3)">+ SQUARE</button>
+					<button id="p3addwhammy" onclick="toggleWhammy([3,1])">+ WHAMMY</button>
+					<button id="p3losewhammy" onclick="toggleWhammy([3,-1])">- WHAMMY</button>
 					<button id="p3pass1" onclick="passSpins([3,1])">PASS TO 1</button>
 					<button id="p3pass2" onclick="passSpins([3,2])">PASS TO 2</button>
+					<button id="kick3" onclick="kickPlayer(3)">KICK</button>
 				</div>
 			</div>
 		</div>
@@ -137,6 +142,7 @@
 				<button id="blink23" onclick="blinkPod([[2,3],1])" class="questioncontrol">BLINK P2/3</button>
 				<button id="blink13" onclick="blinkPod([[1,3],1])" class="questioncontrol">BLINK P1/3</button>
 				<button id="blink123" onclick="blinkPod([[1,2,3],1])" class="questioncontrol">BLINK ALL</button>
+				<button onclick="storeQuestion()" class="questioncontrol">STORE Q/A</button>
 			</div>
 			<div class="spin_control">
 				<p>SPIN CONTROL</p>
@@ -151,8 +157,8 @@
 				<button id="blink1" onclick="lightPod(1)" class="questioncontrol">LIGHT P1</button>
 				<button id="blink2" onclick="lightPod(2)" class="questioncontrol">LIGHT P2</button>
 				<button id="blink3" onclick="lightPod(3)" class="questioncontrol">LIGHT3 P3</button>
-				<button id="chooseleft" class="questioncontrol" onclick="directionMove(2)">CHOOSE LEFT</button>
-				<button id="chooseright" class="questioncontrol" onclick="directionMove(4)">CHOOSE RIGHT</button>
+				<button id="chooseleft" class="questioncontrol" onclick="directionMove(4)">CHOOSE LEFT</button>
+				<button id="chooseright" class="questioncontrol" onclick="directionMove(2)">CHOOSE RIGHT</button>
 				<button id="chooseup" class="questioncontrol" onclick="directionMove(1)">CHOOSE UP</button>
 				<button id="choosedown" class="questioncontrol" onclick="directionMove(3)">CHOOSE DOWN</button>
 			</div>
@@ -172,8 +178,8 @@
 				<button id="hidepodium" onclick="bonusPod(3)">SHOW COMBO $</button>
 				<button id="hidepodium" onclick="displayBonusSpins()">DISPLAY SPINS</button>
 				<button id="clearlights" onclick="clearLights()">CLEAR LIGHTS</button>
-				<button id="chooseleft" class="questioncontrol" onclick="directionMove(2)">CHOOSE LEFT</button>
-				<button id="chooseright" class="questioncontrol" onclick="directionMove(4)">CHOOSE RIGHT</button>
+				<button id="chooseleft" class="questioncontrol" onclick="directionMove(4)">CHOOSE LEFT</button>
+				<button id="chooseright" class="questioncontrol" onclick="directionMove(2)">CHOOSE RIGHT</button>
 				<button id="chooseup" class="questioncontrol" onclick="directionMove(1)">CHOOSE UP</button>
 				<button id="choosedown" class="questioncontrol" onclick="directionMove(3)">CHOOSE DOWN</button>
 			</div>

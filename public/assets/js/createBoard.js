@@ -60,6 +60,9 @@ var valueStandby = 0;
 canStop = false;
 introBtns = true;
 bonusRound = false;
+p1IsActive = false;
+p2IsActive = false;
+p3IsActive = false;
 
 //INIT SETUP
 //SFX
@@ -734,11 +737,14 @@ function setSelectiveSquare(ss){
 
 function stopBoard(){
 	canStop = false;
+	canBlink = true;
 	document.getElementById("buzzer").className = 'press';
 	var extras = "";
 	var prizeInfo = "";
 	boardSpinSfx.pause(); 
 	boardSpinSfx.currentTime = 0;
+	unlightAllSquares();
+	document.body.querySelector('.square[data-square="'+selectedSquare+'"]').classList.add("active");
 	clearInterval(spinVar);
 	clearInterval(cycleVar);
 	sI = selectedSquare - 1;
@@ -1077,32 +1083,57 @@ function stopBoard(){
 */
 		}
 	}
+	setTimeout(function(){ 
+		if (bonusRound){
+			blueBoard.className = 'show';
+			redBoard.className = '';
+		} else {
+			goldBoard.className = 'show';
+			blueBoard.className = '';
+			redBoard.className = '';
+		}
+	}, 5000);
 }
 
 function blinkSquare(squareToBlink){
-	squareToBlink = squareToBlink + 1
-	theSquareLanded = document.body.querySelector('.square[data-square="'+squareToBlink+'"]');
-	setTimeout(function(){ 
-		theSquareLanded.className = '';
-		theSquareLanded.classList.add("square");
-	}, 350);
-	setTimeout(function(){ 
-		theSquareLanded.classList.add("active");
-	}, 700);
-	setTimeout(function(){ 
-		theSquareLanded.className = '';
-		theSquareLanded.classList.add("square");
-	}, 1050);
-	setTimeout(function(){ 
-		theSquareLanded.classList.add("active");
-	}, 1400);
-	setTimeout(function(){ 
-		theSquareLanded.className = '';
-		theSquareLanded.classList.add("square");
-	}, 1750);
-	setTimeout(function(){ 
-		theSquareLanded.classList.add("active");
-	}, 2100);
+	if(canBlink){
+		squareToBlink = squareToBlink + 1
+		theSquareLanded = document.body.querySelector('.square[data-square="'+squareToBlink+'"]');
+		setTimeout(function(){ 
+			if(canBlink){
+				unlightAllSquares();
+				theSquareLanded.className = '';
+				theSquareLanded.classList.add("square");
+			}
+		}, 350);
+		setTimeout(function(){ 
+			if(canBlink){
+				theSquareLanded.classList.add("active");
+			}
+		}, 700);
+		setTimeout(function(){ 
+			if(canBlink){
+				theSquareLanded.className = '';
+				theSquareLanded.classList.add("square");
+			}
+		}, 1050);
+		setTimeout(function(){ 
+			if(canBlink){
+				theSquareLanded.classList.add("active");
+			}
+		}, 1400);
+		setTimeout(function(){ 
+			if(canBlink){
+				theSquareLanded.className = '';
+				theSquareLanded.classList.add("square");
+			}
+		}, 1750);
+		setTimeout(function(){ 
+			if(canBlink){
+				theSquareLanded.classList.add("active");
+			}
+		}, 2100);
+	}
 }
 
 function toggleSquares(){
@@ -2210,6 +2241,9 @@ socket.on('syncPlayer',function(playerData) {
 });
 //TOGGLE PODIUM
 socket.on('togglePodium',function(podiumStatus) {
+	toggleThePodium(podiumStatus);
+});
+function toggleThePodium(podiumStatus){
 	if(podiumStatus==1){
 		document.getElementById("player_holder").className = 'active';
 		document.getElementById("player1score").className = "";document.getElementById("player2score").className = "";document.getElementById("player3score").className = "";
@@ -2238,6 +2272,15 @@ socket.on('togglePodium',function(podiumStatus) {
 		p1spot1.classList.add("spinspot");p1spot1.classList.add("passed");p1spot1.classList.add("show");p1spot2.classList.add("spinspot");p1spot2.classList.add("center");p1spot2.classList.add("show");p1spot3.classList.add("spinspot");p1spot3.classList.add("spins");p1spot3.classList.add("show");
 		p2spot1.classList.add("spinspot");p2spot1.classList.add("passed");p2spot1.classList.add("show");p2spot2.classList.add("spinspot");p2spot2.classList.add("center");p2spot2.classList.add("show");p2spot3.classList.add("spinspot");p2spot3.classList.add("spins");p2spot3.classList.add("show");
 		p3spot1.classList.add("spinspot");p3spot1.classList.add("passed");p3spot1.classList.add("show");p3spot2.classList.add("spinspot");p3spot2.classList.add("center");p3spot2.classList.add("show");p3spot3.classList.add("spinspot");p3spot3.classList.add("spins");p3spot3.classList.add("show");
+		if(p1IsActive){
+			document.getElementById("player1score").classList.add("active");
+		}
+		if(p2IsActive){
+			document.getElementById("player2score").classList.add("active");
+		}
+		if(p3IsActive){
+			document.getElementById("player3score").classList.add("active");
+		}
 	}
 	if(podiumStatus==3){
 		document.getElementById("player_holder").className = '';
@@ -2245,7 +2288,7 @@ socket.on('togglePodium',function(podiumStatus) {
 		document.getElementById("player2score").className = "";
 		document.getElementById("player3score").className = "";
 	}
-});
+}
 //LOCKOUT TRIGGERED
 socket.on('lockoutBuzzer',function(data) {
 	buzzinSfx.play();
@@ -2286,6 +2329,7 @@ socket.on('podsBlink',function(data) {
 	document.getElementById("answer1").innerHTML = "";
 	document.getElementById("answer2").innerHTML = "";
 	document.getElementById("answer3").innerHTML = "";
+	document.getElementById("question").innerHTML = "";
 	if(data[1] == 1){
 		typeBlink = "blink";
 		document.getElementById("player1score").classList.add("showspins");
@@ -2367,14 +2411,17 @@ socket.on('sendTheAnswers',function(data) {
 	document.getElementById("answers").className = "active";
 	boardCenter.className = "dim";
 	setTimeout(function(){ 
+		document.getElementById("question").innerHTML = data[4];
+	}, 500);
+	setTimeout(function(){ 
 		document.getElementById("answer1").innerHTML = data[0];
-	}, 2500);
+	}, 2000);
 	setTimeout(function(){ 
 		document.getElementById("answer2").innerHTML = data[1];
-	}, 4000);
+	}, 3000);
 	setTimeout(function(){ 
 		document.getElementById("answer3").innerHTML = data[2];
-	}, 5500);
+	}, 4000);
 });
 //SHOW THE RIGHT ANSWER
 socket.on('showTheAnswer',function(data) {
@@ -2434,10 +2481,15 @@ socket.on("startBoard",function(data){
 	sfxPlayer = boardSpinSfx;
 	clearAllSquares();
 	canStop = true;
+	canBlink = false;
 // 	spinTimer();
 // 	cycleTimer(activeBoard);
 	if (bonusRound){
 		blueBoard.className = 'show';
+		redBoard.className = '';
+	} else {
+		goldBoard.className = 'show';
+		blueBoard.className = '';
 		redBoard.className = '';
 	}
 });
@@ -2445,6 +2497,11 @@ socket.on("startBoard",function(data){
 socket.on("getSquareInfo",function(data){
 // 	console.log(data);
 	squareInfo = [data,activeBoard[selectedSquare]['values'][0][posStop],activeBoard[selectedSquare]['type'][0][posStop],activeBoard[selectedSquare]['extras'][0][posStop]];
+	if(bonusRound){
+// 		toggleThePodium(3);
+	} else {
+		toggleThePodium(2);
+	}
 	socket.emit('send square info', squareInfo);
 	if(activeBoard[selectedSquare]['type'][0][posStop] == "addaone"){
 		activeBoard[selectedSquare]['type'][0][posStop] = "money";
@@ -2574,6 +2631,10 @@ socket.on("showBonusPodMoney",function(data){
 });
 //LOAD BONUS ROUND NUMBER
 socket.on("loadBonusBoard",function(data){
+	resetLights();
+	resetBoard();
+	clearInterval(boardBlinkTimer);
+	unlightAllSquares();
 	boardSpinSfx = document.getElementById("cycleSfx");
 	scoreCenter.style.display = "none";
 	displayCenterMoney(data);
@@ -2586,23 +2647,30 @@ socket.on("showBonusSpins",function(data){
 		document.getElementById("spinstotal").innerHTML = data[0];
 		dingSfx.play();
 		sfxPlayer = dingSfx;
-	}, 3000);
+	}, 1500);
 });
 //LIGHT MAIN PODIUM
 socket.on("lightMainPod",function(data){
+	toggleThePodium(2);
 	document.getElementById("player1score").className = "";
 	document.getElementById("player2score").className = "";
 	document.getElementById("player3score").className = "";
 	document.getElementById("player1score").classList.add("scorezone");
 	document.getElementById("player2score").classList.add("scorezone");
 	document.getElementById("player3score").classList.add("scorezone");
+	p1IsActive = false;
+	p2IsActive = false;
+	p3IsActive = false;
 	if(data == 1){
+		p1IsActive = true;
 		document.getElementById("player1score").classList.add("active");
 	}
 	if(data == 2){
+		p2IsActive = true;
 		document.getElementById("player2score").classList.add("active");
 	}
 	if(data == 3){
+		p3IsActive = true;
 		document.getElementById("player3score").classList.add("active");
 	}
 });

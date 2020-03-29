@@ -16,6 +16,10 @@ clearInterval(spinVar);
 var cycleVar;
 clearInterval(cycleVar);
 currentStop = [];
+p1IsActive = false;
+p2IsActive = false;
+p3IsActive = false;
+activePlayerNum = 0;
 
 
 //SHUFFLE ARRAYS MASTER
@@ -69,6 +73,14 @@ document.getElementById("hidepodium").onclick = function(){
 	podiumGo(3);
 };
 function podiumGo(q){
+	if(q==1||q==2){
+		pData = [1,document.getElementsByName("player1name")[0].value,document.getElementsByName("player1score")[0].value,document.getElementsByName("player1earned")[0].value,document.getElementsByName("player1passed")[0].value,document.getElementsByName("player1whammy")[0].value,1];
+		sync(pData);
+		pData = [2,document.getElementsByName("player2name")[0].value,document.getElementsByName("player2score")[0].value,document.getElementsByName("player2earned")[0].value,document.getElementsByName("player2passed")[0].value,document.getElementsByName("player2whammy")[0].value,1];
+		sync(pData);
+		pData = [3,document.getElementsByName("player3name")[0].value,document.getElementsByName("player3score")[0].value,document.getElementsByName("player3earned")[0].value,document.getElementsByName("player3passed")[0].value,document.getElementsByName("player3whammy")[0].value,1];
+		sync(pData);
+	}
 	socket.emit('podium toggle', q);
 }
 
@@ -87,6 +99,11 @@ socket.on('checkUsername',function(userSend) {
 	if(userSend[1] == document.getElementsByName("player3key")[0].value && !player3Set){
 		document.getElementsByName("player3name")[0].value = userSend[0];
 		player3Set = true;
+		socket.emit('logged in', [3,userSend[2],userSend[0]]);
+	}
+	if(userSend[1] == document.getElementsByName("champKey")[0].value && !champSet && roundNum == 3){
+		document.getElementsByName("champ1name")[0].value = userSend[0];
+		champSet = true;
 		socket.emit('logged in', [3,userSend[2],userSend[0]]);
 	}
 });
@@ -181,6 +198,7 @@ function passSpins(data){
 }
 //LOAD QUESTION
 function loadQ(num){
+	currentQNum = num;
 	questionLoaded = questionList[num];
 	questionAnswers = questionLoaded['answers'];
 	answerCorrect = questionAnswers[0];
@@ -250,7 +268,7 @@ function answerLayout(type){
 }
 //SEND SCREEN ANSWERS
 function sendAnswers(){
-	answersSending = [document.getElementById("theanswer1").value,document.getElementById("theanswer2").value,document.getElementById("theanswer3").value,answerCorrect];
+	answersSending = [document.getElementById("theanswer1").value,document.getElementById("theanswer2").value,document.getElementById("theanswer3").value,answerCorrect,document.getElementById("thequestion").value];
 	socket.emit('transmit answers', answersSending);
 }
 function revealAnswer(){
@@ -259,6 +277,7 @@ function revealAnswer(){
 //START ROUNDS
 function startRound(num){
 	if(num == 0){
+		standby();
 		socket.emit('podium toggle', 1);
 		socket.emit('start round', 0);
 		roundNum = 0;
@@ -284,6 +303,7 @@ function startRound(num){
  		document.getElementsByClassName('spin_control')[0].style.display = 'flex';
 	}
 	if(num == 3){
+		standby()
 		document.getElementsByClassName('bonus_control')[0].style.display = 'flex';
 		document.getElementsByClassName('question_control')[0].style.display = 'none';
 		document.getElementsByClassName('spin_control')[0].style.display = 'none';
@@ -298,22 +318,27 @@ function startRound(num){
  		if (parseInt(document.getElementsByName("player1score")[0].value) > safeScore){
 	 		safeScore = parseInt(document.getElementsByName("player1score")[0].value);
 	 		champName = document.getElementsByName("player1name")[0].value;
+	 		champKey = document.getElementsByName("player1key")[0].value;
 	 		champNumber = 1;
  		}
  		if (parseInt(document.getElementsByName("player2score")[0].value) > safeScore){
 	 		safeScore = parseInt(document.getElementsByName("player2score")[0].value);
 	 		champName = document.getElementsByName("player2name")[0].value;
+	 		champKey = document.getElementsByName("player2key")[0].value;
 	 		champNumber = 2;
  		}
  		if (parseInt(document.getElementsByName("player3score")[0].value) > safeScore){
 	 		safeScore = parseInt(document.getElementsByName("player3score")[0].value);
 	 		champName = document.getElementsByName("player3name")[0].value;
+	 		champKey = document.getElementsByName("player3key")[0].value;
 	 		champNumber = 3;
  		}
  		socket.emit('start round', 3);
  		document.getElementsByName("champ1name")[0].value = champName;
  		document.getElementsByName("champPlayerNumber")[0].value = champNumber;
+ 		document.getElementsByName("champKey")[0].value = champKey;
  		document.getElementsByName("champ1safe")[0].value = safeScore;
+ 		champSet = true;
 	}
 }
 //ACTIVATE PLAYER BUZZER
@@ -387,6 +412,12 @@ function startSpin(){
 	podiumGo(3);
 	spinTimer();
 	cycleTimer();
+	setTimeout(function(){ 
+		if(champSet){
+			activePlayerNum = 4;
+		}
+		activateBuzzer(activePlayerNum);
+	}, 2000);
 	receivedValue = false;
 	if(roundNum == 3){
 		socket.emit('display bg', 3);
@@ -555,6 +586,22 @@ function displayBonusSpins(){
 }
 //LIGHT MONEY PODIUM
 function lightPod(podNum){
+	activePlayerNum = podNum;
+	if(podNum == 1){
+		p1IsActive = true;
+	}
+	if(podNum == 2){
+		p2IsActive = true;
+	}
+	if(podNum == 3){
+		p3IsActive = true;
+	}
+	pData = [1,document.getElementsByName("player1name")[0].value,document.getElementsByName("player1score")[0].value,document.getElementsByName("player1earned")[0].value,document.getElementsByName("player1passed")[0].value,document.getElementsByName("player1whammy")[0].value,1];
+	sync(pData);
+	pData = [2,document.getElementsByName("player2name")[0].value,document.getElementsByName("player2score")[0].value,document.getElementsByName("player2earned")[0].value,document.getElementsByName("player2passed")[0].value,document.getElementsByName("player2whammy")[0].value,1];
+	sync(pData);
+	pData = [3,document.getElementsByName("player3name")[0].value,document.getElementsByName("player3score")[0].value,document.getElementsByName("player3earned")[0].value,document.getElementsByName("player3passed")[0].value,document.getElementsByName("player3whammy")[0].value,1];
+	sync(pData);
 	socket.emit('light main pod', podNum);
 }
 //DIRECTIONAL MOVE SQUARES
@@ -616,7 +663,7 @@ function boardCycle(){
 	loadSingle(currentStop,1,2);
 }
 function loadSingle(stops, num, type){
-	currentStop = stops;
+	console.log(stops.length);
 	if (stops.length < 18){
 		stops = [];
 		for(x=0;x<18;x++){
@@ -633,5 +680,35 @@ function loadSingle(stops, num, type){
 			stops[x] = stopNum;
 		}
 	}
+	currentStop = stops;
+// 	console.log(stops);
 	socket.emit('send stops board', stops,type);
+}
+//KICK PLAYER
+function kickPlayer(playerNum){
+	if(playerNum == 1){
+		player1Set = false;
+		document.getElementsByName("player1name")[0].value = "";
+	}
+	if(playerNum == 2){
+		player2Set = false;
+		document.getElementsByName("player2name")[0].value = "";
+	}
+	if(playerNum == 3){
+		player3Set = false;
+		document.getElementsByName("player3name")[0].value = "";
+	}
+	if(playerNum == 4){
+		champSet = false;
+		document.getElementsByName("champ1name")[0].value = "";
+	}
+}
+//STORE QUESTION
+function storeQuestion(){
+	theQuestion = document.getElementById("thequestion").value;
+	theAnswers = [document.getElementById("theanswer1").value,document.getElementById("theanswer2").value,document.getElementById("theanswer3").value];
+	questionList[currentQNum]['question'] = theQuestion;
+	questionList[currentQNum]['answers'] = theAnswers;
+	clearAll(1);
+	document.getElementById("loadq"+currentQNum).className = "questionload";
 }

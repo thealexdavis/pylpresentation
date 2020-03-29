@@ -248,54 +248,58 @@ socket.on('transmitWhammy',function(data) {
 });
 //GET SQUARE VALUE AND PARSE
 socket.on('sendSquareInfo',function(squareInfo) {
-	var playerNum = squareInfo[0];
-	var squareValue = parseInt(squareInfo[1]);
-	var squareType = squareInfo[2];
-	var squareExtras = squareInfo[3];
-	var playerNumberFull = "player"+playerNum;
-	if(playerNum == 4){
-		playerNumberFull = "champ1"
-	}
-	if(squareType == "whammy"){
-		playerScoreNew = 0;
-		if(playerNum !== 4){
-			document.getElementsByName('totallost')[0].value = parseInt(document.getElementsByName('totallost')[0].value.replace("$","")) + parseInt(document.getElementsByName(playerNumberFull+"score")[0].value.replace("$",""));
-		}
-	} else if(squareType == "addaone"){
-		currentScore = "1"+document.getElementsByName(playerNumberFull+"score")[0].value;
-		playerScoreNew = parseInt(currentScore);
-	} else if(squareType == "double"){
-		playerScoreNew = parseInt(document.getElementsByName(playerNumberFull+"score")[0].value) * 2;
-	} else {
+	if(canAdd){
+		canAdd = false;
+		var playerNum = squareInfo[0];
+		var squareValue = parseInt(squareInfo[1]);
+		var squareType = squareInfo[2];
+		var squareExtras = squareInfo[3];
+		var playerNumberFull = "player"+playerNum;
 		if(playerNum == 4){
-			playerScoreNew = parseInt(document.getElementsByName("bonustotal")[0].value.replace("$","").replace(",","")) + squareValue;
-		} else {
-			playerScoreNew = parseInt(document.getElementsByName(playerNumberFull+"score")[0].value) + squareValue;
+			playerNumberFull = "champ1"
 		}
-	}
-	if(playerNum == 4){
-		document.getElementsByName("bonustotal")[0].value = "$"+numberWithCommas(playerScoreNew);
-		document.getElementsByName("targetdistance")[0].value = "$"+numberWithCommas((500000-playerScoreNew));
-		
-		grandWinnings();
-	} else {
-		document.getElementsByName(playerNumberFull+"score")[0].value = playerScoreNew;
-		getScoreDifference(0,playerNum);
-	}
-	if (squareExtras !== "plus"){
+		if(squareType == "whammy"){
+			playerScoreNew = 0;
+			if(playerNum !== 4){
+// 				document.getElementsByName('totallost')[0].value = parseInt(document.getElementsByName('totallost')[0].value.replace("$","").replace(",","")) + parseInt(document.getElementsByName(playerNumberFull+"score")[0].value.replace("$","").replace(",",""));
+			}
+			document.getElementsByName('totalwhammies')[0].value = parseInt(document.getElementsByName('totalwhammies')[0].value) + 1;
+		} else if(squareType == "addaone"){
+			currentScore = "1"+document.getElementsByName(playerNumberFull+"score")[0].value;
+			playerScoreNew = parseInt(currentScore);
+		} else if(squareType == "double"){
+			playerScoreNew = parseInt(document.getElementsByName(playerNumberFull+"score")[0].value) * 2;
+		} else {
+			if(playerNum == 4){
+				playerScoreNew = parseInt(document.getElementsByName("bonustotal")[0].value.replace("$","").replace(",","")) + squareValue;
+			} else {
+				playerScoreNew = parseInt(document.getElementsByName(playerNumberFull+"score")[0].value) + squareValue;
+			}
+		}
 		if(playerNum == 4){
-			playerSpinsNew = parseInt(document.getElementsByName("bonusspinstotake")[0].value) - 1;
-			document.getElementsByName("bonusspinstotake")[0].value = playerSpinsNew;
+			document.getElementsByName("bonustotal")[0].value = "$"+numberWithCommas(playerScoreNew);
+			document.getElementsByName("targetdistance")[0].value = "$"+numberWithCommas((500000-playerScoreNew));
+			
+			grandWinnings();
 		} else {
-			playerSpinsNew = parseInt(document.getElementsByName(playerNumberFull+"earned")[0].value) - 1;
-			document.getElementsByName(playerNumberFull+"earned")[0].value = playerSpinsNew;
+			document.getElementsByName(playerNumberFull+"score")[0].value = playerScoreNew;
+			getScoreDifference(0,playerNum);
 		}
-	}
-	if(playerNum == 4){
-		document.getElementsByName('totalspinstaken')[0].value = parseInt(document.getElementsByName('spinstaken')[0].value) + 1;
-	} else {
-		document.getElementsByName('spinstaken')[0].value = parseInt(document.getElementsByName('spinstaken')[0].value) + 1;
-		
+		if (squareExtras !== "plus"){
+			if(playerNum == 4){
+				playerSpinsNew = parseInt(document.getElementsByName("bonusspinstotake")[0].value) - 1;
+				document.getElementsByName("bonusspinstotake")[0].value = playerSpinsNew;
+			} else {
+				playerSpinsNew = parseInt(document.getElementsByName(playerNumberFull+"earned")[0].value) - 1;
+				document.getElementsByName(playerNumberFull+"earned")[0].value = playerSpinsNew;
+			}
+		}
+		if(playerNum == 4){
+			document.getElementsByName('totalspinstaken')[0].value = parseInt(document.getElementsByName('spinstaken')[0].value) + 1;
+		} else {
+			document.getElementsByName('spinstaken')[0].value = parseInt(document.getElementsByName('spinstaken')[0].value) + 1;
+			
+		}
 	}
 });
 //GET SCORE DIFFERENCE
@@ -307,109 +311,101 @@ function getScoreDifference(playerNumberFull,playerNum){
 		p1Score = parseInt(p1Score);
 		p2Score = parseInt(p2Score);
 		p3Score = parseInt(p3Score);
+		scoresArray = [p1Score,p2Score,p3Score];
+		scoresArraySort = [p1Score,p2Score,p3Score];
+		dif1to2 = p1Score - p2Score;
+		dif1to3 = p1Score - p3Score;
+		dif2to1 = p2Score - p1Score;
+		dif2to3 = p2Score - p3Score;
+		dif3to1 = p3Score - p1Score;
+		dif3to2 = p3Score - p2Score;
 		totalScores = p1Score + p2Score + p3Score;
 		document.getElementsByName("totalmoney")[0].value = "$"+numberWithCommas(totalScores);
 		//CHECK FOR PLAYER 1
-		if(playerNum == 1){
-			myScore = p1Score;
-			diffToP2 = myScore - p2Score;
-			diffToP3 = myScore - p3Score;
-			if(myScore > p2Score && myScore > p3Score){
+ 		scoresArraySort.sort(function(a, b){return a-b});
+		scoresArraySort.reverse();
+		diffFirstSecond = scoresArraySort[0] - scoresArraySort[1];
+		diffFirstThird = scoresArraySort[0] - scoresArraySort[2];
+		diffSecondThird = scoresArraySort[1] - scoresArraySort[2];
+		firstPlace = indexOfMax(scoresArray);
+		scoresArray[firstPlace] = -5;
+		firstPlacePlayer = firstPlace + 1;
+		secondPlace = indexOfMax(scoresArray);
+		scoresArray[secondPlace] = -5;
+		secondPlacePlayer = secondPlace + 1;
+		thirdPlace = indexOfMax(scoresArray);
+		scoresArray[thirdPlace] = 0-5;
+		thirdPlacePlayer = thirdPlace + 1;
+		if (playerNum == firstPlacePlayer){
+			if(diffFirstSecond == 0 && diffSecondThird == 0){
+				document.getElementsByName("distancefirst")[0].value = "ALL PLAYERS TIED";
+				document.getElementsByName("distancesecond")[0].value = "ALL PLAYERS TIED";
+				document.getElementsByName("distancethird")[0].value = "ALL PLAYERS TIED";
+				document.getElementsByName("whopasto")[0].value = "TIE | PLAYER CHOOSES";
+			} else if(diffFirstSecond == 0){
+				document.getElementsByName("distancefirst")[0].value = "$0 (TIED FOR FIRST WITH "+document.getElementsByName('player'+secondPlacePlayer+'name')[0].value+")";
+				document.getElementsByName("distancesecond")[0].value = "$0 (TIED FOR FIRST WITH "+document.getElementsByName('player'+secondPlacePlayer+'name')[0].value+")";
+				document.getElementsByName("distancethird")[0].value = "$"+numberWithCommas(diffFirstThird)+" AHEAD OF "+document.getElementsByName('player'+thirdPlacePlayer+'name')[0].value+"";
+				document.getElementsByName("whopasto")[0].value = document.getElementsByName('player'+secondPlacePlayer+'name')[0].value;
+			} else {
 				document.getElementsByName("distancefirst")[0].value = "IN FIRST PLACE";
-				if(p2Score > p3Score){
-					document.getElementsByName("distancesecond")[0].value = "$"+numberWithCommas(diffToP2);
-					document.getElementsByName("distancethird")[0].value = "$"+numberWithCommas(diffToP3);
-				} else {
-					document.getElementsByName("distancesecond")[0].value = "$"+numberWithCommas(diffToP3);
-					document.getElementsByName("distancethird")[0].value = "$"+numberWithCommas(diffToP2);
-				}
-			} else if(myScore < p2Score && myScore > p3Score){
-				document.getElementsByName("distancefirst")[0].value = "$"+numberWithCommas(diffToP2*-1);
+				document.getElementsByName("distancesecond")[0].value = "$"+numberWithCommas(diffFirstSecond)+" AHEAD OF "+document.getElementsByName('player'+secondPlacePlayer+'name')[0].value+"";
+				document.getElementsByName("distancethird")[0].value = "$"+numberWithCommas(diffFirstThird)+" AHEAD OF "+document.getElementsByName('player'+thirdPlacePlayer+'name')[0].value+"";
+				document.getElementsByName("whopasto")[0].value = document.getElementsByName('player'+secondPlacePlayer+'name')[0].value;
+			}
+			
+		}
+		if (playerNum == secondPlacePlayer){
+			if(diffFirstSecond == 0 && diffSecondThird == 0){
+				document.getElementsByName("distancefirst")[0].value = "ALL PLAYERS TIED";
+				document.getElementsByName("distancesecond")[0].value = "ALL PLAYERS TIED";
+				document.getElementsByName("distancethird")[0].value = "ALL PLAYERS TIED";
+				document.getElementsByName("whopasto")[0].value = "TIE | PLAYER CHOOSES";
+			} else if(diffFirstSecond == 0){
+				document.getElementsByName("distancefirst")[0].value = "$0 (TIED FOR FIRST WITH "+document.getElementsByName('player'+firstPlacePlayer+'name')[0].value+")";
+				document.getElementsByName("distancesecond")[0].value = "$0 (TIED FOR FIRST WITH "+document.getElementsByName('player'+firstPlacePlayer+'name')[0].value+")";
+				document.getElementsByName("distancethird")[0].value = "$"+numberWithCommas(diffFirstThird)+" AHEAD OF "+document.getElementsByName('player'+thirdPlacePlayer+'name')[0].value+"";
+				document.getElementsByName("whopasto")[0].value = "TIE | PLAYER CHOOSES";
+			} else if(diffSecondThird == 0){
+				document.getElementsByName("distancefirst")[0].value = "$"+numberWithCommas(diffFirstSecond)+" BEHIND "+document.getElementsByName('player'+firstPlacePlayer+'name')[0].value+"";
+				document.getElementsByName("distancesecond")[0].value = "$0 (TIED FOR SECOND WITH "+document.getElementsByName('player'+thirdPlacePlayer+'name')[0].value+")";
+				document.getElementsByName("distancethird")[0].value = "$0 (TIED FOR SECOND WITH "+document.getElementsByName('player'+thirdPlacePlayer+'name')[0].value+")";
+				document.getElementsByName("whopasto")[0].value = document.getElementsByName('player'+firstPlacePlayer+'name')[0].value;
+			} else {
+				document.getElementsByName("distancefirst")[0].value = "$"+numberWithCommas(diffFirstSecond)+" BEHIND "+document.getElementsByName('player'+firstPlacePlayer+'name')[0].value+"";
 				document.getElementsByName("distancesecond")[0].value = "IN SECOND PLACE";
-				document.getElementsByName("distancethird")[0].value = "$"+numberWithCommas(diffToP3);
-			} else if(myScore > p2Score && myScore < p3Score){
-				document.getElementsByName("distancefirst")[0].value = "$"+numberWithCommas(diffToP3*-1);
-				document.getElementsByName("distancesecond")[0].value = "IN SECOND PLACE";
-				document.getElementsByName("distancethird")[0].value = "$"+numberWithCommas(diffToP2);
-			} else if(myScore < p2Score && myScore < p3Score){
-				if(p2Score > p3Score){
-					document.getElementsByName("distancefirst")[0].value = "$"+numberWithCommas(diffToP2*-1);
-					document.getElementsByName("distancesecond")[0].value = "$"+numberWithCommas(diffToP3*-1);
-				} else {
-					document.getElementsByName("distancefirst")[0].value = "$"+numberWithCommas(diffToP3*-1);
-					document.getElementsByName("distancesecond")[0].value = "$"+numberWithCommas(diffToP2*-1);
-				}
-				document.getElementsByName("distancethird")[0].value = "IN THIRD PLACE";
+				document.getElementsByName("distancethird")[0].value = "$"+numberWithCommas(diffSecondThird)+" AHEAD OF "+document.getElementsByName('player'+thirdPlacePlayer+'name')[0].value+"";
+				document.getElementsByName("whopasto")[0].value = document.getElementsByName('player'+firstPlacePlayer+'name')[0].value;
 			}
 		}
-		//CHECK FOR PLAYER 2
-		if(playerNum == 2){
-			myScore = p2Score;
-			diffToP1 = myScore - p1Score;
-			diffToP3 = myScore - p3Score;
-			if(myScore > p1Score && myScore > p3Score){
-				document.getElementsByName("distancefirst")[0].value = "IN FIRST PLACE";
-				if(p1Score > p3Score){
-					document.getElementsByName("distancesecond")[0].value = "$"+numberWithCommas(diffToP1);
-					document.getElementsByName("distancethird")[0].value = "$"+numberWithCommas(diffToP3);
+		if (playerNum == thirdPlacePlayer){
+			if(diffFirstSecond == 0 && diffSecondThird == 0){
+				document.getElementsByName("distancefirst")[0].value = "ALL PLAYERS TIED";
+				document.getElementsByName("distancesecond")[0].value = "ALL PLAYERS TIED";
+				document.getElementsByName("distancethird")[0].value = "ALL PLAYERS TIED";
+				document.getElementsByName("whopasto")[0].value = "TIE | PLAYER CHOOSES";
+			} else if(diffSecondThird == 0){
+				document.getElementsByName("distancefirst")[0].value = "$"+numberWithCommas(diffFirstThird)+" BEHIND "+document.getElementsByName('player'+firstPlacePlayer+'name')[0].value+"";
+				document.getElementsByName("distancesecond")[0].value = "$0 (TIED FOR SECOND WITH "+document.getElementsByName('player'+secondPlacePlayer+'name')[0].value+")";
+				document.getElementsByName("distancethird")[0].value = "$0 (TIED FOR SECOND WITH "+document.getElementsByName('player'+secondPlacePlayer+'name')[0].value+")";
+				document.getElementsByName("whopasto")[0].value = document.getElementsByName('player'+firstPlacePlayer+'name')[0].value;
+			} else {
+				if(diffFirstSecond == 0){
+					document.getElementsByName("distancefirst")[0].value = "$"+numberWithCommas(diffSecondThird)+" BEHIND "+document.getElementsByName('player'+firstPlacePlayer+'name')[0].value+"";
+					document.getElementsByName("distancesecond")[0].value = "$"+numberWithCommas(diffSecondThird)+" BEHIND "+document.getElementsByName('player'+secondPlacePlayer+'name')[0].value+"";
+					document.getElementsByName("distancethird")[0].value = "IN THIRD PLACE";
+					document.getElementsByName("whopasto")[0].value = "TIE | PLAYER CHOOSES";
 				} else {
-					document.getElementsByName("distancesecond")[0].value = "$"+numberWithCommas(diffToP3);
-					document.getElementsByName("distancethird")[0].value = "$"+numberWithCommas(diffToP1);
+					document.getElementsByName("distancefirst")[0].value = "$"+numberWithCommas(diffFirstThird)+" BEHIND "+document.getElementsByName('player'+firstPlacePlayer+'name')[0].value+"";
+					document.getElementsByName("distancesecond")[0].value = "$"+numberWithCommas(diffSecondThird)+" BEHIND "+document.getElementsByName('player'+secondPlacePlayer+'name')[0].value+"";
+					document.getElementsByName("distancethird")[0].value = "IN THIRD PLACE";
+					document.getElementsByName("whopasto")[0].value = document.getElementsByName('player'+firstPlacePlayer+'name')[0].value;
 				}
-			} else if(myScore < p1Score && myScore > p3Score){
-				document.getElementsByName("distancefirst")[0].value = "$"+numberWithCommas(diffToP1*-1);
-				document.getElementsByName("distancesecond")[0].value = "IN SECOND PLACE";
-				document.getElementsByName("distancethird")[0].value = "$"+numberWithCommas(diffToP3);
-			} else if(myScore > p1Score && myScore < p3Score){
-				document.getElementsByName("distancefirst")[0].value = "$"+numberWithCommas(diffToP3*-1);
-				document.getElementsByName("distancesecond")[0].value = "IN SECOND PLACE";
-				document.getElementsByName("distancethird")[0].value = "$"+numberWithCommas(diffToP1);
-			} else if(myScore < p1Score && myScore < p3Score){
-				if(p1Score > p3Score){
-					document.getElementsByName("distancefirst")[0].value = "$"+numberWithCommas(diffToP1*-1);
-					document.getElementsByName("distancesecond")[0].value = "$"+numberWithCommas(diffToP3*-1);
-				} else {
-					document.getElementsByName("distancefirst")[0].value = "$"+numberWithCommas(diffToP3*-1);
-					document.getElementsByName("distancesecond")[0].value = "$"+numberWithCommas(diffToP1*-1);
-				}
-				document.getElementsByName("distancethird")[0].value = "IN THIRD PLACE";
 			}
 		}
-		//CHECK FOR PLAYER 3
-		if(playerNum == 3){
-			myScore = p3Score;
-			diffToP1 = myScore - p1Score;
-			diffToP2 = myScore - p2Score;
-			if(myScore > p1Score && myScore > p2Score){
-				document.getElementsByName("distancefirst")[0].value = "IN FIRST PLACE";
-				if(p1Score > p2Score){
-					document.getElementsByName("distancesecond")[0].value = "$"+numberWithCommas(diffToP1);
-					document.getElementsByName("distancethird")[0].value = "$"+numberWithCommas(diffToP2);
-				} else {
-					document.getElementsByName("distancesecond")[0].value = "$"+numberWithCommas(diffToP2);
-					document.getElementsByName("distancethird")[0].value = "$"+numberWithCommas(diffToP1);
-				}
-			} else if(myScore < p1Score && myScore > p2Score){
-				document.getElementsByName("distancefirst")[0].value = "$"+numberWithCommas(diffToP1*-1);
-				document.getElementsByName("distancesecond")[0].value = "IN SECOND PLACE";
-				document.getElementsByName("distancethird")[0].value = "$"+numberWithCommas(diffToP2);
-			} else if(myScore > p1Score && myScore < p2Score){
-				document.getElementsByName("distancefirst")[0].value = "$"+numberWithCommas(diffToP2*-1);
-				document.getElementsByName("distancesecond")[0].value = "IN SECOND PLACE";
-				document.getElementsByName("distancethird")[0].value = "$"+numberWithCommas(diffToP1);
-			} else if(myScore < p1Score && myScore < p2Score){
-				if(p1Score > p2Score){
-					document.getElementsByName("distancefirst")[0].value = "$"+numberWithCommas(diffToP1*-1);
-					document.getElementsByName("distancesecond")[0].value = "$"+numberWithCommas(diffToP2*-1);
-				} else {
-					document.getElementsByName("distancefirst")[0].value = "$"+numberWithCommas(diffToP2*-1);
-					document.getElementsByName("distancesecond")[0].value = "$"+numberWithCommas(diffToP1*-1);
-				}
-				document.getElementsByName("distancethird")[0].value = "IN THIRD PLACE";
-			}
-		}
-		whoPassTo();
-	}, 500);
+		
+// 		whoPassTo();
+	}, 100);
 }
 //WHO ARE SPINS PASSED TO
 function whoPassTo(){
@@ -479,4 +475,26 @@ socket.on("loadBonusBoard",function(data){
 	} else {
 		document.getElementsByName("bonusspinstotake")[0].value = 3;
 	}
+});
+//MAX INDEX
+function indexOfMax(arr) {
+    if (arr.length === 0) {
+        return -1;
+    }
+
+    var max = arr[0];
+    var maxIndex = 0;
+
+    for (var i = 1; i < arr.length; i++) {
+        if (arr[i] > max) {
+            maxIndex = i;
+            max = arr[i];
+        }
+    }
+
+    return maxIndex;
+}
+//BOARD STARTED
+socket.on("startBoard",function(data){
+	canAdd = true;
 });
