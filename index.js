@@ -13,6 +13,9 @@ var firstPlayer = 0;
 app.get('/', function(req, res){
 	res.sendFile(__dirname + '/index.html');
 });
+app.get('/podium', function(req, res){
+	res.sendFile(__dirname + '/podium.html');
+});
 app.get('/play', function(req, res){
 	res.sendFile(__dirname + '/player.html');
 });
@@ -80,8 +83,8 @@ io.on('connection', function(socket){
     io.emit('clientstop', 'this is working');
   });
   //START THE BOARD
-  socket.on('start board', function(msg){
-    io.emit('startBoard', 'this is working');
+  socket.on('start board', function(msg, typeSpin){
+    io.emit('startBoard', 'this is working', typeSpin);
   });
   //CHECK AND STORE ANSWER
   	socket.on('transmit answer', function(data){
@@ -138,6 +141,10 @@ io.on('connection', function(socket){
 		if (roundNum == 3){
 			io.emit('showbuzzer', 3);
 			io.emit('startRound', 3);
+		}
+		if (roundNum == 4){
+			io.emit('showbuzzer', 4);
+			io.emit('startRound', 4);
 		}
   	});
   	//ACTIVATE BUZZERS
@@ -229,6 +236,10 @@ io.on('connection', function(socket){
 	  socket.on('load bonus board', function(data){
 	    io.emit('loadBonusBoard', data);
 	  });
+	  //ADD PERSONALIZED PRIZE
+		socket.on('add personal prize', function(data){
+		  io.emit('addPersonalPrize', data);
+		});
 	  //DISPLAY BONUS SPINS
 	  socket.on('display bonus spins', function(data){
 	    io.emit('showBonusSpins', data);

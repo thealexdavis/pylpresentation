@@ -86,7 +86,7 @@ function buzzin(){
 		if(roundType == 0){
 			socket.emit('question buzzin', [myUserId,playerNum]);
 		}
-		if(roundType == 1 || roundType == 2 || roundType == 3){
+		if(roundType == 1 || roundType == 2 || roundType == 3 || roundType == 4){
 			socket.emit('stop board', 'stop');
 			deactivateBuzzer();
 		}

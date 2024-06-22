@@ -20,6 +20,8 @@ p1IsActive = false;
 p2IsActive = false;
 p3IsActive = false;
 activePlayerNum = 0;
+typeOfSpin = 0;
+bonusRoundNum = 0;
 
 
 //SHUFFLE ARRAYS MASTER
@@ -63,6 +65,7 @@ function sync(pData){
 }
 
 //MAIN GAME PODIUM
+/*
 document.getElementById("showqpodium").onclick = function(){
 	podiumGo(1);
 };
@@ -72,6 +75,7 @@ document.getElementById("showmoneypodium").onclick = function(){
 document.getElementById("hidepodium").onclick = function(){
 	podiumGo(3);
 };
+*/
 function podiumGo(q){
 	if(q==1||q==2){
 		pData = [1,document.getElementsByName("player1name")[0].value,document.getElementsByName("player1score")[0].value,document.getElementsByName("player1earned")[0].value,document.getElementsByName("player1passed")[0].value,document.getElementsByName("player1whammy")[0].value,1];
@@ -101,7 +105,7 @@ socket.on('checkUsername',function(userSend) {
 		player3Set = true;
 		socket.emit('logged in', [3,userSend[2],userSend[0]]);
 	}
-	if(userSend[1] == document.getElementsByName("champKey")[0].value && !champSet && roundNum == 3){
+	if(userSend[1] == document.getElementsByName("champKey")[0].value && !champSet && roundNum == 4){
 		document.getElementsByName("champ1name")[0].value = userSend[0];
 		champSet = true;
 		socket.emit('logged in', [3,userSend[2],userSend[0]]);
@@ -292,6 +296,7 @@ function startRound(num){
 		loadSingle(currentStop,1,1);
  		document.getElementsByClassName('question_control')[0].style.display = 'none';
  		document.getElementsByClassName('spin_control')[0].style.display = 'flex';
+ 		boardUsing = roundOneBoard;
 	}
 	if(num == 2){
 		socket.emit('podium toggle', 3);
@@ -301,8 +306,19 @@ function startRound(num){
 		loadSingle(currentStop,1,1);
  		document.getElementsByClassName('question_control')[0].style.display = 'none';
  		document.getElementsByClassName('spin_control')[0].style.display = 'flex';
+ 		boardUsing = roundTwoBoard;
 	}
 	if(num == 3){
+		socket.emit('podium toggle', 3);
+ 		socket.emit('start round', 3);
+ 		roundNum = 3;
+ 		currentStop = [];
+		loadSingle(currentStop,1,1);
+ 		document.getElementsByClassName('question_control')[0].style.display = 'none';
+ 		document.getElementsByClassName('spin_control')[0].style.display = 'flex';
+ 		boardUsing = roundThreeBoard;
+	}
+	if(num == 4){
 		standby()
 		document.getElementsByClassName('bonus_control')[0].style.display = 'flex';
 		document.getElementsByClassName('question_control')[0].style.display = 'none';
@@ -314,7 +330,8 @@ function startRound(num){
  		safeScore = 0;
  		champName = "";
  		champNumber = 0;
- 		roundNum = 3;
+ 		roundNum = 4;
+ 		boardUsing = roundBonusBoardOne;
  		if (parseInt(document.getElementsByName("player1score")[0].value) > safeScore){
 	 		safeScore = parseInt(document.getElementsByName("player1score")[0].value);
 	 		champName = document.getElementsByName("player1name")[0].value;
@@ -333,7 +350,7 @@ function startRound(num){
 	 		champKey = document.getElementsByName("player3key")[0].value;
 	 		champNumber = 3;
  		}
- 		socket.emit('start round', 3);
+ 		socket.emit('start round', 4);
  		document.getElementsByName("champ1name")[0].value = champName;
  		document.getElementsByName("champPlayerNumber")[0].value = champNumber;
  		document.getElementsByName("champKey")[0].value = champKey;
@@ -407,8 +424,9 @@ function activateBuzzer(playerNum){
 	}
 }
 //START SPIN
-function startSpin(){
-	socket.emit('start board', 'start');
+function startSpin(typeSpin = 0){
+	typeOfSpin = typeSpin;
+	socket.emit('start board', 'start', typeSpin);
 	podiumGo(3);
 	spinTimer();
 	cycleTimer();
@@ -419,7 +437,7 @@ function startSpin(){
 		activateBuzzer(activePlayerNum);
 	}, 2000);
 	receivedValue = false;
-	if(roundNum == 3){
+	if(roundNum == 4){
 		socket.emit('display bg', 3);
 	}
 }
@@ -436,6 +454,14 @@ function addSquareValue(playerNum){
 }
 //GET SQUARE VALUE AND PARSE
 socket.on('sendSquareInfo',function(squareInfo) {
+/*
+	console.log(selectedSquare);
+    console.log(currentStop[selectedSquare-1]);
+    console.log(squareInfo);
+*/
+//     console.log(boardUsing);
+//     console.log(boardUsing[selectedSquare]);
+     squareInfo = [squareInfo[0],squareInfo[1],squareInfo[2],squareInfo[3]];
 	if(!receivedValue){
 		receivedValue = true;
 		var playerNum = squareInfo[0];
@@ -444,11 +470,15 @@ socket.on('sendSquareInfo',function(squareInfo) {
 		var squareExtras = squareInfo[3];
 		var playerNumberFull = "player"+playerNum;
 		if(playerNum == 4){
-			playerNumberFull = "champ1"
+			playerNumberFull = "champ1";
 		}
 		if(squareType == "whammy"){
 			playerScoreNew = 0;
-			toggleWhammy([playerNum,1]);
+			if(typeOfSpin == 1){
+				toggleWhammy([playerNum,2]);
+			} else {
+				toggleWhammy([playerNum,1]);
+			}
 			if (playerNum !== 4 && parseInt(document.getElementsByName(playerNumberFull+"passed")[0].value) > 0){
 				playerPassedSpinsNow = parseInt(document.getElementsByName(playerNumberFull+"passed")[0].value) - 1;
 				playerEarnedSpinsNow = parseInt(document.getElementsByName(playerNumberFull+"earned")[0].value);
@@ -463,8 +493,31 @@ socket.on('sendSquareInfo',function(squareInfo) {
 			playerScoreNew = parseInt(currentScore);
 		} else if(squareType == "double"){
 			playerScoreNew = parseInt(document.getElementsByName(playerNumberFull+"score")[0].value) * 2;
+		} else if(squareType == "jackpot"){
+			jackpotVal = parseInt(document.getElementsByName("jackpotval")[0].value);
+			if(typeOfSpin == 1){
+				jackpotVal = jackpotVal * 2;
+			}
+			playerScoreNew = parseInt(document.getElementsByName(playerNumberFull+"score")[0].value) + jackpotVal;
+		} else if(squareType == "lead"){
+			maxScore = Math.max(parseInt(document.getElementsByName("player1score")[0].value),parseInt(document.getElementsByName("player2score")[0].value),parseInt(document.getElementsByName("player3score")[0].value));
+			if(maxScore > parseInt(document.getElementsByName(playerNumberFull+"score")[0].value)){
+				if(typeOfSpin == 1){
+					playerScoreNew = maxScore + 1;
+				} else {
+					playerScoreNew = maxScore + 2;
+				}
+			}
 		} else {
+			if(typeOfSpin == 1){
+				squareValue = squareValue * 2;
+			}
+			// alert(squareValue);
 			playerScoreNew = parseInt(document.getElementsByName(playerNumberFull+"score")[0].value) + squareValue;
+			if(roundNum<3){
+				jackpotVal = parseInt(document.getElementsByName("jackpotval")[0].value) + squareValue;
+				document.getElementsByName("jackpotval")[0].value = jackpotVal;
+			}
 		}
 		document.getElementsByName(playerNumberFull+"score")[0].value = playerScoreNew;
 		if (squareExtras !== "plus"){
@@ -509,6 +562,10 @@ socket.on('clientstop',function(data) {
     player2Active = false;
     player3Active = false;
     champActive = false;
+//     console.log(selectedSquare,usedSquares,canSpin);
+	socket.emit('board light bounce', selectedSquare,usedSquares,canSpin);
+//     console.log(currentStop,currentType);
+    socket.emit('send stops board', currentStop,currentType);
 });
 //CHANGE GAME BG
 function showBg(bgType){
@@ -542,6 +599,8 @@ function showOpen(){
 function centerMonitor(centerType){
 	if(centerType == 1){
 		centralMoney = document.getElementById("moneyshow").value;
+	} else if(centerType == 2) {
+		centralMoney = selectedSquare;
 	} else {
 		centralMoney = 0;
 	}
@@ -566,12 +625,22 @@ function bonusPod(scoreStyle){
 }
 //LOAD BONUS BOARD
 function loadBonusBoard(bonusNum){
+	bonusRoundNum = bonusNum;
 	if(bonusNum == 1){
 		loadedSpins = 5;
+		boardUsing = royaleBoardOne;
 	} else if(bonusNum == 2){
 		loadedSpins = 4;
-	} else {
+		boardUsing = royaleBoardThree;
+	} else if(bonusNum == 3){
 		loadedSpins = 3;
+		boardUsing = royaleBoardFour;
+	} else if(bonusNum == 4){
+		loadedSpins = 3;
+		boardUsing = royaleBoardFive;
+	} else if(bonusNum == 5){
+		loadedSpins = 3;
+		boardUsing = royaleBoardSix;
 	}
 	setTimeout(function(){ 
 		currentStop = [];
@@ -579,6 +648,10 @@ function loadBonusBoard(bonusNum){
 	}, 4000);
 	document.getElementsByName("champ1earned")[0].value = loadedSpins;
 	socket.emit('load bonus board', bonusNum);
+}
+//LOAD PERSONALIZED PRIZE
+function loadPersonalPrize(){
+	socket.emit('add personal prize', bonusRoundNum);
 }
 //DISPLAY BONUS ROUND SPINS
 function displayBonusSpins(){
@@ -663,7 +736,7 @@ function boardCycle(){
 	loadSingle(currentStop,1,2);
 }
 function loadSingle(stops, num, type){
-	console.log(stops.length);
+// 	console.log(stops.length);
 	if (stops.length < 18){
 		stops = [];
 		for(x=0;x<18;x++){
@@ -681,6 +754,7 @@ function loadSingle(stops, num, type){
 		}
 	}
 	currentStop = stops;
+	currentType = type;
 // 	console.log(stops);
 	socket.emit('send stops board', stops,type);
 }
@@ -711,4 +785,9 @@ function storeQuestion(){
 	questionList[currentQNum]['answers'] = theAnswers;
 	clearAll(1);
 	document.getElementById("loadq"+currentQNum).className = "questionload";
+}
+//TOGGLE BTN CLASS
+function toggleClass(idName) {
+  var element = document.getElementById(idName);
+  element.classList.toggle("active");
 }

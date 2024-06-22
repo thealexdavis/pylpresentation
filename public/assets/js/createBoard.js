@@ -63,6 +63,9 @@ bonusRound = false;
 p1IsActive = false;
 p2IsActive = false;
 p3IsActive = false;
+flipWhammy = false;
+flipsDone = 0;
+flipVal = "";
 
 //INIT SETUP
 //SFX
@@ -98,8 +101,9 @@ prizeCount = 0;
 totalWhammies = 0;
 roundNum = 1;
 currentMult = 0;
+bonusRoundNum = 0;
 activeBoard = roundOneBoard;
-loadPrizes(prizeReserveBonus, activePrizes, 1, activePrizes,null,2);
+loadPrizes(bonusRoundPrizeReserve, activePrizes, 1, activePrizes,null,2);
 prizesToBoard(activeBoard, activePrizes);
 // startOpenScreen();
 // startRulesScene();
@@ -581,11 +585,16 @@ function startRoundOne(){
 
 function displayCenterMoney(rn){
 	if (rn > 0){
-		if (rn == 1){activeBoard = royaleBoardOne; dollarDisplay = '<sup>$</sup>10,000';}
+// 		console.log(rn);
+		frameContent.classList.add("bbcenter");
+		if (rn == 1){activeBoard = roundBonusBoardOne; dollarDisplay = '<sup>$</sup>10,000';}
 		if (rn == 2){activeBoard = royaleBoardThree; dollarDisplay = '<sup>$</sup>25,000';}
 		if (rn == 3){activeBoard = royaleBoardFour; dollarDisplay = '<sup>$</sup>50,000';}
 		if (rn == 4){activeBoard = royaleBoardFive; dollarDisplay = '<sup>$</sup>75,000';}
 		if (rn == 5){activeBoard = royaleBoardSix; dollarDisplay = '<sup>$</sup>100,000';}
+		loadPrizes(bonusRoundPrizeReserve, activePrizes, 1, activePrizes,null,2);
+		prizesToBoard(activeBoard, activePrizes);
+		// console.log(activeBoard);
 		centerLogo.classList.add("fliptrans");
 		centerFrame.classList.add("fliptrans");
 		frameContent.classList.add("fliptrans");
@@ -597,9 +606,9 @@ function displayCenterMoney(rn){
 			if (rn == 7){
 				frameContent.classList.add("smaller");
 			}
-			frameText.innerHTML = dollarDisplay;
+			// frameText.innerHTML = dollarDisplay;
 		} else {
-			frameText.innerHTML = '<span class="bb">BIG<br>BUCKS</span>';
+			// frameText.innerHTML = '<span class="bb">BIG<br>BUCKS</span>';
 		}
 		setTimeout(function(){ 
 			centerFrame.classList.add("flipfull");
@@ -608,42 +617,255 @@ function displayCenterMoney(rn){
 		if (rn < 6){
 			setTimeout(function(){ 
 				frameContent.classList.add("centerburst");
-				frameText.innerHTML = dollarDisplay;
+				frameContent.classList.add("r1bonuscenter");
+				// frameText.innerHTML = dollarDisplay;
 			}, 3000);
 			setTimeout(function(){ 
 				frameContent.classList.add("removeburst");
 			}, 3010);
 			setTimeout(function(){ 
-				centerFrame.className = '';
-				centerFrame.classList.add("fliptrans");
-				frameContent.className = '';
-				frameContent.classList.add("fliptrans");
-				frameContent.classList.add("greenspiralcenter");
-			}, 4000);
+				frameContent.classList.remove("removeburst");
+			}, 3200);
+			// setTimeout(function(){ 
+			// 	centerFrame.className = '';
+			// 	centerFrame.classList.add("fliptrans");
+			// 	// frameContent.className = '';
+			// 	frameContent.classList.add("fliptrans");
+			// 	frameContent.classList.add("greenspiralcenter");
+			// }, 4000);
+			// setTimeout(function(){ 
+			// 	centerLogo.className = '';
+			// 	centerLogo.classList.add("fliptrans");
+			// 	frameContent.className = '';
+			// 	frameContent.innerHTML = '';
+			// }, 4400);
+		}
+	}
+}
+
+function displayCenterPrizeBonus(p,r,c){
+	// console.log(p);
+	// console.log(r);
+	// console.log(c);
+	prizeToAdd = p;
+	for(i in activeBoard){
+		boardSquare = boardItems[i-1].parentNode;
+		boardSquare.className = '';
+		boardSquare.classList.add("square");
+	}
+	if(!c){
+		// console.log(prizeToAdd);
+		dollarDisplay = '<img src="/assets/img/prizes/'+prizeToAdd.icon+'" class="prizeicon"><span class="prizename">'+prizeToAdd.name+'</span>';
+		console.log(activeBoard);
+		centerLogo.classList.add("fliptrans");
+		centerFrame.classList.add("fliptrans");
+		frameContent.classList.add("fliptrans");
+		frameContent.classList.add("greenspiralcenter");
+		frameContent.classList.add("blueprize");
+		centerLogo.classList.add("fliphalf");
+		var frameText = document.createElement("div");
+		frameContent.appendChild(frameText);
+		frameText.innerHTML = dollarDisplay;
+		setTimeout(function(){ 
+			centerFrame.classList.add("flipfull");
+			frameContent.classList.add("flipfull");
+		}, 400);
+		personalizedPrizeOnCenter = !personalizedPrizeOnCenter;
+	} else {
+		if(!prizeToAdd.extra){
+			personalizedPrizeOnCenter = !personalizedPrizeOnCenter;
+			if(personalizedPrizeAct == 2){
+				activePrizes = [];
+			}
+			for(i in activeBoard){
+				var theSquare = activeBoard[i];
+				for(var j=1;j<=3;j++){
+					if(personalizedPrizeAct == 1){
+						if (theSquare['extras'][0][j] == "replacewithprize1"){
+							theSquare['text'][0][j] = prizeToAdd.name;
+							theSquare['values'][0][j] = prizeToAdd.value;
+							theSquare['extras'][0][j] = prizeToAdd.icon;
+							theSquare['color'][0][j] = "blueprize";
+							theSquare['type'][0][j] = "prize";
+							fillSquare(i-1, theSquare['color'][0][j], theSquare['type'][0][j], theSquare['values'][0][j], theSquare['text'][0][j], theSquare['prizeValues'][0][j], theSquare['extras'][0][j]);
+							squareFlash = boardItems[i-1].parentNode;
+							squareFlash.classList.add("flash");
+						}
+					} else if(personalizedPrizeAct == 2){
+						if (theSquare['extras'][0][j] == "replacewithprize2"){
+							theSquare['text'][0][j] = prizeToAdd.name;
+							theSquare['values'][0][j] = prizeToAdd.value;
+							theSquare['extras'][0][j] = prizeToAdd.icon;
+							theSquare['color'][0][j] = "blueprize";
+							theSquare['type'][0][j] = "prize";
+							fillSquare(i-1, theSquare['color'][0][j], theSquare['type'][0][j], theSquare['values'][0][j], theSquare['text'][0][j], theSquare['prizeValues'][0][j], theSquare['extras'][0][j]);
+							squareFlash = boardItems[i-1].parentNode;
+							squareFlash.classList.add("flash");
+						}
+						if(theSquare['type'][0][j] == "prize"){
+							newPrize = {
+								name: theSquare['text'][0][j],
+								level: 1,
+								extras: theSquare['extras'][0][j],
+								value: theSquare['values'][0][j],
+								square: parseInt(i),
+								stop: parseInt(j)
+							};
+							activePrizes.push(newPrize);
+						}
+					} else{
+						// console.log(activePrizes);
+						if(i == 1 && j == 1){
+							var prizeToRemove = getSmallestPrize(activePrizes);
+							console.log(activePrizes[prizeToRemove]);
+							removePrize(prizeToRemove,0,3);
+							// var prizeToRemove = getSmallestPrize(activePrizes);
+							// console.log(activePrizes[prizeToRemove]);
+						}
+					}
+				}
+			}
+			centerFrame.className = '';
+			centerFrame.classList.add("fliptrans");
+			frameContent.className = '';
+			frameContent.classList.add("fliptrans");
+			frameContent.classList.add("greenspiral");
+			frameContent.classList.add("blueprize");
 			setTimeout(function(){ 
 				centerLogo.className = '';
 				centerLogo.classList.add("fliptrans");
-				frameContent.className = '';
 				frameContent.innerHTML = '';
-			}, 4400);
+			}, 400);
+			personalizedPrizeAct++;
+			console.log(activePrizes);
+			// console.log(activeBoard);
+		} else {
+			personalizedPrizeAct++;
 		}
 	}
 }
 
 function displayCenterMoneyMain(amount){
-	dollarDisplay = '<sup>$</sup>'+numberWithCommas(amount);
-	centerLogo.classList.add("fliptrans");
-	centerFrame.classList.add("fliptrans");
-	frameContent.classList.add("fliptrans");
-	frameContent.classList.add("greenspiralcenter");
-	centerLogo.classList.add("fliphalf");
-	var frameText = document.createElement("div");
-	frameContent.appendChild(frameText);
-	frameText.innerHTML = dollarDisplay;
-	setTimeout(function(){ 
-		centerFrame.classList.add("flipfull");
-		frameContent.classList.add("flipfull");
-	}, 400);
+	if(amount !== "double" && amount !== "whammy" && amount !== "bigbucks"){
+		dollarDisplay = '<sup>$</sup>'+numberWithCommas(amount);
+		centerLogo.classList.add("fliptrans");
+		centerFrame.classList.add("fliptrans");
+		frameContent.classList.add("fliptrans");
+		frameContent.classList.add("greenspiralcenter");
+		centerLogo.classList.add("fliphalf");
+		var frameText = document.createElement("div");
+		frameContent.appendChild(frameText);
+		frameText.innerHTML = dollarDisplay;
+		setTimeout(function(){ 
+			centerFrame.classList.add("flipfull");
+			frameContent.classList.add("flipfull");
+		}, 400);
+	} else {
+		activeBoard[1]['type'][0][1] = "money";
+		activeBoard[1]['values'][0][1] = 4900;
+		activeBoard[1]['text'][0][1] = "<sup>$</sup>4,900";
+		activeBoard[1]['color'][0][1] = "aqua";
+		activeBoard[1]['extras'][0][1] = "";
+		activeBoard[10]['type'][0][1] = "money";
+		activeBoard[10]['values'][0][1] = 5000;
+		activeBoard[10]['text'][0][1] = "<sup>$</sup>5,000";
+		activeBoard[10]['color'][0][1] = "lightgreen";
+		activeBoard[10]['extras'][0][1] = "";
+		activeBoard[15]['type'][0][1] = "money";
+		activeBoard[15]['values'][0][1] = 4125;
+		activeBoard[15]['text'][0][1] = "<sup>$</sup>4,125";
+		activeBoard[15]['color'][0][1] = "darkgreen";
+		activeBoard[15]['extras'][0][1] = "";
+		if(amount == "double"){
+			dollarDisplay = '';
+			frameContent.classList.add("bigbuckscenter");
+			frameContent.classList.add("doublecenter");
+			var animStarfield = setInterval(tick, Math.floor(1000 / framerate));
+			flipWhammy = 0;
+			flipVal = "double";
+			for(x=0;x<lightIds.length;x++){
+				 turnLightOnOrOff(lightIds[x], purpleData);
+			 }
+			setTimeout(function(){ 
+				if (bonusRound){
+					blueBoard.className = 'show';
+					redBoard.className = '';
+					clearInterval(animStarfield);
+					context.clearRect(0, 0, width, height);
+				} else {
+					goldBoard.className = 'show';
+					blueBoard.className = '';
+					redBoard.className = '';
+					clearInterval(animStarfield);
+					context.clearRect(0, 0, width, height);
+				}
+				for(x=0;x<lightIds.length;x++){
+					 turnLightOnOrOff(lightIds[x], defaultData);
+				 }
+			}, 5000);
+		}
+		if(amount == "whammy"){
+			dollarDisplay = '';
+			frameContent.classList.add("whammycenter");
+			whammySfx.play();
+			sfxPlayer = whammySfx;
+			flipWhammy = 1;
+			flipVal = "whammy";
+			redBoard.className = 'show';
+			setTimeout(function(){ 
+				if (bonusRound){
+					blueBoard.className = 'show';
+					redBoard.className = '';
+					clearInterval(animStarfield);
+					context.clearRect(0, 0, width, height);
+				} else {
+					goldBoard.className = 'show';
+					blueBoard.className = '';
+					redBoard.className = '';
+					clearInterval(animStarfield);
+					context.clearRect(0, 0, width, height);
+				}
+			}, 5000);
+		}
+		if(amount == "bigbucks"){
+			dollarDisplay = '';
+			frameContent.classList.add("bigbuckscenter");
+			var animStarfield = setInterval(tick, Math.floor(1000 / framerate));
+			for(x=0;x<lightIds.length;x++){
+				 turnLightOnOrOff(lightIds[x], greenData);
+			 }
+			flipWhammy = 0;
+			flipVal = "bigbucks";
+			setTimeout(function(){ 
+				if (bonusRound){
+					blueBoard.className = 'show';
+					redBoard.className = '';
+					clearInterval(animStarfield);
+					context.clearRect(0, 0, width, height);
+				} else {
+					goldBoard.className = 'show';
+					blueBoard.className = '';
+					redBoard.className = '';
+					clearInterval(animStarfield);
+					context.clearRect(0, 0, width, height);
+				}
+				for(x=0;x<lightIds.length;x++){
+					 turnLightOnOrOff(lightIds[x], defaultData);
+				 }
+			}, 5000);
+		}
+		centerLogo.classList.add("fliptrans");
+		centerFrame.classList.add("fliptrans");
+		frameContent.classList.add("fliptrans");
+		centerLogo.classList.add("fliphalf");
+		var frameText = document.createElement("div");
+		frameContent.appendChild(frameText);
+		frameText.innerHTML = dollarDisplay;
+		setTimeout(function(){ 
+			centerFrame.classList.add("flipfull");
+			frameContent.classList.add("flipfull");
+		}, 400);
+	}
 }
 
 function unflipCenter(){
@@ -693,6 +915,7 @@ function displayCenterPrize(prizeName){
 socket.on('clientstop',function(data) {
     if (canStop == true){
 		stopBoard();
+		flipWhammy = false;
 		smackSfx.play();
 	}
 });
@@ -744,22 +967,41 @@ function stopBoard(){
 	boardSpinSfx.pause(); 
 	boardSpinSfx.currentTime = 0;
 	unlightAllSquares();
+	theBoard.classList.add("fade");
 	document.body.querySelector('.square[data-square="'+selectedSquare+'"]').classList.add("active");
+	document.body.querySelector('.square[data-square="'+selectedSquare+'"]').classList.add("landed");
 	clearInterval(spinVar);
 	clearInterval(cycleVar);
 	sI = selectedSquare - 1;
 	posStop = activeIndexes[sI];
+// 	console.log("Selected Square: XX. Pos Stop: XX. Item Stopped On is XX");
 	if(sI == 3){
 		if(bonusRound){
 			runBoardAnim(7);
+			var animStarfield = setInterval(tick, Math.floor(1000 / framerate));
+			for(x=0;x<lightIds.length;x++){
+				 turnLightOnOrOff(lightIds[x], greenData);
+			 }
 		} else {
 			runBoardAnim(4);
+			var animStarfield = setInterval(tick, Math.floor(1000 / framerate));
+			for(x=0;x<lightIds.length;x++){
+				 turnLightOnOrOff(lightIds[x], greenData);
+			 }
 		}
 	} else if(sI == 5 && activeBoard[selectedSquare]['extras'][0][posStop] == "backtwo"){
 		if(bonusRound){
 			runBoardAnim(7);
+			var animStarfield = setInterval(tick, Math.floor(1000 / framerate));
+			for(x=0;x<lightIds.length;x++){
+				turnLightOnOrOff(lightIds[x], greenData);
+			}
 		} else {
 			runBoardAnim(4);
+			var animStarfield = setInterval(tick, Math.floor(1000 / framerate));
+			for(x=0;x<lightIds.length;x++){
+				turnLightOnOrOff(lightIds[x], greenData);
+			}
 		}
 	}
 	if (activeBoard[selectedSquare]['type'][0][posStop] == "bigbucks"){
@@ -767,8 +1009,10 @@ function stopBoard(){
 		selectedSquare = 4;
 		if(bonusRound){
 			runBoardAnim(7);
+			var animStarfield = setInterval(tick, Math.floor(1000 / framerate));
 		} else {
 			runBoardAnim(4);
+			var animStarfield = setInterval(tick, Math.floor(1000 / framerate));
 		}
 		sI = selectedSquare - 1;
 		posStop = activeIndexes[sI];
@@ -777,9 +1021,16 @@ function stopBoard(){
 			clearAllSquares();
 			setSquare(4);
 		}, 750);
+		for(x=0;x<lightIds.length;x++){
+			turnLightOnOrOff(lightIds[x], greenData);
+		}
 	}
-	if (activeBoard[selectedSquare]['type'][0][posStop] == "addaone" || activeBoard[selectedSquare]['type'][0][posStop] == "double"){
+	if (activeBoard[selectedSquare]['type'][0][posStop] == "addaone" || activeBoard[selectedSquare]['type'][0][posStop] == "double" || activeBoard[selectedSquare]['type'][0][posStop] == "lead"  || activeBoard[selectedSquare]['type'][0][posStop] == "jackpot"){
 		runBoardAnim(6);
+		var animStarfield = setInterval(tick, Math.floor(1000 / framerate));
+		for(x=0;x<lightIds.length;x++){
+			turnLightOnOrOff(lightIds[x], purpleData);
+		}
 	}
 	if (activeBoard[selectedSquare]['extras'][0][posStop] == "backtwo"){
 // 		extraMsg = "Move two spaces to ";
@@ -800,6 +1051,7 @@ function stopBoard(){
 */
 	}
 	if (activeBoard[selectedSquare]['extras'][0][posStop] == "losewhammy"){
+		document.body.querySelector('.square[data-square="'+selectedSquare+'"]').classList.remove("landed");
 		if (totalWhammies > 0){
 // 			guiMsg = "Stop at $"+toDollar(activeBoard[selectedSquare]['values'][0][posStop])+" or Lose a Whammy! Which do you want?<p class='btns'><button id='takemoney'>$"+toDollar(activeBoard[selectedSquare]['values'][0][posStop])+"</button><button id='losewhammy'>Lose a Whammy</button></p>";
 /*
@@ -853,11 +1105,11 @@ function stopBoard(){
 	if (activeBoard[selectedSquare]['type'][0][posStop] == "prize"){
 		currentMult = selectedSquare * posStop;
 		prizeCount++;
-		removePrize(activeBoard[selectedSquare]['text'][0][posStop], roundNum,1);
+		// removePrize(activeBoard[selectedSquare]['text'][0][posStop], roundNum,1);
 		prizeInfo = activeBoard[selectedSquare]['text'][0][posStop]+" worth";
 	}
 	if (activeBoard[selectedSquare]['type'][0][posStop] !== "move" && activeBoard[selectedSquare]['type'][0][posStop] !== "bigbucks"){
-		if (activeBoard[selectedSquare]['extras'][0][posStop] !== "plus"){
+		if (activeBoard[selectedSquare]['extras'][0][posStop] !== "plus" && activeBoard[selectedSquare]['type'][0][posStop] !== "double" && activeBoard[selectedSquare]['type'][0][posStop] !== "lead"){
 			totalSpins--;
 		} else {
 			extras = " plus a spin";
@@ -867,6 +1119,9 @@ function stopBoard(){
 			sfxPlayer = whammySfx;
 			redBoard.className = 'show';
  			blinkSquare(sI);
+			 for(x=0;x<lightIds.length;x++){
+				 turnLightOnOrOff(lightIds[x], redData);
+			 }
 			playerScore = 0;
 			if (prizeCount > 0){
 				prizeCount = 0;
@@ -1084,13 +1339,20 @@ function stopBoard(){
 		}
 	}
 	setTimeout(function(){ 
+		for(x=0;x<lightIds.length;x++){
+			turnLightOnOrOff(lightIds[x], defaultData);
+		}
 		if (bonusRound){
 			blueBoard.className = 'show';
 			redBoard.className = '';
+			clearInterval(animStarfield);
+			context.clearRect(0, 0, width, height);
 		} else {
 			goldBoard.className = 'show';
 			blueBoard.className = '';
 			redBoard.className = '';
+			clearInterval(animStarfield);
+			context.clearRect(0, 0, width, height);
 		}
 	}, 5000);
 }
@@ -1104,6 +1366,7 @@ function blinkSquare(squareToBlink){
 				unlightAllSquares();
 				theSquareLanded.className = '';
 				theSquareLanded.classList.add("square");
+				theSquareLanded.classList.add("landed");
 			}
 		}, 350);
 		setTimeout(function(){ 
@@ -1115,6 +1378,7 @@ function blinkSquare(squareToBlink){
 			if(canBlink){
 				theSquareLanded.className = '';
 				theSquareLanded.classList.add("square");
+				theSquareLanded.classList.add("landed");
 			}
 		}, 1050);
 		setTimeout(function(){ 
@@ -1126,6 +1390,7 @@ function blinkSquare(squareToBlink){
 			if(canBlink){
 				theSquareLanded.className = '';
 				theSquareLanded.classList.add("square");
+				theSquareLanded.classList.add("landed");
 			}
 		}, 1750);
 		setTimeout(function(){ 
@@ -1133,6 +1398,9 @@ function blinkSquare(squareToBlink){
 				theSquareLanded.classList.add("active");
 			}
 		}, 2100);
+		setTimeout(function(){ 
+			theBoard.classList.remove("fade");
+		}, 3500);
 	}
 }
 
@@ -1340,7 +1608,7 @@ function menuBtn(fn){
 			startGame();
 		}
 	}, 400);
-	loadPrizes(prizeReserveBonus, activePrizes, 1, activePrizes,null,2);
+	loadPrizes(bonusRoundPrizeReserve, activePrizes, 1, activePrizes,null,2);
 	prizesToBoard(activeBoard, activePrizes);
 }
 
@@ -1508,16 +1776,18 @@ function getSmallestPrize(activePrizes){
 	var prizeVal = 0;
 	var prizeName = "";
 	for(var x = 0;x<activePrizes.length;x++){
-		if (prizeVal > activePrizes[x][0]['value']){
-			prizeName = activePrizes[x][0]['name'];
-			prizeVal = activePrizes[x][0]['value'];
+		if (prizeVal > activePrizes[x]['value']){
+			prizeName = activePrizes[x]['name'];
+			prizeVal = activePrizes[x]['value'];
+			prizeIndex = x;
 		}
 		if (prizeVal == 0){
-			prizeName = activePrizes[x][0]['name'];
-			prizeVal = activePrizes[x][0]['value'];
+			prizeName = activePrizes[x]['name'];
+			prizeVal = activePrizes[x]['value'];
+			prizeIndex = x;
 		}
 	}
-	return prizeName;
+	return prizeIndex;
 }
 
 function loadBoard(boardConfig,boardNum){
@@ -1651,18 +1921,36 @@ function median(values) {
 
 function prizesToBoard(theBoard, prizes){
 	var p = 0;
+	if(bonusRoundNum == 0){
+		maxNum = 3;
+	} else if(bonusRoundNum == 1){
+		maxNum = 7;
+	} else {
+		maxNum = 3;
+	}
 	for(i in theBoard){
 		var theSquare = theBoard[i];
-		for(var j=1;j<=3;j++){
+		for(var j=1;j<=maxNum;j++){
 			if (theSquare['type'][0][j] == "prize"){
 				theSquare['text'][0][j] = prizes[p][0]['name'];
 				theSquare['values'][0][j] = prizes[p][0]['value'];
+				theSquare['extras'][0][j] = prizes[p][0]['extras'];
 				p++;
-				if(p>2){p=0}
+				if(p>(maxNum - 1)){p=0}
 			}
 		}
 	}
 }
+personalizedPrizeOnCenter = false;
+personalizedPrizeAct = 1;
+socket.on("addPersonalPrize",function(data){
+	// alert(bonusRoundNum);
+	console.log(personalizedPrizeAct);
+	displayCenterPrizeBonus(personalizedPrizes[personalizedPrizeAct],data,personalizedPrizeOnCenter);
+	if(personalizedPrizes[personalizedPrizeAct].extra){
+		personalizedPrizeAct++;
+	}
+});
 
 function boardCycle(){
 	loadSingle(activeBoard, currentStop,1,2);
@@ -1675,6 +1963,7 @@ function loadPrizes(i,e,r,a,n,t){
 			r = 1;
 		}
 	}
+	// alert(r);
 	if (possiblePrizes.length == 0){
 		possiblePrizes = [];
 		for (j in i){
@@ -1692,7 +1981,7 @@ function loadPrizes(i,e,r,a,n,t){
 		}
 		maxGo = 2;	
 	}
-	maxGo = (3 - a.length);
+	maxGo = (7 - a.length);
 	for(var x=0;x<maxGo;x++){
 		rI = Math.floor(Math.random()*possiblePrizes.length);
 		var item = possiblePrizes[rI];
@@ -1702,11 +1991,13 @@ function loadPrizes(i,e,r,a,n,t){
 		    { 
 		        "name": i[itemIndex]['name'],
 		        "value": i[itemIndex]['value'],
-		        "level": r
+		        "level": r,
+				"extras": i[itemIndex]['icon']
 		    }
 		];
 		a.push(data);
 	}
+	console.log(n);
 	if (n !== null){
 		setTimeout(function(){ 
 			for(i in activeBoard){
@@ -1715,13 +2006,16 @@ function loadPrizes(i,e,r,a,n,t){
 					if (theSquare['type'][0][j] == "prize" && theSquare['text'][0][j] == n){
 						theSquare['text'][0][j] = a[2][0]['name'];
 						theSquare['values'][0][j] = a[2][0]['value'];
+						theSquare['extras'][0][j] = a[2][0]['extras'];
 					}
 				}
 			}
 			for(var q = 0;q<18;q++){
 				var squareElem = boardItems[q];
 				if (squareElem.textContent == n){
-					squareElem.innerHTML = a[2][0]['name'];
+					squareElem.classList.add("item");
+					squareElem.classList.add("itemsingle");
+					squareElem.innerHTML = "<span><img src='/assets/img/prizes/"+a[2][0]['extras']+"' class='prizeicon'><span class='prizecopy'>"+a[2][0]['name']+"</span>";
 				}
 			}
 		}, 2000);
@@ -1821,23 +2115,94 @@ function fillSquare(square,color,type,value,text,prizeValue,extra){
 	squareQueueFade = boardItemsFade[square];
 	currentVal = squareQueue.innerHTML;
 // 	console.log(currentVal);
-	if (currentVal !== ""){
-		squareQueueFade.innerHTML = currentVal;
-		squareQueueFade.classList.add("reveal");
-		squareQueueFade.classList.add("fade");
+	if (type == "prize"){
+		squareQueue.className = '';
+		squareQueue.classList.add("item");
+		squareQueue.classList.add("itemsingle");
+		squareQueue.classList.add(color);
+		squareQueue.innerHTML = "<span><img src='/assets/img/prizes/"+extra+"' class='prizeicon'><span class='prizecopy'>"+text+"</span>";
+		squarePlace = value;
+	} else {
+		if (currentVal !== ""){
+			squareQueueFade.innerHTML = currentVal;
+			squareQueueFade.classList.add("reveal");
+			squareQueueFade.classList.add("fade");
+		}
+		squareQueue.className = '';
+		squareQueue.classList.add("item");
+		squareQueue.classList.add("itemsingle");
+		squareQueue.classList.add(color);
+		if (color == "move"){
+			squareQueue.classList.add(extra);
+		}
+		if (type == "intro"){
+			squareClass = squareQueue.parentNode;
+			squareClass.setAttribute("id", extra);
+		}
+		squarePlace = value;
+		if(extra == "plus"){
+			squarePlace = value+"plus";
+		}
+		if(extra == "addaone"){
+			squarePlace = "addaone";
+		}
+		if(type == "bigbucks"){
+			squarePlace = "bigbucks";
+		}
+		if(extra == "backtwo" || extra == "forwardtwo"){
+			squarePlace = "movetwospaces";
+		}
+		if(extra == "double"){
+			squarePlace = "doublemoney";
+		}
+		if(extra == "updown"){
+			squarePlace = "movevertical";
+		}
+		if(extra == "leftright"){
+			squarePlace = "movehorizontal";
+		}
+		if(extra == "across"){
+			squarePlace = "across";
+		}
+		if(extra == "losewhammy"){
+			if(value == 5500){
+				squarePlace = "5500orlose";
+			}
+			if(value == 7100){
+				squarePlace = "7100orlose";
+			}
+		}
+		if(extra == "lead"){
+			squarePlace = "takethelead";
+		}
+		if(extra == "doubleup"){
+			if(value == 10000){
+				squarePlace = "10000ordouble";
+			}
+		}
+		if(extra == "jackpot"){
+			squarePlace = "jackpot";
+		}
+		if(extra == "spinagain"){
+			if(value == 3000){
+				squarePlace = "3000orspin";
+			}
+			if(value == 1750){
+				squarePlace = "1750orspin";
+			}
+		}
+		if(extra == "flip"){
+			if(value == 3500){
+				squarePlace = "3500orflip";
+			}
+			if(value == 5000){
+				squarePlace = "5000orflip";
+			}
+		}
+		if(squarePlace !== 0){
+			squareQueue.innerHTML = "<span><img src='/assets/img/cash/"+squarePlace+".png'></span>";
+		}
 	}
-	squareQueue.className = '';
-	squareQueue.classList.add("item");
-	squareQueue.classList.add("itemsingle");
-	squareQueue.classList.add(color);
-	if (color == "move"){
-		squareQueue.classList.add(extra);
-	}
-	if (type == "intro"){
-		squareClass = squareQueue.parentNode;
-		squareClass.setAttribute("id", extra);
-	}
-	squareQueue.innerHTML = "<span>"+text+"</span>";
 	setTimeout(function(){ 
 		boardItemsFade[square].className = '';
 		boardItemsFade[square].classList.add("item");
@@ -1884,6 +2249,7 @@ function setSquare(ab){
 	clearAllSquares();
 	var squareElem = document.body.querySelector('.square[data-square="'+ab+'"]');
 	squareElem.classList.add("active");
+	selectedSquare = ab;
 }
 
 //BOUNCE BOARD LIGHT
@@ -2000,28 +2366,50 @@ function addVal(sC,ty){
 }
 
 function removePrize(prizeName,round,type){
-	for(var x = 0;x<activePrizes.length;x++){
-		if (activePrizes[x][0]['name'] == prizeName){
-			var data = [
-			    { 
-			        "name": activePrizes[x][0]['name'],
-			        "value": activePrizes[x][0]['value'],
-			        "level": activePrizes[x][0]['level']
-			    }
-			];
-			if (type == 2){
-				lostPrizes.push(data);
-			} else {
-				usedPrizes.push(data);
+	console.log(prizeName);
+	console.log(activePrizes);
+	if(type == 3){
+		for(var x = 0;x<activePrizes.length;x++){
+			if (x == prizeName){
+				var data = [
+					{ 
+						"name": activePrizes[x][0]['name'],
+						"value": activePrizes[x][0]['value'],
+						"level": activePrizes[x][0]['level']
+					}
+				];
+				if (type == 2){
+					lostPrizes.push(data);
+				} else {
+					usedPrizes.push(data);
+				}
+				activePrizes.splice(x, 1);
 			}
-			activePrizes.splice(x, 1);
+		}
+	} else {
+		for(var x = 0;x<activePrizes.length;x++){
+			if (activePrizes[x][0]['name'] == prizeName){
+				var data = [
+			    	{ 
+			        	"name": activePrizes[x][0]['name'],
+			        	"value": activePrizes[x][0]['value'],
+			        	"level": activePrizes[x][0]['level']
+			    	}
+				];
+				if (type == 2){
+					lostPrizes.push(data);
+				} else {
+					usedPrizes.push(data);
+				}
+				activePrizes.splice(x, 1);
+			}
 		}
 	}
 // 	console.log(lostPrizes);
 	if (type == 2){
-		loadPrizes(prizeReserveBonus, activePrizes, round, activePrizes,prizeName,2);
+		loadPrizes(bonusRoundPrizeReserve, activePrizes, round, activePrizes,prizeName,2);
 	} else {
-		loadPrizes(prizeReserveBonus, activePrizes, round, activePrizes,prizeName,1);
+		loadPrizes(bonusRoundPrizeReserve, activePrizes, round, activePrizes,prizeName,1);
 	}
 }
 
@@ -2076,7 +2464,7 @@ function preloadImages(srcs) {
 }
 
 // then to call it, you would use this
-var imageSrcs = ["assets/img/basebg.png","assets/img/blankscore.png","assets/img/board_blue.jpg","assets/img/board_red.jpg","assets/img/board_standby.jpg","assets/img/border.png","assets/img/brightgreenspiral.png","assets/img/buzzer.jpg","assets/img/centerburst.png","assets/img/cfx.png","assets/img/earnedpassed.png","assets/img/greenspiral.png","assets/img/leftarrow.png","assets/img/logo.png","assets/img/monitorpodium.jpg","assets/img/movehorizontal.png","assets/img/onlypassedspins_display.png","assets/img/movehorizontal.png","assets/img/movevertical.png","assets/img/onlyscore_empty_standby.png","assets/img/onlyscore_empty.png","assets/img/onlyspins_display.png","assets/img/red_border.png","assets/img/rightarrow.png","assets/img/scorebg.jpg","assets/img/spins_buzz.png","assets/img/spins_notbuzz.png","assets/img/thewhammy.png","assets/img/whammy_popup.jpg","assets/img/whammy1.png","assets/img/whammy2.png","assets/img/whammy3.png","assets/img/whammy4.png","assets/img/whammy5.png","assets/img/whammy6.png","assets/img/white_border.png","assets/img/board_blue_blink_1.jpg","assets/img/board_blue_blink_2.jpg","assets/img/board_blue_blink_3.jpg","assets/img/board_blue_blink_4.jpg","assets/img/board_gold_blackout_1.jpg","assets/img/board_gold_blackout_2.jpg","assets/img/board_gold_blackout_3.jpg","assets/img/board_gold_blackout_4.jpg","assets/img/board_gold_blink_1.jpg","assets/img/board_gold_blink_2.jpg","assets/img/board_gold_blink_3.jpg","assets/img/board_gold_blink_4.jpg","assets/img/board_gold_diagonal_blink_1.jpg","assets/img/board_gold_diagonal_blink_2.jpg","assets/img/board_gold_diagonal_blink_3.jpg","assets/img/board_gold_diagonal_blink_4.jpg","assets/img/board_gold_diagonal_blink_5.jpg","assets/img/board_gold_diagonal_blink_6.jpg","assets/img/board_gold_diagonal_blink_7.jpg","assets/img/board_gold_vertical_blackout_1.jpg","assets/img/board_gold_vertical_blackout_2.jpg","assets/img/board_gold_vertical_blackout_3.jpg","assets/img/board_gold_vertical_blackout_4.jpg","assets/img/board_gold_vertical_blink_1.jpg","assets/img/board_gold_vertical_blink_2.jpg","assets/img/board_gold_vertical_blink_3.jpg","assets/img/board_gold_vertical_blink_4.jpg"];
+var imageSrcs = ["assets/img/basebg.png","assets/img/blankscore.png","assets/img/board_blue.jpg","assets/img/board_red.jpg","assets/img/board_standby.jpg","assets/img/border.png","assets/img/brightgreenspiral.png","assets/img/buzzer.jpg","assets/img/centerburst.png","assets/img/cfx.png","assets/img/earnedpassed.png","assets/img/greenspiral.png","assets/img/leftarrow.png","assets/img/logo.png","assets/img/monitorpodiumgreen.jpg","assets/img/movehorizontal.png","assets/img/onlypassedspins_display.png","assets/img/movehorizontal.png","assets/img/movevertical.png","assets/img/onlyscore_empty_standby.png","assets/img/onlyscore_empty.png","assets/img/onlyspins_display.png","assets/img/red_border.png","assets/img/rightarrow.png","assets/img/scorebg.jpg","assets/img/spins_buzz.png","assets/img/spins_notbuzz.png","assets/img/thewhammy.png","assets/img/whammy_popup.jpg","assets/img/whammy1.png","assets/img/whammy2.png","assets/img/whammy3.png","assets/img/whammy4.png","assets/img/whammy5.png","assets/img/whammy6.png","assets/img/white_border.png","assets/img/board_blue_blink_1.jpg","assets/img/board_blue_blink_2.jpg","assets/img/board_blue_blink_3.jpg","assets/img/board_blue_blink_4.jpg","assets/img/board_gold_blackout_1.jpg","assets/img/board_gold_blackout_2.jpg","assets/img/board_gold_blackout_3.jpg","assets/img/board_gold_blackout_4.jpg","assets/img/board_gold_blink_1.jpg","assets/img/board_gold_blink_2.jpg","assets/img/board_gold_blink_3.jpg","assets/img/board_gold_blink_4.jpg","assets/img/board_gold_diagonal_blink_1.jpg","assets/img/board_gold_diagonal_blink_2.jpg","assets/img/board_gold_diagonal_blink_3.jpg","assets/img/board_gold_diagonal_blink_4.jpg","assets/img/board_gold_diagonal_blink_5.jpg","assets/img/board_gold_diagonal_blink_6.jpg","assets/img/board_gold_diagonal_blink_7.jpg","assets/img/board_gold_vertical_blackout_1.jpg","assets/img/board_gold_vertical_blackout_2.jpg","assets/img/board_gold_vertical_blackout_3.jpg","assets/img/board_gold_vertical_blackout_4.jpg","assets/img/board_gold_vertical_blink_1.jpg","assets/img/board_gold_vertical_blink_2.jpg","assets/img/board_gold_vertical_blink_3.jpg","assets/img/board_gold_vertical_blink_4.jpg"];
 
 preloadImages(imageSrcs);
 
@@ -2441,6 +2829,24 @@ socket.on('showTheAnswer',function(data) {
 		document.getElementById("answer3").className = "wrong";
 	}
 });
+flipOptions = ["bigbucks","whammy","double"];
+function shuffle(array) {
+  let currentIndex = array.length,  randomIndex;
+
+  // While there remain elements to shuffle...
+  while (currentIndex != 0) {
+
+	// Pick a remaining element...
+	randomIndex = Math.floor(Math.random() * currentIndex);
+	currentIndex--;
+
+	// And swap it with the current element.
+	[array[currentIndex], array[randomIndex]] = [
+	  array[randomIndex], array[currentIndex]];
+  }
+
+  return array;
+}
 //START ROUND
 socket.on('startRound',function(data) {
 	if(data == 0){
@@ -2462,6 +2868,7 @@ socket.on('startRound',function(data) {
 */
 	}
 	if(data == 2){
+		shuffle(flipOptions);
 		runBoardAnim(5);
 		bonusRound = false;
 		activeBoard = roundTwoBoard;
@@ -2471,17 +2878,37 @@ socket.on('startRound',function(data) {
 //  		loadSingle(activeBoard,currentStop,1,1);
 	}
 	if(data == 3){
+		runBoardAnim(5);
+		bonusRound = false;
+		activeBoard = roundThreeBoard;
+		tobigboardSfx.play();
+		currentPlaying = 4;
+		sfxPlayer = tobigboardSfx;
+//  		loadSingle(activeBoard,currentStop,1,1);
+	}
+	if(data == 4){
 		runBoardAnim(3);
 		bonusRound = true;
 	}
 });
 //START THE BOARD
-socket.on("startBoard",function(data){
+socket.on("startBoard",function(data, typeSpin){
 	boardSpinSfx.play();
 	sfxPlayer = boardSpinSfx;
 	clearAllSquares();
 	canStop = true;
 	canBlink = false;
+	theBoard.classList.remove("fade");
+	if(typeSpin == 1){
+		theBoard.classList.add("double");
+		blueBoard.className = 'show';
+		redBoard.className = '';
+	} else {
+		theBoard.classList.remove("double");
+		goldBoard.className = 'show';
+		blueBoard.className = '';
+		redBoard.className = '';
+	}
 // 	spinTimer();
 // 	cycleTimer(activeBoard);
 	if (bonusRound){
@@ -2495,14 +2922,25 @@ socket.on("startBoard",function(data){
 });
 //GET THE SQUARE INFO
 socket.on("getSquareInfo",function(data){
-// 	console.log(data);
-	squareInfo = [data,activeBoard[selectedSquare]['values'][0][posStop],activeBoard[selectedSquare]['type'][0][posStop],activeBoard[selectedSquare]['extras'][0][posStop]];
+	if(flipVal == "whammy"){
+		squareInfo = [data,0,"whammy",""];
+	} else if(flipVal == "double"){
+		squareInfo = [data,0,"double",""];
+	} else if(flipVal == "bigbucks"){
+		squareInfo = [data,10000,"money","plus"];
+	} else {
+		squareInfo = [data,activeBoard[selectedSquare]['values'][0][posStop],activeBoard[selectedSquare]['type'][0][posStop],activeBoard[selectedSquare]['extras'][0][posStop]];
+		if(activeBoard[selectedSquare]['type'][0][posStop] == "prize"){
+			removePrize(activeBoard[selectedSquare]['text'][0][posStop], roundNum,1);
+		}
+	}
 	if(bonusRound){
 // 		toggleThePodium(3);
 	} else {
 		toggleThePodium(2);
 	}
 	socket.emit('send square info', squareInfo);
+	flipVal = "";
 	if(activeBoard[selectedSquare]['type'][0][posStop] == "addaone"){
 		activeBoard[selectedSquare]['type'][0][posStop] = "money";
 		activeBoard[selectedSquare]['values'][0][posStop] = 1000;
@@ -2515,6 +2953,20 @@ socket.on("getSquareInfo",function(data){
 		activeBoard[selectedSquare]['values'][0][posStop] = 1500;
 		activeBoard[selectedSquare]['text'][0][posStop] = "<sup>$</sup>1,500";
 		activeBoard[selectedSquare]['color'][0][posStop] = "blue";
+		activeBoard[selectedSquare]['extras'][0][posStop] = "";
+	}
+	if(activeBoard[selectedSquare]['type'][0][posStop] == "lead"){
+		activeBoard[selectedSquare]['type'][0][posStop] = "money";
+		activeBoard[selectedSquare]['values'][0][posStop] = 4375;
+		activeBoard[selectedSquare]['text'][0][posStop] = "<sup>$</sup>4,375";
+		activeBoard[selectedSquare]['color'][0][posStop] = "red";
+		activeBoard[selectedSquare]['extras'][0][posStop] = "";
+	}
+	if(activeBoard[selectedSquare]['type'][0][posStop] == "jackpot"){
+		activeBoard[selectedSquare]['type'][0][posStop] = "money";
+		activeBoard[selectedSquare]['values'][0][posStop] = 8888;
+		activeBoard[selectedSquare]['text'][0][posStop] = "<sup>$</sup>8,888";
+		activeBoard[selectedSquare]['color'][0][posStop] = "aqua";
 		activeBoard[selectedSquare]['extras'][0][posStop] = "";
 	}
 });
@@ -2612,7 +3064,39 @@ socket.on("toggleCenterMonitor",function(data){
 	if (data[0] == 1){
 		scoreCenter.style.display = "none";
 		displayCenterMoneyMain(data[1]);
-	} else {
+	} else if (data[0] == 2){
+		if(selectedSquare == 1){
+			activeBoard[1]['type'][0][posStop] = "money";
+			activeBoard[1]['values'][0][posStop] = 3500;
+			activeBoard[1]['text'][0][posStop] = "<sup>$</sup>3,500";
+			activeBoard[1]['color'][0][posStop] = "aqua";
+			activeBoard[1]['extras'][0][posStop] = "";
+		}
+		if(selectedSquare == 10){
+			activeBoard[10]['type'][0][posStop] = "money";
+			activeBoard[10]['values'][0][posStop] = 3750;
+			activeBoard[10]['text'][0][posStop] = "<sup>$</sup>3,750";
+			activeBoard[10]['color'][0][posStop] = "lightgreen";
+			activeBoard[10]['extras'][0][posStop] = "";
+		}
+		if(selectedSquare == 15){
+			activeBoard[15]['type'][0][posStop] = "money";
+			activeBoard[15]['values'][0][posStop] = 3000;
+			activeBoard[15]['text'][0][posStop] = "<sup>$</sup>3,000";
+			activeBoard[15]['color'][0][posStop] = "darkgreen";
+			activeBoard[15]['extras'][0][posStop] = "plus";
+		}
+		if(data[1] == 1){
+			flipAmount = flipOptions[0];
+		}
+		if(data[1] == 10 || data[9]){
+			flipAmount = flipOptions[1];
+		}
+		if(data[1] == 15 || data[1] == 14){
+			flipAmount = flipOptions[2];
+		}
+		displayCenterMoneyMain(flipAmount);
+	}  else {
 		unflipCenter();
 	}
 });
@@ -2631,6 +3115,7 @@ socket.on("showBonusPodMoney",function(data){
 });
 //LOAD BONUS ROUND NUMBER
 socket.on("loadBonusBoard",function(data){
+	bonusRoundNum = data;
 	resetLights();
 	resetBoard();
 	clearInterval(boardBlinkTimer);
@@ -2746,36 +3231,173 @@ function aud_fade(sfxPlayer,currentPlaying){
 socket.on("triggerBgAnim",function(data){
 	runBoardAnim(data);
 });
+currentRunningAnim = 0;
 function runBoardAnim(data){
-	redBoard.className = "";
-	blueBoard.className = "";
-	goldBoard.className = "";
-	if(data==1){
-		goldBoard.classList.add("show");
-		goldBoard.classList.add("vertblackout");
+	if(currentRunningAnim == data){
+		if(data!==8){
+			redBoard.className = "";
+			blueBoard.className = "";
+			goldBoard.className = "";
+		} else {
+			clearInterval(animStarfield);
+			context.clearRect(0, 0, width, height);
+		}
+		currentRunningAnim = 0;
+	} else {
+		if(data!==8){
+			redBoard.className = "";
+			blueBoard.className = "";
+			goldBoard.className = "";
+		}
+		if(data==0){
+			clearInterval(animStarfield);
+			context.clearRect(0, 0, width, height);
+		}
+		if(data==1){
+			goldBoard.classList.add("show");
+			goldBoard.classList.add("vertblackout");
+		}
+		if(data==2){
+			goldBoard.classList.add("show");
+			goldBoard.classList.add("vertblink");
+		}
+		if(data==3){
+			goldBoard.classList.add("show");
+			goldBoard.classList.add("horblackout");
+		}
+		if(data==4){
+			goldBoard.classList.add("show");
+			goldBoard.classList.add("horblink");
+		}
+		if(data==5){
+			goldBoard.classList.add("show");
+			goldBoard.classList.add("diagonalblinkreverse");
+		}
+		if(data==6){
+			goldBoard.classList.add("show");
+			goldBoard.classList.add("diagonalblink");
+		}
+		if(data==7){
+			blueBoard.classList.add("show");
+			blueBoard.classList.add("blueblink");
+		}
+		if(data==8){
+			animStarfield = setInterval(tick, Math.floor(1000 / framerate));
+		}
+		currentRunningAnim = data;
 	}
-	if(data==2){
-		goldBoard.classList.add("show");
-		goldBoard.classList.add("vertblink");
-	}
-	if(data==3){
-		goldBoard.classList.add("show");
-		goldBoard.classList.add("horblackout");
-	}
-	if(data==4){
-		goldBoard.classList.add("show");
-		goldBoard.classList.add("horblink");
-	}
-	if(data==5){
-		goldBoard.classList.add("show");
-		goldBoard.classList.add("diagonalblinkreverse");
-	}
-	if(data==6){
-		goldBoard.classList.add("show");
-		goldBoard.classList.add("diagonalblink");
-	}
-	if(data==7){
-		blueBoard.classList.add("show");
-		blueBoard.classList.add("blueblink");
-	}
+	
 }
+
+//BOARD STARFIELD ANIM
+/* --- config start --- */
+
+var starfieldCanvasId     = "starfieldCanvas", // id of the canvas to use
+    framerate             = 30,                // frames per second this animation runs at (this is not exact)
+    numberOfStarsModifier = 5.0,               // Number of stars, higher numbers have performance impact
+    flightSpeed           = 0.02;              // speed of the flight, the higher this number the faster
+
+/* ---- config end ---- */
+
+var canvas        = document.getElementById(starfieldCanvasId),
+    context       = canvas.getContext("2d"),
+    width         = canvas.width,
+    height        = canvas.height,
+    numberOfStars = width * height / 1000 * numberOfStarsModifier,
+    dirX          = width / 2,
+    dirY          = height / 2,
+    stars         = [],
+    TWO_PI        = Math.PI * 2;
+
+// initialize starfield
+for(var x = 0; x < numberOfStars; x++) {
+    stars[x] = {
+        x: range(0, width),
+        y: range(0, height),
+        size: range(0, 1)
+    };
+}
+
+// when mouse moves over canvas change middle point of animation
+
+// start tick at specified fps
+//             window.setInterval(tick, Math.floor(1000 / framerate));
+
+// main routine
+function tick() {
+    var oldX,
+        oldY;
+
+    // reset canvas for next frame
+    context.clearRect(0, 0, width, height);
+
+    for(var x = 0; x < numberOfStars; x++) {
+        // save old status
+        oldX = stars[x].x;
+        oldY = stars[x].y;
+
+        // calculate changes to star
+        stars[x].x += (stars[x].x - dirX) * stars[x].size * flightSpeed;
+        stars[x].y += (stars[x].y - dirY) * stars[x].size * flightSpeed;
+        stars[x].size += flightSpeed;
+
+        // if star is out of bounds, reset
+        if(stars[x].x < 0 || stars[x].x > width || stars[x].y < 0 || stars[x].y > height) {
+            stars[x] = {
+                x: range(0, width),
+                y: range(0, height),
+                size: 0
+            };
+        }
+
+        // draw star
+        context.strokeStyle = "rgba(255, 255, 255, " + Math.min(stars[x].size, 1) + ")";
+        context.lineWidth = stars[x].size;
+        context.beginPath();
+        context.moveTo(oldX, oldY);
+        context.lineTo(stars[x].x, stars[x].y);
+        context.stroke();
+    }
+}
+
+// get a random number inside a range
+function range(start, end) {
+    return Math.random() * (end - start) + start;
+}
+
+hueIP = "192.168.1.66";
+hueUser = "MoPaXGE3WY03qKTcGI-iJusRcXFgvcYLJ8xKrCY3";
+isHue = false;
+isGameRoom = false;
+
+function turnLightOnOrOff(lightId, dataLights){
+	if(isHue){
+		var url = "http://"+hueIP+"/api/"+hueUser+"/lights/"+lightId+"/state";
+		
+		var xhr = new XMLHttpRequest();
+		xhr.open("PUT", url);
+		
+		xhr.setRequestHeader("Content-Type", "application/json");
+		
+		xhr.onreadystatechange = function () {
+	   	if (xhr.readyState === 4) {
+		  	console.log(xhr.status);
+		  	console.log(xhr.responseText);
+	   	}};
+		
+		
+		xhr.send(dataLights);
+	}
+	
+}
+
+if(isGameRoom){
+	lightIds = [4,7,17,3];
+} else {
+	lightIds = [15,16];
+}
+defaultData = '{"on":true, "sat":142, "bri":254,"hue":8401}';
+blueData = '{"on":true, "sat":254, "bri":254,"hue":46575}';
+redData = '{"on":true, "sat":254, "bri":254,"hue":62659}';
+greenData = '{"on":true, "sat":254, "bri":254,"hue":29485}';
+purpleData = '{"on":true, "sat":254, "bri":254,"hue":50449}';

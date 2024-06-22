@@ -1,0 +1,137 @@
+<title>Press Your Luck Podium</title>
+
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="assets/fonts/fonts.css">
+<link rel="stylesheet" type="text/css" href="assets/css/styles.css">
+
+<body>
+	
+<canvas width="1200" height="800" id="starfieldCanvas"></canvas>
+	
+<div id="text_ribbon">
+	<div id="ribbon_content"></div>
+</div>
+
+<div id="game_setup">
+	<div id="code_area">
+		<p class="label">GAME CODE</p>
+		<input type="text" name="gamecode" id="gamecode" value="">
+	</div>
+	<div id="player_names">
+		<div class="player">
+			<p class="label">PLAYER 1</p>
+			<input type="text" name="player1" id="player1" value="">
+		</div>
+		<div class="player">
+			<p class="label">PLAYER 2</p>
+			<input type="text" name="player2" id="player2" value="">
+		</div>
+		<div class="player">
+			<p class="label">PLAYER 3</p>
+			<input type="text" name="player3" id="player3" value="">
+		</div>
+		<div class="player">
+			<p class="label">PLAYER 4</p>
+			<input type="text" name="player4" id="player4" value="">
+		</div>
+	</div>
+</div>
+
+<div id="bg" class="podium">
+</div>
+<div id="player_holder" class="active">
+	<div class="player">
+		<div class="thewhammies">
+			<img src="assets/img/whammy_popup.jpg" id="p1w1" />
+			<img src="assets/img/whammy_popup.jpg" id="p1w2" />
+			<img src="assets/img/whammy_popup.jpg" id="p1w3" />
+			<img src="assets/img/whammy_popup.jpg" id="p1w4" />
+		</div>
+		<div class="playername"><span id="player1name"></span></div>
+		<div id="player1score" class="scorezone showspins"><div class="thescore"><span id="dollarsign">$</span><span id="dollartotal1" class="dollartotal">0</span></div></div>
+		<div class="spin_area">
+			<div class="spinspot" id="p1spot1"><span id="passed1"></span></div>
+			<div class="spinspot spins show" id="p1spot2"><span id="center1">0</span></div>
+			<div class="spinspot" id="p1spot3"><span id="spins1"></span></div>
+		</div>
+	</div>
+	<div class="player">
+		<div class="thewhammies">
+			<img src="assets/img/whammy_popup.jpg" id="p2w1" />
+			<img src="assets/img/whammy_popup.jpg" id="p2w2" />
+			<img src="assets/img/whammy_popup.jpg" id="p2w3" />
+			<img src="assets/img/whammy_popup.jpg" id="p2w4" />
+		</div>
+		<div class="playername"><span id="player2name"></span></div>
+		<div id="player2score" class="scorezone showspins"><div class="thescore"><span id="dollarsign">$</span><span id="dollartotal2" class="dollartotal">0</span></div></div>
+		<div class="spin_area">
+			<div class="spinspot" id="p2spot1"><span id="passed2"></span></div>
+			<div class="spinspot spins show" id="p2spot2"><span id="center2">0</span></div>
+			<div class="spinspot" id="p2spot3"><span id="spins2"></span></div>
+		</div>
+	</div>
+	<div class="player">
+		<div class="thewhammies">
+			<img src="assets/img/whammy_popup.jpg" id="p3w1" />
+			<img src="assets/img/whammy_popup.jpg" id="p3w2" />
+			<img src="assets/img/whammy_popup.jpg" id="p3w3" />
+			<img src="assets/img/whammy_popup.jpg" id="p3w4" />
+		</div>
+		<div class="playername"><span id="player3name"></span></div>
+		<div id="player3score" class="scorezone showspins"><div class="thescore"><span id="dollarsign">$</span><span id="dollartotal3" class="dollartotal">0</span></div></div>
+		<div class="spin_area">
+			<div class="spinspot" id="p3spot1"><span id="passed3"></span></div>
+			<div class="spinspot spins show" id="p3spot2"><span id="center3">0</span></div>
+			<div class="spinspot" id="p3spot3"><span id="spins3"></span></div>
+		</div>
+	</div>
+</div>
+<script src="socket.io/socket.io.js"></script>
+<script>
+  var socket = io();
+</script>
+</body>
+
+<audio id="cycleSfx" preload loop>
+  <source src="assets/sfx/boardcycle.mp3" type="audio/mpeg">
+</audio>
+<audio id="whammySfx" preload>
+  <source src="assets/sfx/whammy.mp3" type="audio/mpeg">
+</audio>
+<audio id="timeupSfx" preload>
+  <source src="assets/sfx/timeup.mp3" type="audio/mpeg">
+</audio>
+<audio id="dingSfx" preload>
+  <source src="assets/sfx/ding.mp3" type="audio/mpeg">
+</audio>
+<audio id="passSfx" preload>
+  <source src="assets/sfx/pass.mp3" type="audio/mpeg">
+</audio>
+<audio id="boingSfx" preload>
+  <source src="assets/sfx/boing.mp3" type="audio/mpeg">
+</audio>
+<audio id="buzzinSfx" preload>
+  <source src="assets/sfx/buzzin.mp3" type="audio/mpeg">
+</audio>
+<audio id="smackSfx" preload>
+  <source src="assets/sfx/smack.mp3" type="audio/mpeg">
+</audio>
+<audio id="boardLoopSfx" preload>
+  <source src="assets/sfx/boardcycle_main.mp3" type="audio/mpeg">
+</audio>
+<audio id="themeSfx" preload>
+  <source src="assets/sfx/theme.mp3" type="audio/mpeg">
+</audio>
+<audio id="tobigboardSfx" preload>
+  <source src="assets/sfx/tobigboard.mp3" type="audio/mpeg">
+</audio>
+<audio id="stingSfx" preload>
+  <source src="assets/sfx/sting.mp3" type="audio/mpeg">
+</audio>
+<audio id="shorterloopSfx" preload>
+  <source src="assets/sfx/shorterloop.mp3" type="audio/mpeg">
+</audio>
+
+<script src="assets/js/boardConfig.js"></script>
+<script src="assets/js/podiumConfig.js"></script>
+<script src="assets/js/questions.js"></script>

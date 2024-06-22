@@ -99,16 +99,24 @@
 					<button id="kick3" onclick="kickPlayer(3)">KICK</button>
 				</div>
 			</div>
+			<div class="the_player extras">
+				<div class="details"><div class="holder">
+				<label for="jackpotval">JACKPOT</label><input type="text" name="jackpotval" id="jackpotval" value="0" placeholder="0">
+				</div></div>
+			</div>
 		</div>
 		<div class="board_info">
 			<div class="round_control">
 				<button onclick="startRound(0)" id="startqround">START QUESTION ROUND</button>
+<!--
 				<button id="showqpodium">SHOW Q PODIUM</button>
 				<button id="showmoneypodium">SHOW $ PODIUM</button>
 				<button id="hidepodium">HIDE</button>
+-->
 				<button onclick="startRound(1)" id="startr1">START ROUND ONE</button>
 				<button onclick="startRound(2)" id="startr2">START ROUND TWO</button>
-				<button id="startbonus" onclick="startRound(3)">START BONUS ROUND</button>
+				<button onclick="startRound(3)" id="startr3">START ROUND THREE</button>
+				<button id="startbonus" onclick="startRound(4)">START BONUS ROUND</button>
 			</div>
 			<div class="question_control">
 				<p>QUESTION CONTROL</p>
@@ -148,6 +156,7 @@
 				<p>SPIN CONTROL</p>
 				<button id="startspin" class="questioncontrol" onclick="startSpin()">START SPIN</button>
 				<button id="endspin" class="questioncontrol" onclick="endSpin()">END SPIN</button>
+				<button id="startspindouble" class="questioncontrol" onclick="startSpin(1)">DOUBLE SPIN</button>
 				<button id="clearall" onclick="clearAll(2)" class="questioncontrol" onclick="lightPod(0)">CLEAR PODS</button>
 				<button id="clearlights" class="questioncontrol" onclick="clearLights()">CLEAR BOARD LIGHTS</button>
 				<button id="blink1" onclick="blinkPod([[1],2])" class="questioncontrol">BLINK P1</button>
@@ -173,15 +182,16 @@
 				<button id="loadbonusb5" onclick="loadBonusBoard(5)">LOAD R5</button>
 				<button id="showpodium" onclick="bonusPodium(1)">SHOW PODIUM</button>
 				<button id="hidepodium" onclick="bonusPodium(0)">HIDE PODIUM</button>
-				<button id="hidepodium" onclick="bonusPod(1)">SHOW SAFE $</button>
-				<button id="hidepodium" onclick="bonusPod(2)">SHOW SCORE $</button>
-				<button id="hidepodium" onclick="bonusPod(3)">SHOW COMBO $</button>
-				<button id="hidepodium" onclick="displayBonusSpins()">DISPLAY SPINS</button>
+				<button id="bonusPod1" onclick="bonusPod(1)">SHOW SAFE $</button>
+				<button id="bonusPos2" onclick="bonusPod(2)">SHOW SCORE $</button>
+				<button id="bonusPod3" onclick="bonusPod(3)">SHOW COMBO $</button>
+				<button id="displayBonusSpin" onclick="displayBonusSpins()">DISPLAY SPINS</button>
 				<button id="clearlights" onclick="clearLights()">CLEAR LIGHTS</button>
 				<button id="chooseleft" class="questioncontrol" onclick="directionMove(4)">CHOOSE LEFT</button>
 				<button id="chooseright" class="questioncontrol" onclick="directionMove(2)">CHOOSE RIGHT</button>
 				<button id="chooseup" class="questioncontrol" onclick="directionMove(1)">CHOOSE UP</button>
 				<button id="choosedown" class="questioncontrol" onclick="directionMove(3)">CHOOSE DOWN</button>
+				<button id="loadPrize" class="questioncontrol" onclick="loadPersonalPrize()">LOAD PRIZE</button>
 			</div>
 			<div class="board_control">
 				<p>BOARD CONTROL</p>
@@ -193,19 +203,21 @@
 				<input type="text" name="moneyshow" id="moneyshow" placeholder="1,000,000">
 				<button id="showcentercash" onclick="centerMonitor(1)">SHOW CENTER $</button>
 				<button id="hidecentercash" onclick="centerMonitor(0)">HIDE CENTER $</button>
+				<button id="flip" onclick="centerMonitor(2)">FLIP BOARD</button>
 				<button id="lightall" onclick="lightall()">LIGHT ALL</button>
 				<button id="blinkstart" onclick="toggleBoardBlink(1)">BLINK START</button>
 				<button id="blinkend" onclick="toggleBoardBlink(0)">BLINK END</button>
 				<button id="blackout" onclick="blackout()">BLACKOUT</button>
 				<button id="showopen" onclick="showOpen()">OPEN</button>
-				<button id="showopen" class="smaller" onclick="boardAnim(1)">VERT BLACKOUT</button>
-				<button id="showopen" class="smaller" onclick="boardAnim(2)">VERT FADE</button>
-				<button id="showopen" class="smaller" onclick="boardAnim(3)">HOR BLACKOUT</button>
-				<button id="showopen" class="smaller" onclick="boardAnim(4)">HOR FADE</button>
-				<button id="showopen" class="smaller" onclick="boardAnim(5)">ARROW IN</button>
-				<button id="showopen" class="smaller" onclick="boardAnim(6)">ARROW OUT</button>
-				<button id="showopen" class="smaller" onclick="boardAnim(7)">BLUE FADE</button>
-				<button id="showopen" class="smaller" onclick="boardAnim(0)">STOP ANIM</button>
+				<button id="animbtn1" class="smaller" onclick="boardAnim(1);toggleClass('animbtn1');">VERT BLACKOUT</button>
+				<button id="animbtn2" class="smaller" onclick="boardAnim(2);toggleClass('animbtn2');">VERT FADE</button>
+				<button id="animbtn3" class="smaller" onclick="boardAnim(3);toggleClass('animbtn3');">HOR BLACKOUT</button>
+				<button id="animbtn4" class="smaller" onclick="boardAnim(4);toggleClass('animbtn4');">HOR FADE</button>
+				<button id="animbtn5" class="smaller" onclick="boardAnim(5);toggleClass('animbtn5');">ARROW IN</button>
+				<button id="animbtn6" class="smaller" onclick="boardAnim(6);toggleClass('animbtn6');">ARROW OUT</button>
+				<button id="animbtn7" class="smaller" onclick="boardAnim(7);toggleClass('animbtn7');">BLUE FADE</button>
+				<button id="animbtn8" class="smaller" onclick="boardAnim(8);toggleClass('animbtn8');">STAR FIELD</button>
+				<button id="animbtn0" class="smaller" onclick="boardAnim(0);toggleClass('animbtn0');">STOP ANIM</button>
 				<button id="showopen" class="smaller" onclick="sfx(1)">PLAY THEME</button>
 				<button id="showopen" class="smaller" onclick="sfx(2)">PLAY LOOP</button>
 				<button id="showopen" class="smaller" onclick="sfx(3)">PLAY STING</button>
@@ -227,6 +239,7 @@
 	</script>
 </body>
 
+<script src="assets/js/boardConfig.js"></script>
 <script src="assets/js/questions.js"></script>
 <script src="assets/js/producer.js"></script>
 

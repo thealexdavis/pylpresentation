@@ -25,8 +25,24 @@ html, body{
 	    right: 0;
 	    overflow: auto;
     }
+    &.board{
+	    #player_holder{
+		    display: none !important;
+	    }
+    }
 }
+#starfieldCanvas{
+	position: absolute;
+	z-index: 2;
+	overflow: auto;
+  margin: auto;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  width: 1303px !important;
+  height: 810px !important;
+  clip-path: polygon(15% 0%, 16% 12%, 9% 13%, 9% 22%, 3% 23%, 5% 49%, 3% 76%, 10% 76%, 9% 85%, 16% 86%, 15% 100%, 85% 100%, 84% 86%, 91% 85%, 90% 76%, 97% 76%, 94% 50%, 97% 22%, 90% 22%, 91% 12%, 84% 12%, 85% 0%, 84% 0%);
 
+}
 body{
 	padding: 0;
 	margin: 0;
@@ -174,10 +190,14 @@ body{
 					height: 50px;
 					&.smaller{
 						width: 12.5%;
+						&.active{
+							background-color: green;
+							color: white;
+						}
 					}
 				}
 				input[type="text"]{
-					width: 60%;
+					width: 40%;
 					font-family: 'DINNeuzeitGroteskStd-BdCond';
 					text-align: center;
 					font-size: 22px;
@@ -225,8 +245,14 @@ body{
 				display: flex;
 				flex-direction: row;
 				flex-wrap: wrap;
+				&.extras{
+					margin-top: 15px;
+				}
 				&.off{
 					display: none;
+				}
+				.jackpot_info{
+					width: 100%;
 				}
 				p{
 					text-align: center;
@@ -734,6 +760,9 @@ body{
 			opacity: 1;
 		}
 	}
+	&.podium{
+		background-color: #00ff00;
+	}
 }
 #game_setup{
 	position: fixed;
@@ -1074,21 +1103,26 @@ body{
 			justify-content: center;
   			display: none;
 			z-index: 2;
-			background-image: url(../img/monitorpodium.jpg);
+			background-image: url(../img/monitorpodiumgreen.jpg);
 			background-position: center center;
 			background-repeat: no-repeat;
-			background-size: 135%;
+			background-size: 100%;
 			#buzzer{
 				position: absolute;
+				display: none;
+			    top: 62.2%;
+				left: 46%;
+/*
 			    top: 19.2%;
 				left: 45%;
+*/
 			    margin: auto;
 			    background-image: url(../img/buzzer.jpg);
 			    background-size: cover;
 			    background-repeat: no-repeat;
 			    background-position: center center;
-			    width: 41px;
-			    height: 41px;
+			    width: 32px;
+			    height: 32px;
 			    z-index: 5;
 			    cursor: pointer;
 			    &.press{
@@ -1102,9 +1136,9 @@ body{
 			}
 			.whammycenter{
 				position: absolute;
-			    width: 73%;
-			    height: 50px;
-			    top: 17.5%;
+			    width: 60%;
+			    height: 40px;
+			    top: 60%;
 			    left: 0;
 			    right: 0;
 			    margin: auto;
@@ -1114,8 +1148,8 @@ body{
 					background-size: cover;
 					background-repeat: no-repeat;
 					background-position: center center;
-					height: 50px; 
-					width: 50px;
+					height: 40px; 
+					width: 40px;
 					position: absolute;
 					top: 50px;
 					@include transition(top, 0.25s, ease-out);
@@ -1159,13 +1193,13 @@ body{
 					font-family: 'DINNeuzeitGroteskStd-BdCond';
 				    font-weight: 700;
 				    text-shadow: 2px 2px 3px #000;
-				    font-size: 2.8em;
+				    font-size: 2.3em;
 				    color: white;
 				    position: absolute;
-				    width: 43.5%;
-				    left: 20%;
+				    width: 38.5%;
+				    left: 25%;
 				    margin: 0;
-				    top: 42.5%;
+				    top: 78.5%;
 				    #dollarsign{
 					    margin-left: 10%;
 					    width: 9%;
@@ -1181,13 +1215,13 @@ body{
 					font-family: 'DINNeuzeitGroteskStd-BdCond';
 				    font-weight: 700;
 				    text-shadow: 2px 2px 3px #000;
-				    font-size: 2.8em;
+				    font-size: 2.3em;
 				    color: white;
 				    position: absolute;
 				    width: 12.5%;
-					right: 18.3%;
+				    right: 24.8%;
 				    margin: 0;
-				    top: 42.5%;
+				    top: 78.5%;
 				    text-align: center;
 				}
 			}
@@ -1203,6 +1237,15 @@ body{
 		    display: flex;
 		    align-items: center;
 			justify-content: center;
+			.prizeicon{
+				width: 40%;
+				display: block;
+				margin: 5px auto 5px;
+			}
+			span.prizename{
+				font-size: 3rem;
+				line-height: 4.5rem;
+			}
 		    h2{
 			    font-family: 'DINNeuzeitGroteskStd-BdCond';
 			    font-weight: 600;
@@ -1266,6 +1309,21 @@ body{
 	    &.preload{
 		    opacity: 0;
 	    }
+		&.fade{
+			.square:not(.landed){
+				&:after{
+					opacity: 1;
+				}
+			}
+		}
+		&.double{
+			.square{
+				&.active{
+					border-color: gold;
+					border-image: url(../img/gold_border.png) 20;
+				}
+			}
+		}
 	}
 	.square{
 		width: 6.25em;
@@ -1281,6 +1339,36 @@ body{
 				border-color: white;
 				border-image: url(../img/white_border.png) 20;
 			}
+		}
+		&:after{
+			content: "";
+			position: absolute;
+			left: 0;
+			top: 0;
+			background-color: rgba(0,0,0,0.4);
+			width: 100%;
+			height: 100%;
+			opacity: 0;
+			z-index: 3;
+			@include transition(opacity, 0.15s, ease-out);
+		}
+		.prizeicon{
+			width: 45%;
+			display: block;
+			margin: 5px auto 5px;
+		}
+		.prizecopy{
+			color: white;
+			font-family: 'DINNeuzeitGroteskStd-BdCond';
+			text-align: center;
+			text-shadow: 2px 2px 3px #000000;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			max-width: calc(100% - 10px);
+			margin: 0 auto;
+			font-size: 1.1rem;
+			line-height: 1em;
 		}
 		&.flash{
 			&:after{
@@ -1401,8 +1489,11 @@ body{
 			font-family: 'DINNeuzeitGroteskStd-BdCond';
 // 			font-weight: 600;
 			text-shadow: 2px 2px 3px #000000;
-			font-size: 1.8em;
+			font-size: 2em;
 			line-height: 1em;
+			img{
+				max-width: 100%;
+			}
 			&.itemsinglefade{
 				position: absolute;
 				top: 0;
@@ -1433,21 +1524,44 @@ body{
 			&.bigbucks{
 				span{
 					line-height: 1em;
+					img{
+						max-width: 100%;
+					}
 				}
 			}
 			span{
 				&.plus{
 					display: block;
-					margin: -0.2em 0 0.1em;
+					margin: -0.4em 0 -0.1em;
+					font-size: 0.9em;
 // 					margin: -0.4em 0 -0.2em;
 				}
 				&.spin{
 					display: block;
+					font-size: 0.75em;
+				}
+			}
+			&.spinagain{
+				.cash{
+					display: block;
+				}
+				.or{
+					display: block;
+					font-size: 0.6em;
+					margin: -6px 0px;
+				}
+				.lose{
+					display: block;
+					font-size: 0.7em;
+					margin: -8px 0;
 				}
 			}
 		}
 		.item{
 			height: 100%;
+			background-size: cover;
+			background-position: center-center;
+			background-repeat: no-repeat;
 			&.blue, &.aqua, &.fuscia, &.red, &.purple, &.orange, &.lightgreen, &.darkgreen{
 				&:before{
 					content: "";
@@ -1457,9 +1571,9 @@ body{
 					width: 100%;
 					height: 100%;
 					/* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#000000+0,000000+50,000000+100&0.75+0,0.5+15,0.25+50,0.5+85,0.75+100 */
-background: -moz-linear-gradient(top, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.5) 15%, rgba(0,0,0,0.25) 50%, rgba(0,0,0,0.5) 85%, rgba(0,0,0,0.5) 100%); /* FF3.6-15 */
-background: -webkit-linear-gradient(top, rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.5) 15%,rgba(0,0,0,0.25) 50%,rgba(0,0,0,0.5) 85%,rgba(0,0,0,0.5) 100%); /* Chrome10-25,Safari5.1-6 */
-background: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.5) 15%,rgba(0,0,0,0.25) 50%,rgba(0,0,0,0.5) 85%,rgba(0,0,0,0.5) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+background: -moz-linear-gradient(top, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.25) 15%, rgba(0,0,0,0.25) 50%, rgba(0,0,0,0.25) 85%, rgba(0,0,0,0.25) 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(top, rgba(0,0,0,0.25) 0%,rgba(0,0,0,0.25) 15%,rgba(0,0,0,0.25) 50%,rgba(0,0,0,0.25) 85%,rgba(0,0,0,0.25) 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to bottom, rgba(0,0,0,0.25) 0%,rgba(0,0,0,0.25) 15%,rgba(0,0,0,0.25) 50%,rgba(0,0,0,0.25) 85%,rgba(0,0,0,0.25) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bf000000', endColorstr='#bf000000',GradientType=0 ); /* IE6-9 */
 				}
 				&:after{
@@ -1478,73 +1592,44 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bf000000', e
 				span{
 					position: relative;
 					z-index: 3;
+					img{
+						max-width: 90%;
+					}
 				}
 			}
 		}
 	}
 	.blue{
 			/* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#19155e+0,281fb6+50,19155e+100 */
-			background: #19155e; /* Old browsers */
-			background: -moz-linear-gradient(top, #19155e 0%, #281fb6 50%, #19155e 100%); /* FF3.6-15 */
-			background: -webkit-linear-gradient(top, #19155e 0%,#281fb6 50%,#19155e 100%); /* Chrome10-25,Safari5.1-6 */
-			background: linear-gradient(to bottom, #19155e 0%,#281fb6 50%,#19155e 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#19155e', endColorstr='#19155e',GradientType=0 ); /* IE6-9 */
+			background-image: url(../img/squarebg/blue.png);
 		}
 		.aqua{
 			/* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#044432+0,1fbc90+50,044432+100 */
-			background: #044432; /* Old browsers */
-			background: -moz-linear-gradient(top, #044432 0%, #1fbc90 50%, #044432 100%); /* FF3.6-15 */
-			background: -webkit-linear-gradient(top, #044432 0%,#1fbc90 50%,#044432 100%); /* Chrome10-25,Safari5.1-6 */
-			background: linear-gradient(to bottom, #044432 0%,#1fbc90 50%,#044432 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#044432', endColorstr='#044432',GradientType=0 ); /* IE6-9 */
+			background-image: url(../img/squarebg/aqua.png);
 		}
 		.fuscia{
 			/* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#32132c+0,661251+50,32132c+100 */
-			background: #32132c; /* Old browsers */
-			background: -moz-linear-gradient(top, #32132c 0%, #661251 50%, #32132c 100%); /* FF3.6-15 */
-			background: -webkit-linear-gradient(top, #32132c 0%,#661251 50%,#32132c 100%); /* Chrome10-25,Safari5.1-6 */
-			background: linear-gradient(to bottom, #32132c 0%,#661251 50%,#32132c 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#32132c', endColorstr='#32132c',GradientType=0 ); /* IE6-9 */
+			background-image: url(../img/squarebg/fuscia.png);
 		}
 		.red{
 			/* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#4b1c1b+0,a52314+50,4b1c1b+100 */
-			background: #4b1c1b; /* Old browsers */
-			background: -moz-linear-gradient(top, #4b1c1b 0%, #a52314 50%, #4b1c1b 100%); /* FF3.6-15 */
-			background: -webkit-linear-gradient(top, #4b1c1b 0%,#a52314 50%,#4b1c1b 100%); /* Chrome10-25,Safari5.1-6 */
-			background: linear-gradient(to bottom, #4b1c1b 0%,#a52314 50%,#4b1c1b 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4b1c1b', endColorstr='#4b1c1b',GradientType=0 ); /* IE6-9 */
+			background-image: url(../img/squarebg/red.png);
 		}
 		.purple{
 			/* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#281551+0,561da1+50,281551+100 */
-			background: #281551; /* Old browsers */
-			background: -moz-linear-gradient(top, #281551 0%, #561da1 50%, #281551 100%); /* FF3.6-15 */
-			background: -webkit-linear-gradient(top, #281551 0%,#561da1 50%,#281551 100%); /* Chrome10-25,Safari5.1-6 */
-			background: linear-gradient(to bottom, #281551 0%,#561da1 50%,#281551 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#281551', endColorstr='#281551',GradientType=0 ); /* IE6-9 */
+			background-image: url(../img/squarebg/purple.png);
 		}
 		.orange{
 			/* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#4f2016+0,a8441f+50,4f2016+100 */
-			background: #4f2016; /* Old browsers */
-			background: -moz-linear-gradient(top, #4f2016 0%, #a8441f 50%, #4f2016 100%); /* FF3.6-15 */
-			background: -webkit-linear-gradient(top, #4f2016 0%,#a8441f 50%,#4f2016 100%); /* Chrome10-25,Safari5.1-6 */
-			background: linear-gradient(to bottom, #4f2016 0%,#a8441f 50%,#4f2016 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4f2016', endColorstr='#4f2016',GradientType=0 ); /* IE6-9 */
+			background-image: url(../img/squarebg/orange.png);
 		}
 		.darkgreen{
 			/* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#162413+0,1a3d27+50,162413+100 */
-			background: #162413; /* Old browsers */
-			background: -moz-linear-gradient(top, #162413 0%, #1a3d27 50%, #162413 100%); /* FF3.6-15 */
-			background: -webkit-linear-gradient(top, #162413 0%,#1a3d27 50%,#162413 100%); /* Chrome10-25,Safari5.1-6 */
-			background: linear-gradient(to bottom, #162413 0%,#1a3d27 50%,#162413 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#162413', endColorstr='#162413',GradientType=0 ); /* IE6-9 */
+			background-image: url(../img/squarebg/darkgreen.png);
 		}
 		.lightgreen{
 			/* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#0d6114+0,29d138+50,0d6114+100 */
-			background: #0d6114; /* Old browsers */
-			background: -moz-linear-gradient(top, #0d6114 0%, #29d138 50%, #0d6114 100%); /* FF3.6-15 */
-			background: -webkit-linear-gradient(top, #0d6114 0%,#29d138 50%,#0d6114 100%); /* Chrome10-25,Safari5.1-6 */
-			background: linear-gradient(to bottom, #0d6114 0%,#29d138 50%,#0d6114 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0d6114', endColorstr='#0d6114',GradientType=0 ); /* IE6-9 */
+			background-image: url(../img/squarebg/lightgreen.png);
 		}
 		.centerburst{
 			&:before{
@@ -1574,7 +1659,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bf000000', e
 				}
 			}
 		}
-		.greenspiralcenter{
+		.greenspiralcenter, .movecenter, .whammycenter, .bigbuckscenter, .bbcenter, .blueprize, .aquaprize, .redprize, .lightgreenprize, .greenprize, .purpleprize{
 			background-color: #0e704a;
 			background-image: url(../img/greenspiral.png);
 			background-position: center center;
@@ -1589,7 +1674,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bf000000', e
 				width: 100%;
 				height: 100%;
 				background-image: url(../img/cfx.png);
-				background-size: 90%;
+				background-size: 90% !important;
 				background-position: center center;
 				background-repeat: no-repeat;
 				z-index: 1;
@@ -1632,76 +1717,216 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bf000000', e
 				}
 			}
 		}
+		.blueprize, .aquaprize, .redprize, .lightgreenprize, .greenprize, .purpleprize{
+			&:after{
+				display: none;
+			}
+		}
+		.movecenter{
+			background-image: url(../img/squarebg/move.png);
+			background-size: 100% 100%;
+			&:after{
+				display: none;
+			}
+		}
+		.whammycenter{
+			background-size: 90%;
+			background-color: #dadc50;
+			background-position: center center;
+			background-repeat: no-repeat;
+			background-image: transparent;
+			&:after{
+				background-image: url(../img/whammy3.png);
+				background-position: center center;
+				background-repeat: no-repeat;
+				background-color: #dadc50;
+				background-size: 70% !important;
+			}
+		}
+		.bigbuckscenter{
+			background-color: #0e704a;
+			background-image: url(../img/brightgreenspiral.png);
+			background-position: center center;
+			background-repeat: no-repeat;
+			background-size: 150%;
+			&:after{
+				background-image: url(../img/cash/10000plus.png);
+				background-position: center center;
+				background-repeat: no-repeat;
+				background-size: 70% !important;
+			}
+		}
+		.bbcenter{
+			background-color: #0e704a;
+			background-image: url(../img/brightgreenspiral.png);
+			background-position: center center;
+			background-repeat: no-repeat;
+			background-size: 150%;
+			&:before{
+				content: "";
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background-image: url(../img/cfx.png);
+				background-size: 90% !important;
+				background-position: center center;
+				background-repeat: no-repeat;
+				z-index: 1;
+				-moz-transform: scaleY(-1);
+				-o-transform: scaleY(-1);
+				-webkit-transform: scaleY(-1);
+				transform: scaleY(-1);
+				filter: FlipV;
+				-ms-filter: "FlipV";
+			}
+			&:after{
+				background-image: url(../img/cash/bigbucks.png);
+				background-position: center center;
+				background-repeat: no-repeat;
+				background-size: 85% !important;
+			}
+		}
+		.cashflipcenter{
+			background-color: #0e704a;
+			background-image: url(../img/squarebg/move.png);
+			background-position: center center;
+			background-repeat: no-repeat;
+			background-size: 100% 100%;
+			&:after{
+				display: block;
+				background-image: url(../img/cash/1500.png);
+				background-position: center center;
+				background-repeat: no-repeat;
+				background-size: 90% !important;
+			}
+		}
+		.r1bonuscenter{
+			background-color: #0e704a;
+			background-image: url(../img/brightgreenspiral.png);
+			background-position: center center;
+			background-repeat: no-repeat;
+			background-size: 150%;
+			&:before{
+				content: "";
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background-image: url(../img/cfx.png);
+				background-size: 90% !important;
+				background-position: center center;
+				background-repeat: no-repeat;
+				z-index: 1;
+				-moz-transform: scaleY(-1);
+				-o-transform: scaleY(-1);
+				-webkit-transform: scaleY(-1);
+				transform: scaleY(-1);
+				filter: FlipV;
+				-ms-filter: "FlipV";
+			}
+			&:after{
+				background-image: url(../img/cash/10000.png);
+				background-position: center center;
+				background-repeat: no-repeat;
+				background-size: 80% !important;
+			}
+		}
+		.doublecenter{
+			background-color: #0e704a;
+			background-image: url(../img/cash/doublecenter.png);
+			background-position: center center;
+			background-repeat: no-repeat;
+			background-size: 100% 100%;
+			&:after{
+				display: block;
+				background-image: url(../img/cash/doublecenter.png);
+				background-position: center center;
+				background-repeat: no-repeat;
+				background-size: 98% 98% !important;
+			}
+		}
 		.blueprize{
 			background-color: #1a24b7;
+			background-image: url(../img/squarebg/bluespiral.png);
+			background-size: 150% !important;
+			background-position: center center;
 		}
 		.purpleprize{
+			background-image: url(../img/squarebg/purplespiral.png);
 			background-color: #3f27b8;
+			background-size: 150% !important;
+			background-position: center center;
 		}
 		.redprize{
 			background-color: #ca1358;
+			background-image: url(../img/squarebg/redspiral.png);
+			background-size: 150% !important;
+			background-position: center center;
 		}
 		.whammya{
-			background-color: #e3f565;
+			background-color: #dadc50;
 			background-image: url(../img/whammy1.png);
 			background-position: center center;
 			background-repeat: no-repeat;
-			background-size: 90%;
+			background-size: 90% !important;
 			color: red !important;
 			span{
 				display: none;
 			}
 		}
 		.whammyb{
-			background-color: #e3f565;
+			background-color: #dadc50;
 			background-image: url(../img/whammy2.png);
 			background-position: center center;
 			background-repeat: no-repeat;
-			background-size: 90%;
+			background-size: 90% !important;
 			color: red !important;
 			span{
 				display: none;
 			}
 		}
 		.whammyc{
-			background-color: #e3f565;
+			background-color: #dadc50;
 			background-image: url(../img/whammy3.png);
 			background-position: center center;
 			background-repeat: no-repeat;
-			background-size: 90%;
+			background-size: 90% !important;
 			color: red !important;
 			span{
 				display: none;
 			}
 		}
 		.whammyd{
-			background-color: #e3f565;
+			background-color: #dadc50;
 			background-image: url(../img/whammy4.png);
 			background-position: center center;
 			background-repeat: no-repeat;
-			background-size: 90%;
+			background-size: 90% !important;
 			color: red !important;
 			span{
 				display: none;
 			}
 		}
 		.whammye{
-			background-color: #e3f565;
+			background-color: #dadc50;
 			background-image: url(../img/whammy5.png);
 			background-position: center center;
 			background-repeat: no-repeat;
-			background-size: 90%;
+			background-size: 90% !important;
 			color: red !important;
 			span{
 				display: none;
 			}
 		}
 		.whammyf{
-			background-color: #e3f565;
+			background-color: #dadc50;
 			background-image: url(../img/whammy6.png);
 			background-position: center center;
 			background-repeat: no-repeat;
-			background-size: 90%;
+			background-size: 90% !important;
 			color: red !important;
 			span{
 				display: none;
@@ -1709,7 +1934,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bf000000', e
 		}
 		.bigbucks{
 			background-color: #0e704a;
-			background-image: url(../img/greenspiral.png);
+			background-image: url(../img/brightgreenspiral.png);
 			background-position: center center;
 			background-repeat: no-repeat;
 			background-size: 150%;
@@ -1723,20 +1948,58 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bf000000', e
 			span{
 				line-height: 0.9em;
 				color: #ffeda8;
+				img{
+					max-width: 100%;
+				}
 				span{
 					display: block;
 				    font-size: 0.75em;
 				    margin: 0px 0 3px;
+				    &.doublewords{
+					    font-size: 0.6em;
+				    }
+				    &.jackpot{
+					    font-size: 1em;
+				    }
+				    &.addone{
+					    font-size: 1em !important;
+						margin-bottom: -8px !important;
+				    }
+				}
+			}
+			.plus{
+				margin: -7px 0 5px !important;
+			}
+			.spin{
+				margin-bottom: -5px !important;
+				font-size: 0.7em !important;
+			}
+		}
+		.bigbucksdark{
+			background-color: #0e704a;
+			background-image: url(../img/darkgreenspiral.png);
+			background-position: center center;
+			background-repeat: no-repeat;
+			background-size: 150%;
+			span{
+				line-height: 0.9em;
+				color: white;
+				span{
+					display: block;
+				    font-size: 0.75em;
+				    margin: 0px 0 3px;
+				    &.doublewords{
+					    font-size: 0.7em;
+				    }
+				    &.jackpot{
+					    font-size: 0.9em;
+				    }
 				}
 			}
 		}
 		.move{
 			/* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#24662e+0,0f561e+10,0e290d+15,0e290d+15,171003+50,0e290d+85,0f561e+90,0f561e+90,24662e+100 */
-background: rgb(36,102,46); /* Old browsers */
-background: -moz-linear-gradient(top, rgba(36,102,46,1) 0%, rgba(15,86,30,1) 10%, rgba(14,41,13,1) 15%, rgba(14,41,13,1) 15%, rgba(23,16,3,1) 50%, rgba(14,41,13,1) 85%, rgba(15,86,30,1) 90%, rgba(15,86,30,1) 90%, rgba(36,102,46,1) 100%); /* FF3.6-15 */
-background: -webkit-linear-gradient(top, rgba(36,102,46,1) 0%,rgba(15,86,30,1) 10%,rgba(14,41,13,1) 15%,rgba(14,41,13,1) 15%,rgba(23,16,3,1) 50%,rgba(14,41,13,1) 85%,rgba(15,86,30,1) 90%,rgba(15,86,30,1) 90%,rgba(36,102,46,1) 100%); /* Chrome10-25,Safari5.1-6 */
-background: linear-gradient(to bottom, rgba(36,102,46,1) 0%,rgba(15,86,30,1) 10%,rgba(14,41,13,1) 15%,rgba(14,41,13,1) 15%,rgba(23,16,3,1) 50%,rgba(14,41,13,1) 85%,rgba(15,86,30,1) 90%,rgba(15,86,30,1) 90%,rgba(36,102,46,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#24662e', endColorstr='#24662e',GradientType=0 ); /* IE6-9 */
+			background-image: url(../img/squarebg/move.png);
 			&.forwardtwo, &.backtwo{
 				&:before{
 					content: "";
@@ -1745,7 +2008,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#24662e', end
 					left: 0;
 					width: 100%;
 					height: 100%;
-					background-image: url(../img/leftarrow.png);
+					// background-image: url(../img/leftarrow.png);
 					background-position: 45% 50%;
 					background-repeat: no-repeat;
 					background-size: 75%;
@@ -1753,6 +2016,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#24662e', end
 				span{
 					position: relative;
 					z-index: 2;
+					img{
+						max-width: 100%;
+					}
 					&.word{
 						display: block;
 						color: #f8f7a5;
@@ -1787,7 +2053,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#24662e', end
 					left: 0;
 					width: 100%;
 					height: 100%;
-					background-image: url(../img/rightarrow.png);
+					// background-image: url(../img/rightarrow.png);
 					background-position: 62% 50%;
 					background-repeat: no-repeat;
 					background-size: 75%;
@@ -1795,6 +2061,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#24662e', end
 				span{
 					position: relative;
 					z-index: 2;
+					img{
+						max-width: 100%;
+					}
 					&.word{
 						display: block;
 						color: #f8f7a5;
@@ -1830,14 +2099,17 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#24662e', end
 					left: 0;
 					width: 100%;
 					height: 100%;
-					background-image: url(../img/movehorizontal.png);
+					// background-image: url(../img/movehorizontal.png);
 					background-position: 50% 50%;
 					background-repeat: no-repeat;
-					background-size: 90%;
+					background-size: 90% !important;
 				}
 				span{
 					position: relative;
 					z-index: 2;
+					img{
+						max-width: 100%;
+					}
 					&.word{
 						display: block;
 						color: #f8f7a5;
@@ -1872,7 +2144,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#24662e', end
 					left: 0;
 					width: 100%;
 					height: 100%;
-					background-image: url(../img/movevertical.png);
+					// background-image: url(../img/movevertical.png);
 					background-position: 50% 50%;
 					background-repeat: no-repeat;
 					background-size: 60%;
@@ -1880,6 +2152,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#24662e', end
 				span{
 					position: relative;
 					z-index: 2;
+					img{
+						max-width: 100%;
+					}
 					&.word{
 						display: block;
 						color: #f8f7a5;
@@ -1888,7 +2163,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#24662e', end
 					    left: 0.1em;
 					    text-shadow: 0px 0px 2px #f8f7a5;
 					    &.moveword{
-						    top: 0.6em;
+						    top: 0.75em;
 						    left: 0;
 						    background-color: #171003;
 						    font-size: 0.4em;
@@ -1896,7 +2171,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#24662e', end
 						    line-height: 1em;
 					    }
 					    &.spaces{
-						    top: -0.65em;
+						    top: -0.85em;
 						    left: 0;
 						    background-color: #171003;
 						    font-size: 0.4em;
@@ -1917,6 +2192,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#24662e', end
 			}
 			&.losewhammy{
 				span{
+					img{
+						max-width: 100%;
+					}
 					span{
 						font-size: 0.75em;
 						display: block;
@@ -1929,6 +2207,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#24662e', end
 						}
 						&.lose{
 							line-height: 1em;
+							font-size: 0.6em;
 						}
 					}
 				}
